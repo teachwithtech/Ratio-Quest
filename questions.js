@@ -480,38 +480,41 @@ const questions = [
 
 
     {
-        id: "RD15",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "KU",
-        type: "matching",
+    id: "RD15",
+    mission: "RD",
+    missionName: "Ratio Detective",
+    level: "KU",
+    type: "matching",
 
-        stimulus:
-            "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
+    stimulus:
+        "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
 
-        question:
-            "Pasangkanlah pernyataan rasio di sebelah kiri dengan nilai rasio paling sederhana di sebelah kanan dengan tepat!\n1. merah : biru = 2 : 3\n2. biru : hijau = 3 : 4\n3. hijau : merah = 4 : 2",
+    question: [
+        "Merah terhadap biru",
+        "Biru terhadap hijau",
+        "Hijau terhadap merah"
+    ],
 
-        options: [
-            "Rasio merah terhadap biru",
-            "Rasio biru terhadap hijau",
-            "Rasio hijau terhadap merah"
-        ],
+    options: [
+        "2 : 3",
+        "3 : 4",
+        "2 : 1"
+    ],
 
-        answer: [
-            "4 : 3",
-            "2 : 3",
-            "3 : 4"
-        ],
+    answer: [
+        "2 : 3",
+        "3 : 4",
+        "2 : 1"
+    ],
 
-        explanation:
-            "Baca rasio dari kiri ke kanan sesuai urutan yang diminta.",
+    explanation:
+        "Baca rasio dari kiri ke kanan sesuai urutan yang diminta lalu sederhanakan (Merah:Biru = 4:6 disederhanakan menjadi 2:3; Biru:Hijau = 6:8 menjadi 3:4; Hijau:Merah = 8:4 menjadi 2:1).",
 
-        errorCode: "E2",
+    errorCode: "E2",
 
-        feedback:
-            "Baca rasio dari kiri ke kanan sesuai urutan yang diminta."
-    },
+    feedback:
+        "Baca rasio dari kiri ke kanan sesuai urutan yang diminta."
+}
 
 
     {
