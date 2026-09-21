@@ -20,8 +20,27 @@
   "use strict";
 
   const Q = window.RATIO_QUESTIONS || [];
-  const BANKS = window.RATIO_QUESTION_BANKS || {};
-  const MISSIONS = window.RATIO_MISSION_INFO || {};
+const BANKS = window.RATIO_QUESTION_BANKS || {};
+const MISSIONS = window.RATIO_MISSION_INFO || {};
+
+console.log("=================================");
+console.log("🔎 RATIO QUEST — CEK DATA");
+console.log("=================================");
+console.log("Jumlah soal:", Q.length);
+console.log("Bank soal:", BANKS);
+console.log("Mission info:", MISSIONS);
+
+if (!Q.length) {
+  console.error(
+    "❌ QUESTIONS.JS BELUM TERBACA!"
+  );
+} else {
+  console.log(
+    "✅ QUESTIONS.JS TERBACA:",
+    Q.length,
+    "soal"
+  );
+}
 
   const STORAGE_KEY = "ratioQuestProgress_v1";
 
@@ -2852,27 +2871,6 @@
     ensureAppShell();
 
     syncStartForm();
-
-    const startButton =
-      $("#rq-start-btn");
-
-    if (startButton) {
-
-      startButton.dataset.action =
-        "start";
-
-    }
-
-    $$(
-      "[data-action='start']"
-    ).forEach(btn => {
-
-      btn.addEventListener(
-        "click",
-        startGame
-      );
-
-    });
 
     showScreen("start");
 
