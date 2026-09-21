@@ -1,4 +1,3 @@
-```javascript
 // ============================================================
 // MATH MISSION — RATIO QUEST
 // "Misi Menemukan Perbandingan yang Tepat"
