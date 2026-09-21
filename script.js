@@ -1090,140 +1090,187 @@
   // ANSWER INPUT
   // ============================================================
 
-  function renderAnswerInput(q) {
+ function renderAnswerInput(q) {
 
-    const zone =
-      $("#rq-answer-zone");
+  const zone = $("#rq-answer-zone");
 
-    if (!zone) return;
+  if (!zone) return;
 
-    if (
-      q.type === "multiple_choice" ||
-      q.type === "true_false" ||
-      Array.isArray(q.options)
-    ) {
+  // ============================================================
+  // MULTIPLE CHOICE
+  // ============================================================
 
-      const options =
-        Array.isArray(q.options)
-          ? q.options
-          : [
-              {
-                id: "A",
-                text: "Benar"
-              },
-              {
-                id: "B",
-                text: "Salah"
-              }
-            ];
+  if (q.type === "multiple_choice") {
 
-      zone.innerHTML =
-        options
-          .map(opt => `
+    const options = Array.isArray(q.options)
+      ? q.options
+      : [];
 
-            <button
-              class="rq-option"
-              data-answer="${escapeHTML(opt.id)}"
-            >
+    zone.innerHTML = options
+      .map((opt, index) => {
 
-              <span
-                class="rq-option-id"
-              >
-                ${escapeHTML(opt.id)}
-              </span>
+        // Mendukung 2 format:
+        // 1. "Jawaban berupa string"
+        // 2. { id: "A", text: "Jawaban" }
 
-              <span>
-                ${formatText(opt.text)}
-              </span>
+        const isObject =
+          typeof opt === "object" &&
+          opt !== null;
 
-            </button>
+        const id =
+          isObject
+            ? (opt.id ?? String.fromCharCode(65 + index))
+            : String.fromCharCode(65 + index);
 
-          `)
-          .join("");
+        const text =
+          isObject
+            ? (opt.text ?? "")
+            : String(opt);
 
-      return;
-    }
+        return `
+          <button
+            type="button"
+            class="rq-option"
+            data-answer="${escapeHTML(text)}"
+          >
 
-    if (q.type === "short_answer") {
+            <span class="rq-option-id">
+              ${escapeHTML(id)}
+            </span>
 
-      zone.innerHTML = `
+            <span class="rq-option-text">
+              ${formatText(text)}
+            </span>
 
-        <input
-          id="rq-short-answer"
-          class="rq-short-answer"
-          type="text"
-          autocomplete="off"
-          placeholder="Tulis jawabanmu..."
-        >
+          </button>
+        `;
 
-      `;
+      })
+      .join("");
 
-      return;
-    }
+    return;
+  }
 
-    if (q.type === "matching") {
 
-      const opts =
-        Array.isArray(q.options)
-          ? q.options
-          : [];
+  // ============================================================
+  // TRUE / FALSE
+  // ============================================================
 
-      zone.innerHTML = `
-
-        <p class="rq-mini-label">
-          Pilih pasangan sesuai urutan.
-        </p>
-
-        <div class="rq-matching-list">
-
-          ${opts.map((opt, i) => `
-
-            <label
-              class="rq-match-row"
-            >
-
-              <span>
-                ${formatText(opt)}
-              </span>
-
-              <select
-                data-match-index="${i}"
-              >
-
-                <option value="">
-                  Pilih
-                </option>
-
-                ${opts.map((_, j) => `
-                  <option value="${j}">
-                    ${j + 1}
-                  </option>
-                `).join("")}
-
-              </select>
-
-            </label>
-
-          `).join("")}
-
-        </div>
-
-      `;
-
-      return;
-    }
+  if (q.type === "true_false") {
 
     zone.innerHTML = `
+      <button
+        type="button"
+        class="rq-option"
+        data-answer="Benar"
+      >
+        <span class="rq-option-id">✓</span>
+        <span class="rq-option-text">Benar</span>
+      </button>
 
+      <button
+        type="button"
+        class="rq-option"
+        data-answer="Salah"
+      >
+        <span class="rq-option-id">✕</span>
+        <span class="rq-option-text">Salah</span>
+      </button>
+    `;
+
+    return;
+  }
+
+
+  // ============================================================
+  // SHORT ANSWER
+  // ============================================================
+
+  if (q.type === "short_answer") {
+
+    zone.innerHTML = `
       <input
         id="rq-short-answer"
         class="rq-short-answer"
         type="text"
+        autocomplete="off"
         placeholder="Tulis jawabanmu..."
       >
+    `;
+
+    return;
+  }
+
+
+  // ============================================================
+  // MATCHING
+  // ============================================================
+
+  if (q.type === "matching") {
+
+    const opts =
+      Array.isArray(q.options)
+        ? q.options
+        : [];
+
+    zone.innerHTML = `
+
+      <p class="rq-mini-label">
+        Pilih pasangan sesuai urutan.
+      </p>
+
+      <div class="rq-matching-list">
+
+        ${opts.map((opt, i) => `
+
+          <label class="rq-match-row">
+
+            <span>
+              ${formatText(opt)}
+            </span>
+
+            <select
+              data-match-index="${i}"
+            >
+
+              <option value="">
+                Pilih
+              </option>
+
+              ${opts.map((_, j) => `
+                <option value="${j}">
+                  ${j + 1}
+                </option>
+              `).join("")}
+
+            </select>
+
+          </label>
+
+        `).join("")}
+
+      </div>
 
     `;
+
+    return;
   }
+
+
+  // ============================================================
+  // FALLBACK
+  // ============================================================
+
+  zone.innerHTML = `
+    <input
+      id="rq-short-answer"
+      class="rq-short-answer"
+      type="text"
+      autocomplete="off"
+      placeholder="Tulis jawabanmu..."
+    >
+  `;
+}
 
   function collectAnswer() {
 
