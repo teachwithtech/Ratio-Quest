@@ -708,45 +708,50 @@
     };
   }
 
-  function missionStatus(id) {
+ function missionStatus(id) {
 
-    if (id === "PRETEST") {
+  // PRETEST selalu menjadi titik awal
+  if (id === "PRETEST") {
+    return APP.progress.pretest.completed
+      ? "done"
+      : "available";
+  }
 
-      return APP.progress.pretest.completed
-        ? "done"
-        : "available";
+  // Jika misi sudah selesai
+  const record = APP.progress.missions[id];
 
-    }
+  if (record?.completed) {
+    return "done";
+  }
 
-    const record =
-      APP.progress.missions[id];
+  // Cari posisi misi
+  const index = missionOrder.indexOf(id);
 
-    if (record?.completed) {
-      return "done";
-    }
-
-    const index =
-      missionOrder.indexOf(id);
-
-    if (index <= 1) {
-      return "available";
-    }
-
-    const previous =
-      missionOrder[index - 1];
-
-    if (previous === "PRETEST") {
-
-      return APP.progress.pretest.completed
-        ? "available"
-        : "locked";
-
-    }
-
-    return APP.progress.missions[previous]?.completed
+  // Misi pertama setelah Pretest = Ratio Detective
+  if (id === "RD") {
+    return APP.progress.pretest.completed
       ? "available"
       : "locked";
   }
+
+  // Jika misi tidak ditemukan
+  if (index === -1) {
+    return "locked";
+  }
+
+  // Misi berikutnya harus menunggu misi sebelumnya
+  const previous = missionOrder[index - 1];
+
+  if (previous === "PRETEST") {
+    return APP.progress.pretest.completed
+      ? "available"
+      : "locked";
+  }
+
+  return APP.progress.missions[previous]?.completed
+    ? "available"
+    : "locked";
+}
 
   function renderMissionMap() {
 
