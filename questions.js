@@ -487,21 +487,21 @@ const questions = [
         type: "matching",
 
         stimulus:
-            "Merah = 10\nBiru = 15\nHijau = 5",
+            "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
 
         question:
-            "Pasangkan rasio berikut dengan nilainya:\n\n1. Merah : Biru\n2. Biru : Hijau\n3. Hijau : Merah",
+            "Pasangkanlah pernyataan rasio di sebelah kiri dengan nilai rasio paling sederhana di sebelah kanan dengan tepat!",
 
         options: [
-            "Merah : Biru → 10 : 15",
-            "Biru : Hijau → 15 : 5",
-            "Hijau : Merah → 5 : 10"
+            "Rasio merah terhadap biru",
+            "Rasio biru terhadap hijau",
+            "Rasio hijau terhadap merah"
         ],
 
         answer: [
-            "10 : 15",
-            "15 : 5",
-            "5 : 10"
+            "4 : 3",
+            "2 : 3",
+            "3 : 4"
         ],
 
         explanation:
@@ -560,7 +560,7 @@ const questions = [
             "Pernyataan Raka …",
 
         options: [
-            "benar",
+            "benar karena urutannya merah : biru",
             "salah karena seharusnya 6 : 4",
             "salah karena seharusnya 4 : 10",
             "benar karena urutan tidak penting"
