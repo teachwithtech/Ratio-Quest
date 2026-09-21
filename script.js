@@ -1,152 +1,38 @@
-// ============================================================
-// MATH MISSION — RATIO QUEST
-// script.js — Game Engine
-// "Misi Menemukan Perbandingan yang Tepat"
-// ============================================================
-// Fungsi utama:
-// 1. Navigasi layar
-// 2. Data pemain & progres
-// 3. Membaca questions.js
-// 4. Menampilkan berbagai tipe soal
-// 5. Skor, feedback, hint, dan error analysis
-// 6. Mission Map
-// 7. Mistake Lab
-// 8. Boss Challenge
-// 9. Rekap nilai siswa
-// 10. Penyimpanan progres dengan localStorage
-// ============================================================
+/* =========================================================
+   MATH MISSION - RATIO QUEST
+   Sistem Progress Per Siswa
+   ========================================================= */
 
 (() => {
   "use strict";
 
+  /* =========================================================
+     1. DATA SOAL
+     ========================================================= */
+
   const Q = window.RATIO_QUESTIONS || [];
-const BANKS = window.RATIO_QUESTION_BANKS || {};
-const MISSIONS = window.RATIO_MISSION_INFO || {};
+  const BANKS = window.RATIO_QUESTION_BANKS || {};
+  const MISSIONS = window.RATIO_MISSION_INFO || {};
 
-console.log("=================================");
-console.log("🔎 RATIO QUEST — CEK DATA");
-console.log("=================================");
-console.log("Jumlah soal:", Q.length);
-console.log("Bank soal:", BANKS);
-console.log("Mission info:", MISSIONS);
+  /* =========================================================
+     2. LOCAL STORAGE
+     ========================================================= */
 
-if (!Q.length) {
-  console.error(
-    "❌ QUESTIONS.JS BELUM TERBACA!"
-  );
-} else {
-  console.log(
-    "✅ QUESTIONS.JS TERBACA:",
-    Q.length,
-    "soal"
-  );
-}
+  const STORAGE_PREFIX = "ratioQuestProgress_";
 
-  const STORAGE_KEY = "ratioQuestProgress_v1";
-
-  const APP = {
-    currentScreen: "start",
-    currentMission: null,
-    currentQuestionIndex: 0,
-    currentQuestions: [],
-    currentQuestion: null,
-    selectedAnswer: null,
-    lastResult: null,
-    isRetry: false,
-    timer: null,
-    timerSeconds: 0,
-    session: null,
-    progress: null,
-    answeredIds: new Set(),
-    mistakeIds: [],
-    bossMode: false
-  };
-
-  // ============================================================
-  // UTILITIES
-  // ============================================================
-
-  const $ = (selector, parent = document) =>
-    parent.querySelector(selector);
-
-  const $$ = (selector, parent = document) =>
-    [...parent.querySelectorAll(selector)];
-
-  function escapeHTML(value) {
-    return String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-  function shuffle(array) {
-    const copy = [...array];
-
-    for (let i = copy.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-
-      [copy[i], copy[j]] = [copy[j], copy[i]];
-    }
-
-    return copy;
-  }
-
-  function normalize(value) {
-    return String(value ?? "")
+  function getStudentStorageKey(studentName) {
+    const cleanName = String(studentName || "")
       .trim()
       .toLowerCase()
-      .replace(/\s+/g, " ");
+      .replace(/\s+/g, "_")
+      .replace(/[^a-z0-9_]/g, "");
+
+    return STORAGE_PREFIX + (cleanName || "siswa");
   }
 
-  function getMissionQuestions(mission) {
-    if (Array.isArray(BANKS[mission])) {
-      return [...BANKS[mission]];
-    }
-
-    return Q.filter(q => q.mission === mission);
-  }
-
-  function getMissionName(mission) {
-    return (
-      MISSIONS[mission]?.name ||
-      Q.find(q => q.mission === mission)?.missionName ||
-      mission
-    );
-  }
-
-  function scorePercent(score, total) {
-    if (!total) return 0;
-
-    return Math.round((score / total) * 100);
-  }
-
-  function masteryLabel(percent) {
-    if (percent >= 80) return "TUNTAS";
-    if (percent >= 60) return "PERLU PENGUATAN";
-
-    return "PERLU BIMBINGAN";
-  }
-
-  function getErrorLabel(code) {
-    const labels = {
-      E1: "Salah menentukan besaran yang dibandingkan",
-      E2: "Salah urutan rasio",
-      E3: "Salah menyederhanakan rasio",
-      E4: "Salah menentukan rasio senilai/faktor pengali",
-      E5: "Salah memahami konteks"
-    };
-
-    return (
-      labels[code] ||
-      "Perlu mengecek kembali strategi penyelesaian"
-    );
-  }
-
-  // ============================================================
-  // STORAGE
-  // ============================================================
+  /* =========================================================
+     3. DATA PROGRESS KOSONG
+     ========================================================= */
 
   function createEmptyProgress() {
     return {
@@ -178,451 +64,243 @@ if (!Q.length) {
     };
   }
 
-  function loadProgress() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+  /* =========================================================
+     4. APP STATE
+     ========================================================= */
 
-      APP.progress = raw
-        ? {
-            ...createEmptyProgress(),
-            ...JSON.parse(raw)
-          }
-        : createEmptyProgress();
+  const APP = {
+    currentScreen: "start",
 
-    } catch (error) {
-      console.warn(
-        "Progress tidak dapat dibaca:",
-        error
-      );
+    currentMission: null,
 
-      APP.progress = createEmptyProgress();
-    }
-  }
+    currentQuestionIndex: 0,
+
+    currentQuestions: [],
+
+    currentQuestion: null,
+
+    selectedAnswer: null,
+
+    lastResult: null,
+
+    isRetry: false,
+
+    timer: null,
+
+    timerSeconds: 0,
+
+    session: null,
+
+    progress: createEmptyProgress(),
+
+    answeredIds: new Set(),
+
+    mistakeIds: [],
+
+    bossMode: false
+  };
+
+  /* =========================================================
+     5. HELPER DOM
+     ========================================================= */
+
+  const $ = (selector) => document.querySelector(selector);
+
+  const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+  /* =========================================================
+     6. SAVE PROGRESS SISWA
+     ========================================================= */
 
   function saveProgress() {
-    if (!APP.progress) return;
+    const studentName = APP.progress.studentName;
 
-    APP.progress.lastPlayed =
-      new Date().toISOString();
-
-    try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(APP.progress)
-      );
-
-    } catch (error) {
-      console.warn(
-        "Progress tidak dapat disimpan:",
-        error
-      );
+    if (!studentName) {
+      return;
     }
+
+    const key = getStudentStorageKey(studentName);
+
+    APP.progress.lastPlayed = new Date().toISOString();
+
+    localStorage.setItem(
+      key,
+      JSON.stringify(APP.progress)
+    );
+
+    console.log("💾 Progress disimpan:", key);
   }
 
+  /* =========================================================
+     7. LOAD PROGRESS SISWA
+     ========================================================= */
+
+  function loadProgress(studentName) {
+    if (!studentName) {
+      APP.progress = createEmptyProgress();
+      return;
+    }
+
+    const key = getStudentStorageKey(studentName);
+
+    const saved = localStorage.getItem(key);
+
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+
+        APP.progress = {
+          ...createEmptyProgress(),
+          ...data,
+
+          pretest: {
+            ...createEmptyProgress().pretest,
+            ...(data.pretest || {})
+          },
+
+          boss: {
+            ...createEmptyProgress().boss,
+            ...(data.boss || {})
+          },
+
+          missions: data.missions || {},
+
+          mistakes: data.mistakes || []
+        };
+
+        console.log(
+          "📂 Progress ditemukan untuk:",
+          studentName
+        );
+
+      } catch (error) {
+        console.error(
+          "❌ Progress siswa rusak:",
+          error
+        );
+
+        APP.progress = createEmptyProgress();
+      }
+
+    } else {
+
+      /*
+       * SISWA BARU
+       * Tidak mengambil progress siswa lain.
+       */
+
+      APP.progress = createEmptyProgress();
+
+      APP.progress.studentName = studentName;
+
+      console.log(
+        "🆕 Siswa baru. Progress dimulai dari awal:",
+        studentName
+      );
+    }
+
+    APP.progress.studentName = studentName;
+  }
+
+  /* =========================================================
+     8. RESET PROGRESS SISWA AKTIF
+     ========================================================= */
+
   function resetProgress() {
+    const studentName = APP.progress.studentName;
+
+    if (!studentName) {
+      alert("Belum ada siswa yang aktif.");
+      return;
+    }
+
+    const yakin = confirm(
+      `Reset seluruh progress siswa "${studentName}"?\n\n` +
+      `Semua nilai dan progress siswa ini akan kembali ke awal.`
+    );
+
+    if (!yakin) {
+      return;
+    }
+
+    const key = getStudentStorageKey(studentName);
+
+    localStorage.removeItem(key);
+
     APP.progress = createEmptyProgress();
+
+    APP.progress.studentName = studentName;
 
     APP.answeredIds.clear();
 
     APP.mistakeIds = [];
 
+    APP.session = null;
+
+    APP.currentMission = null;
+
+    APP.currentQuestion = null;
+
+    APP.currentQuestions = [];
+
+    APP.currentQuestionIndex = 0;
+
     saveProgress();
-  }
 
-  // ============================================================
-  // DYNAMIC UI FALLBACK
-  // ============================================================
-
-  function ensureAppShell() {
-    let root = $("#app");
-
-    if (!root) {
-      root = document.createElement("main");
-
-      root.id = "app";
-
-      document.body.prepend(root);
-    }
-
-    if (!$("#rq-start", root)) {
-      root.innerHTML = `
-
-        <section id="rq-start"
-          class="rq-screen active-screen">
-
-          <div class="rq-card rq-start-card">
-
-            <div class="rq-logo">🧭</div>
-
-            <div class="rq-kicker">
-              MATH MISSION
-            </div>
-
-            <h1>RATIO QUEST</h1>
-
-            <p>
-              Misi Menemukan Perbandingan yang Tepat
-            </p>
-
-            <div class="rq-form">
-
-              <label for="rq-name">
-                Nama Siswa
-              </label>
-
-              <input
-                id="rq-name"
-                type="text"
-                maxlength="40"
-                placeholder="Tulis nama kamu..."
-                autocomplete="off"
-              >
-
-              <label for="rq-class">
-                Kelas
-              </label>
-
-              <input
-                id="rq-class"
-                type="text"
-                value="VI A"
-                maxlength="10"
-              >
-
-              <button
-                id="rq-start-btn"
-                class="rq-btn rq-btn-primary"
-              >
-                🚀 Mulai Misi
-              </button>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <section id="rq-map"
-          class="rq-screen">
-
-          <div class="rq-card">
-
-            <div class="rq-topbar">
-
-              <button
-                class="rq-btn rq-btn-small"
-                data-action="home"
-              >
-                ⌂ Beranda
-              </button>
-
-              <span id="rq-player-badge"></span>
-
-            </div>
-
-            <div class="rq-kicker">
-              MISSION MAP
-            </div>
-
-            <h2>Pilih Misi</h2>
-
-            <div
-              id="rq-mission-list"
-              class="rq-mission-grid"
-            ></div>
-
-            <div class="rq-special-grid">
-
-              <button
-                class="rq-special"
-                data-action="mistake"
-              >
-                🧩 Mistake Lab
-              </button>
-
-              <button
-                class="rq-special"
-                data-action="boss"
-              >
-                👑 Boss Challenge
-              </button>
-
-              <button
-                class="rq-special"
-                data-action="scores"
-              >
-                📊 Nilai Siswa
-              </button>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <section id="rq-game"
-          class="rq-screen">
-
-          <div class="rq-card rq-game-card">
-
-            <div class="rq-topbar">
-
-              <button
-                class="rq-btn rq-btn-small"
-                data-action="map"
-              >
-                ← Mission Map
-              </button>
-
-              <div id="rq-game-title"></div>
-
-              <div id="rq-score">
-                0
-              </div>
-
-            </div>
-
-            <div class="rq-progress">
-              <div id="rq-progress-bar"></div>
-            </div>
-
-            <div id="rq-question-area"></div>
-
-            <div id="rq-feedback-area"></div>
-
-          </div>
-
-        </section>
-
-
-        <section id="rq-result"
-          class="rq-screen">
-
-          <div class="rq-card rq-result-card">
-
-            <div id="rq-result-content"></div>
-
-            <button
-              class="rq-btn rq-btn-primary"
-              data-action="map"
-            >
-              🗺️ Kembali ke Mission Map
-            </button>
-
-          </div>
-
-        </section>
-
-
-        <section id="rq-mistake"
-          class="rq-screen">
-
-          <div class="rq-card">
-
-            <div class="rq-topbar">
-
-              <button
-                class="rq-btn rq-btn-small"
-                data-action="map"
-              >
-                ← Mission Map
-              </button>
-
-            </div>
-
-            <div class="rq-kicker">
-              MISTAKE LAB
-            </div>
-
-            <h2>
-              Belajar dari Kesalahan
-            </h2>
-
-            <div
-              id="rq-mistake-content"
-            ></div>
-
-          </div>
-
-        </section>
-
-
-        <section id="rq-scores"
-          class="rq-screen">
-
-          <div class="rq-card">
-
-            <div class="rq-topbar">
-
-              <button
-                class="rq-btn rq-btn-small"
-                data-action="map"
-              >
-                ← Mission Map
-              </button>
-
-            </div>
-
-            <div class="rq-kicker">
-              STUDENT REPORT
-            </div>
-
-            <h2>
-              Nilai Siswa
-            </h2>
-
-            <div
-              id="rq-score-content"
-            ></div>
-
-          </div>
-
-        </section>
-
-      `;
-    }
-  }
-
-  // ============================================================
-  // SCREEN NAVIGATION
-  // ============================================================
-
-  function screenSelector(name) {
-
-    const aliases = {
-
-      start: [
-        "#rq-start",
-        "#startScreen",
-        "#start-screen"
-      ],
-
-      map: [
-        "#rq-map",
-        "#mapScreen",
-        "#missionMap",
-        "#mission-map"
-      ],
-
-      game: [
-        "#rq-game",
-        "#gameScreen",
-        "#game-screen"
-      ],
-
-      result: [
-        "#rq-result",
-        "#resultScreen",
-        "#result-screen"
-      ],
-
-      mistake: [
-        "#rq-mistake",
-        "#mistakeScreen",
-        "#mistake-lab"
-      ],
-
-      scores: [
-        "#rq-scores",
-        "#scoreScreen",
-        "#studentScores"
-      ]
-
-    };
-
-    return aliases[name] || [];
-  }
-
-  function showScreen(name) {
-
-    stopTimer();
-
-    APP.currentScreen = name;
-
-    const allScreens =
-      $$(".rq-screen, .screen, [data-screen]");
-
-    allScreens.forEach(el => {
-
-      el.classList.remove(
-        "active-screen",
-        "active",
-        "show"
-      );
-
-      el.hidden = true;
-
-    });
-
-    let target = null;
-
-    for (const selector of screenSelector(name)) {
-
-      target = $(selector);
-
-      if (target) break;
-
-    }
-
-    if (!target) {
-
-      console.warn(
-        `Screen '${name}' tidak ditemukan.`
-      );
-
-      return;
-    }
-
-    target.hidden = false;
-
-    target.classList.add(
-      "active-screen",
-      "active",
-      "show"
+    alert(
+      `Progress ${studentName} sudah direset.`
     );
 
-    if (name === "map") {
-      renderMissionMap();
+    showScreen("map");
+  }
+
+  /* =========================================================
+     9. FORM SISWA
+     ========================================================= */
+
+  function syncStartForm() {
+    const nameInput = $(
+      "#rq-student-name"
+    );
+
+    const classInput = $(
+      "#rq-student-class"
+    );
+
+    if (nameInput) {
+      nameInput.value =
+        APP.progress.studentName || "";
     }
 
-    if (name === "mistake") {
-      renderMistakeLab();
-    }
-
-    if (name === "scores") {
-      renderStudentScores();
+    if (classInput) {
+      classInput.value =
+        APP.progress.studentClass || "VI A";
     }
   }
 
-  // ============================================================
-  // START GAME
-  // ============================================================
+  /* =========================================================
+     10. MULAI GAME
+     ========================================================= */
 
   function startGame() {
 
-    const nameInput =
-      $("#rq-name") ||
-      $("#studentName") ||
-      $("[name='studentName']");
+    const nameInput = $(
+      "#rq-student-name"
+    );
 
-    const classInput =
-      $("#rq-class") ||
-      $("#studentClass") ||
-      $("[name='studentClass']");
+    const classInput = $(
+      "#rq-student-class"
+    );
 
-    const name =
-      (nameInput?.value || "").trim();
+    const studentName =
+      nameInput?.value.trim() || "";
 
     const studentClass =
-      (classInput?.value || "VI A")
-        .trim() || "VI A";
+      classInput?.value.trim() || "VI A";
 
-    if (!name) {
-
+    if (!studentName) {
       alert(
-        "Tulis nama terlebih dahulu sebelum memulai misi."
+        "Silakan masukkan nama terlebih dahulu."
       );
 
       nameInput?.focus();
@@ -630,7 +308,44 @@ if (!Q.length) {
       return;
     }
 
-    APP.progress.studentName = name;
+    /*
+     * PENTING:
+     * Setiap kali nama berbeda,
+     * kita LOAD progress berdasarkan nama tersebut.
+     */
+
+    if (
+      APP.progress.studentName !==
+      studentName
+    ) {
+
+      loadProgress(studentName);
+
+      APP.answeredIds.clear();
+
+      APP.mistakeIds = [];
+
+      APP.session = null;
+
+      APP.currentMission = null;
+
+      APP.currentQuestion = null;
+
+      APP.currentQuestions = [];
+
+      APP.currentQuestionIndex = 0;
+
+    } else {
+
+      /*
+       * Nama sama → lanjutkan progress.
+       */
+
+      loadProgress(studentName);
+    }
+
+    APP.progress.studentName =
+      studentName;
 
     APP.progress.studentClass =
       studentClass;
@@ -642,12 +357,113 @@ if (!Q.length) {
 
     saveProgress();
 
+    syncStartForm();
+
     showScreen("map");
+
+    console.log(
+      "🎮 Game dimulai untuk:",
+      studentName
+    );
+
+    console.log(
+      "📊 Progress:",
+      APP.progress
+    );
   }
 
-  // ============================================================
-  // MISSION MAP
-  // ============================================================
+  /* =========================================================
+     11. SCREEN
+     ========================================================= */
+
+  function hideAllScreens() {
+
+    $$(
+      "#app > section, #app > div[id$='screen']"
+    ).forEach((el) => {
+      el.style.display = "none";
+    });
+
+    $$(
+      ".rq-screen"
+    ).forEach((el) => {
+      el.style.display = "none";
+    });
+  }
+
+  function showScreen(screen) {
+
+    APP.currentScreen = screen;
+
+    hideAllScreens();
+
+    let target = null;
+
+    switch (screen) {
+
+      case "start":
+        target = $("#rq-start");
+        break;
+
+      case "map":
+        target = $("#rq-map");
+        break;
+
+      case "question":
+        target = $("#rq-question");
+        break;
+
+      case "feedback":
+        target = $("#rq-feedback");
+        break;
+
+      case "mistake":
+        target = $("#rq-mistake-lab");
+        break;
+
+      case "boss":
+        target = $("#rq-boss");
+        break;
+
+      case "scores":
+        target = $("#rq-scores");
+        break;
+
+      case "result":
+        target = $("#rq-result");
+        break;
+
+      default:
+        console.warn(
+          "Screen tidak ditemukan:",
+          screen
+        );
+    }
+
+    if (target) {
+      target.style.display = "";
+    }
+
+    if (screen === "map") {
+      renderMissionMap();
+    }
+
+    if (screen === "mistake") {
+      renderMistakeLab();
+    }
+
+    if (screen === "scores") {
+      renderStudentScores();
+    }
+
+    if (screen === "start") {
+      syncStartForm();
+    }
+  }
+
+  /* =========================================================
+     12. MISSION ORDER
+     ========================================================= */
 
   const missionOrder = [
     "PRETEST",
@@ -655,282 +471,365 @@ if (!Q.length) {
     "RB",
     "RBR",
     "RRL",
-    "RM"
+    "RM",
+    "BOSS"
   ];
 
-  const missionFallback = {
+  /* =========================================================
+     13. STATUS MISSION
+     ========================================================= */
 
-    PRETEST: {
-      title: "Starting Point",
-      icon: "🎯",
-      desc: "Cek kemampuan awal"
-    },
+  function missionStatus(id) {
 
-    RD: {
-      title: "Ratio Detective",
-      icon: "🔎",
-      desc: "Temukan perbandingan"
-    },
+    if (id === "PRETEST") {
 
-    RB: {
-      title: "Ratio Builder",
-      icon: "🧱",
-      desc: "Bangun rasio sederhana"
-    },
-
-    RBR: {
-      title: "Ratio Bridge",
-      icon: "🌉",
-      desc: "Temukan rasio senilai"
-    },
-
-    RRL: {
-      title: "Ratio in Real Life",
-      icon: "🌎",
-      desc: "Gunakan rasio dalam kehidupan"
-    },
-
-    RM: {
-      title: "Ratio Master",
-      icon: "🧠",
-      desc: "Tuntaskan tantangan penalaran"
+      return APP.progress.pretest.completed
+        ? "done"
+        : "available";
     }
 
-  };
+    if (id === "BOSS") {
 
-  function getMissionMeta(id) {
+      const allMissionsDone =
+        ["RD", "RB", "RBR", "RRL", "RM"]
+          .every(
+            (mission) =>
+              APP.progress.missions[
+                mission
+              ]?.completed
+          );
 
-    const source = MISSIONS[id];
+      if (
+        APP.progress.boss.completed
+      ) {
+        return "done";
+      }
 
-    const fallback =
-      missionFallback[id] || {};
+      return allMissionsDone
+        ? "available"
+        : "locked";
+    }
 
-    return {
+    const record =
+      APP.progress.missions[id];
 
-      title:
-        source?.name ||
-        source?.title ||
-        fallback.title ||
-        id,
+    if (record?.completed) {
+      return "done";
+    }
 
-      icon:
-        source?.icon ||
-        fallback.icon ||
-        "⭐",
+    const index =
+      missionOrder.indexOf(id);
 
-      desc:
-        source?.description ||
-        source?.desc ||
-        fallback.desc ||
-        "Selesaikan misi ini."
+    /*
+     * Ratio Detective baru terbuka
+     * setelah PRETEST.
+     */
 
-    };
-  }
+    if (index === 1) {
 
- function missionStatus(id) {
+      return APP.progress.pretest.completed
+        ? "available"
+        : "locked";
+    }
 
-  // PRETEST selalu menjadi titik awal
-  if (id === "PRETEST") {
-    return APP.progress.pretest.completed
-      ? "done"
-      : "available";
-  }
+    const previous =
+      missionOrder[index - 1];
 
-  // Jika misi sudah selesai
-  const record = APP.progress.missions[id];
+    if (previous === "PRETEST") {
 
-  if (record?.completed) {
-    return "done";
-  }
+      return APP.progress.pretest.completed
+        ? "available"
+        : "locked";
+    }
 
-  // Cari posisi misi
-  const index = missionOrder.indexOf(id);
-
-  // Misi pertama setelah Pretest = Ratio Detective
-  if (id === "RD") {
-    return APP.progress.pretest.completed
+    return APP.progress.missions[
+      previous
+    ]?.completed
       ? "available"
       : "locked";
   }
 
-  // Jika misi tidak ditemukan
-  if (index === -1) {
-    return "locked";
-  }
-
-  // Misi berikutnya harus menunggu misi sebelumnya
-  const previous = missionOrder[index - 1];
-
-  if (previous === "PRETEST") {
-    return APP.progress.pretest.completed
-      ? "available"
-      : "locked";
-  }
-
-  return APP.progress.missions[previous]?.completed
-    ? "available"
-    : "locked";
-}
+  /* =========================================================
+     14. RENDER MISSION MAP
+     ========================================================= */
 
   function renderMissionMap() {
 
-    const list =
+    const container =
       $("#rq-mission-list");
 
-    if (!list) return;
+    if (!container) {
+      return;
+    }
 
-    list.innerHTML =
-      missionOrder
-        .map((id, index) => {
+    const missionIds = [
+      "PRETEST",
+      "RD",
+      "RB",
+      "RBR",
+      "RRL",
+      "RM"
+    ];
 
-          const meta =
-            getMissionMeta(id);
+    container.innerHTML = "";
 
-          const status =
-            missionStatus(id);
+    missionIds.forEach((id) => {
 
-          const record =
-            id === "PRETEST"
-              ? APP.progress.pretest
-              : APP.progress.missions[id];
+      const info =
+        MISSIONS[id] || {};
 
-          const percent =
-            record?.total
-              ? scorePercent(
-                  record.score,
-                  record.total
-                )
-              : 0;
+      const status =
+        missionStatus(id);
 
-          const locked =
-            status === "locked";
+      const record =
+        id === "PRETEST"
+          ? APP.progress.pretest
+          : APP.progress.missions[id];
 
-          const statusText =
+      const percent =
+        record?.completed
+          ? calculatePercent(record)
+          : 0;
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        `rq-mission-card ${status}`;
+
+      card.innerHTML = `
+        <div class="rq-mission-icon">
+          ${info.icon || "🎯"}
+        </div>
+
+        <div class="rq-mission-content">
+
+          <h3>
+            ${info.title || id}
+          </h3>
+
+          <p>
+            ${
+              info.description ||
+              "Misi Ratio Quest"
+            }
+          </p>
+
+          ${
             status === "done"
-              ? `✓ ${percent}%`
-              : locked
-                ? "🔒 Terkunci"
-                : "Mulai";
+              ? `
+                <div class="rq-progress-text">
+                  Selesai • ${percent}%
+                </div>
+              `
+              : ""
+          }
 
-          return `
+          ${
+            status === "locked"
+              ? `
+                <div class="rq-progress-text">
+                  🔒 Terkunci
+                </div>
+              `
+              : ""
+          }
 
-            <button
-              class="rq-mission-card ${status}"
-              data-mission="${id}"
-              ${locked ? "disabled" : ""}
-            >
+        </div>
 
-              <span class="rq-mission-number">
-                ${index + 1}
-              </span>
+        <div class="rq-mission-action">
 
-              <span class="rq-mission-icon">
-                ${meta.icon}
-              </span>
+          ${
+            status === "available"
+              ? `
+                <button
+                  data-action="mission"
+                  data-mission="${id}">
+                  Mulai
+                </button>
+              `
+              : ""
+          }
 
-              <strong>
-                ${escapeHTML(meta.title)}
-              </strong>
+          ${
+            status === "done"
+              ? `
+                <button
+                  data-action="mission"
+                  data-mission="${id}">
+                  Ulangi
+                </button>
+              `
+              : ""
+          }
 
-              <small>
-                ${escapeHTML(meta.desc)}
-              </small>
+        </div>
+      `;
 
-              <span class="rq-mission-status">
-                ${statusText}
-              </span>
+      container.appendChild(card);
+    });
 
-            </button>
+    /*
+     * BOSS
+     */
 
-          `;
+    const bossContainer =
+      $("#rq-boss-card");
 
-        })
-        .join("");
+    if (bossContainer) {
 
-    const badge =
-      $("#rq-player-badge");
+      const status =
+        missionStatus("BOSS");
 
-    if (badge) {
+      bossContainer.innerHTML = `
+        <div class="rq-mission-icon">
+          👑
+        </div>
 
-      badge.textContent =
-        `${APP.progress.avatar} ` +
-        `${APP.progress.studentName} • ` +
-        `${APP.progress.studentClass}`;
+        <div class="rq-mission-content">
 
+          <h3>
+            Boss Challenge
+          </h3>
+
+          <p>
+            Tantangan akhir untuk
+            menguji penguasaan
+            perbandingan.
+          </p>
+
+          ${
+            status === "done"
+              ? `
+                <div>
+                  Selesai •
+                  ${calculatePercent(
+                    APP.progress.boss
+                  )}%
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            status === "locked"
+              ? `
+                <div>
+                  🔒 Selesaikan semua misi
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+
+        <div>
+
+          ${
+            status !== "locked"
+              ? `
+                <button
+                  data-action="boss">
+                  ${
+                    status === "done"
+                      ? "Ulangi"
+                      : "Mulai"
+                  }
+                </button>
+              `
+              : ""
+          }
+
+        </div>
+      `;
+    }
+
+    /*
+     * Nama siswa
+     */
+
+    const nameDisplay =
+      $("#rq-current-student");
+
+    if (nameDisplay) {
+
+      nameDisplay.textContent =
+        `${APP.progress.avatar} ${APP.progress.studentName}`;
     }
   }
 
-  function launchMission(mission) {
+  /* =========================================================
+     15. PERCENT
+     ========================================================= */
 
-    if (mission === "PRETEST") {
+  function calculatePercent(record) {
 
-      runQuestionBank(
-        "PRETEST",
-        {
-          shuffleQuestions: false
-        }
-      );
-
-      return;
+    if (!record) {
+      return 0;
     }
 
-    if (mission === "BOSS") {
-
-      runQuestionBank(
-        "BOSS",
-        {
-          shuffleQuestions: true,
-          boss: true
-        }
-      );
-
-      return;
+    if (
+      !record.total ||
+      record.total <= 0
+    ) {
+      return 0;
     }
 
-    if (missionOrder.includes(mission)) {
-
-      runQuestionBank(
-        mission,
-        {
-          shuffleQuestions: true
-        }
-      );
-
-    }
+    return Math.round(
+      (record.score /
+        (record.total * 10)) *
+        100
+    );
   }
 
-  // ============================================================
-  // QUESTION ENGINE
-  // ============================================================
+  /* =========================================================
+     16. MULAI BANK SOAL
+     ========================================================= */
 
   function runQuestionBank(
-    mission,
-    options = {}
+    missionId,
+    boss = false
   ) {
 
-    let bank =
-      getMissionQuestions(mission);
+    let questions = [];
 
-    if (!bank.length) {
+    if (boss) {
+
+      questions =
+        BANKS.BOSS ||
+        Q.filter(
+          (q) => q.mission === "BOSS"
+        );
+
+    } else {
+
+      questions =
+        BANKS[missionId] ||
+        Q.filter(
+          (q) =>
+            q.mission === missionId
+        );
+    }
+
+    if (!questions.length) {
 
       alert(
-        `Bank soal ${mission} belum tersedia.`
+        `Soal untuk ${missionId} belum ditemukan.`
       );
 
       return;
     }
 
-    if (options.shuffleQuestions) {
-      bank = shuffle(bank);
-    }
+    APP.currentMission =
+      missionId;
 
-    APP.currentMission = mission;
-
-    APP.currentQuestions = bank;
+    APP.currentQuestions =
+      [...questions];
 
     APP.currentQuestionIndex = 0;
 
-    APP.currentQuestion = null;
+    APP.currentQuestion =
+      APP.currentQuestions[0];
 
     APP.selectedAnswer = null;
 
@@ -938,12 +837,9 @@ if (!Q.length) {
 
     APP.isRetry = false;
 
-    APP.bossMode =
-      Boolean(options.boss);
+    APP.bossMode = boss;
 
     APP.session = {
-
-      mission,
 
       score: 0,
 
@@ -953,20 +849,19 @@ if (!Q.length) {
 
       attempts: 0,
 
-      startedAt: Date.now(),
-
       mistakes: [],
 
       answered: []
-
     };
 
-    showScreen("game");
-
-    renderQuestion();
+    showQuestion();
   }
 
-  function renderQuestion() {
+  /* =========================================================
+     17. TAMPILKAN SOAL
+     ========================================================= */
+
+  function showQuestion() {
 
     const q =
       APP.currentQuestions[
@@ -984,450 +879,412 @@ if (!Q.length) {
 
     APP.selectedAnswer = null;
 
-    APP.lastResult = null;
+    const questionNumber =
+      $("#rq-question-number");
 
-    const title =
-      $("#rq-game-title");
+    const questionText =
+      $("#rq-question-text");
 
-    if (title) {
+    const stimulus =
+      $("#rq-stimulus");
 
-      title.innerHTML =
-        `<span>${escapeHTML(
-          getMissionName(
-            APP.currentMission
-          )
-        )}</span>`;
+    const answerArea =
+      $("#rq-answer-area");
 
+    if (questionNumber) {
+
+      questionNumber.textContent =
+        `${APP.currentQuestionIndex + 1} / ${APP.currentQuestions.length}`;
     }
 
-    const score =
-      $("#rq-score");
+    if (questionText) {
 
-    if (score) {
-
-      score.textContent =
-        `${APP.session.score} poin`;
-
+      questionText.textContent =
+        q.question || "";
     }
 
-    const bar =
-      $("#rq-progress-bar");
+    if (stimulus) {
 
-    if (bar) {
+      stimulus.textContent =
+        q.stimulus || "";
 
-      bar.style.width =
-        `${(
-          APP.currentQuestionIndex /
-          APP.currentQuestions.length
-        ) * 100}%`;
-
+      stimulus.style.display =
+        q.stimulus ? "" : "none";
     }
 
-    const area =
-      $("#rq-question-area");
+    if (answerArea) {
+
+      answerArea.innerHTML =
+        renderAnswerInput(q);
+    }
 
     const feedback =
-      $("#rq-feedback-area");
-
-    if (!area) return;
+      $("#rq-feedback-box");
 
     if (feedback) {
+
       feedback.innerHTML = "";
+
+      feedback.style.display =
+        "none";
     }
 
-    area.innerHTML = `
-
-      <div class="rq-question-meta">
-
-        <span>
-          Soal
-          ${APP.currentQuestionIndex + 1}
-          /
-          ${APP.currentQuestions.length}
-        </span>
-
-        <span>
-          ${escapeHTML(q.level || "")}
-        </span>
-
-      </div>
-
-      ${
-        q.stimulus
-          ? `
-            <div class="rq-stimulus">
-              ${formatText(q.stimulus)}
-            </div>
-          `
-          : ""
-      }
-
-      <div class="rq-question">
-        ${formatText(q.question)}
-      </div>
-
-      <div
-        id="rq-answer-zone"
-        class="rq-answer-zone"
-      ></div>
-
-      <div class="rq-action-row">
-
-        ${
-          APP.bossMode
-            ? ""
-            : `
-              <button
-                class="rq-btn rq-btn-hint"
-                data-action="hint"
-              >
-                💡 Petunjuk
-              </button>
-            `
-        }
-
-        <button
-          id="rq-submit"
-          class="rq-btn rq-btn-primary"
-          data-action="submit"
-        >
-          Jawab
-        </button>
-
-      </div>
-
-    `;
-
-    renderAnswerInput(q);
-
-    updateSubmitState();
+    showScreen("question");
   }
 
-  function formatText(text) {
+  /* =========================================================
+     18. RENDER JAWABAN
+     ========================================================= */
 
-    return escapeHTML(
-      text || ""
-    ).replace(/\n/g, "<br>");
-  }
+  function renderAnswerInput(q) {
 
-  // ============================================================
-  // ANSWER INPUT
-  // ============================================================
+    if (
+      q.type === "multiple_choice"
+    ) {
 
- function renderAnswerInput(q) {
+      return `
+        <div class="rq-options">
 
-  const zone = $("#rq-answer-zone");
+          ${
+            (q.options || [])
+              .map(
+                (option, index) => {
 
-  if (!zone) return;
+                  const value =
+                    typeof option === "object"
+                      ? option.id
+                      : option;
 
-  // ============================================================
-  // MULTIPLE CHOICE
-  // ============================================================
+                  const text =
+                    typeof option === "object"
+                      ? option.text
+                      : option;
 
-  if (q.type === "multiple_choice") {
+                  return `
+                    <button
+                      class="rq-option"
+                      data-action="option"
+                      data-value="${escapeHTML(
+                        value
+                      )}">
 
-    const options = Array.isArray(q.options)
-      ? q.options
-      : [];
+                      <span>
+                        ${String.fromCharCode(
+                          65 + index
+                        )}.
+                      </span>
 
-    zone.innerHTML = options
-      .map((opt, index) => {
+                      ${escapeHTML(text)}
 
-        // Mendukung 2 format:
-        // 1. "Jawaban berupa string"
-        // 2. { id: "A", text: "Jawaban" }
+                    </button>
+                  `;
+                }
+              )
+              .join("")
+          }
 
-        const isObject =
-          typeof opt === "object" &&
-          opt !== null;
+        </div>
+      `;
+    }
 
-        const id =
-          isObject
-            ? (opt.id ?? String.fromCharCode(65 + index))
-            : String.fromCharCode(65 + index);
+    if (
+      q.type === "true_false"
+    ) {
 
-        const text =
-          isObject
-            ? (opt.text ?? "")
-            : String(opt);
+      return `
+        <div class="rq-options">
 
-        return `
           <button
-            type="button"
             class="rq-option"
-            data-answer="${escapeHTML(text)}"
-          >
-
-            <span class="rq-option-id">
-              ${escapeHTML(id)}
-            </span>
-
-            <span class="rq-option-text">
-              ${formatText(text)}
-            </span>
-
+            data-action="option"
+            data-value="true">
+            ✅ Benar
           </button>
-        `;
 
-      })
-      .join("");
+          <button
+            class="rq-option"
+            data-action="option"
+            data-value="false">
+            ❌ Salah
+          </button>
 
-    return;
-  }
+        </div>
+      `;
+    }
 
+    if (
+      q.type === "short_answer"
+    ) {
 
-  // ============================================================
-  // TRUE / FALSE
-  // ============================================================
+      return `
+        <input
+          id="rq-short-answer"
+          class="rq-short-answer"
+          type="text"
+          placeholder="Ketik jawabanmu..."
+          autocomplete="off">
+      `;
+    }
 
-  if (q.type === "true_false") {
+    if (
+      q.type === "matching"
+    ) {
 
-    zone.innerHTML = `
-      <button
-        type="button"
-        class="rq-option"
-        data-answer="Benar"
-      >
-        <span class="rq-option-id">✓</span>
-        <span class="rq-option-text">Benar</span>
-      </button>
+      return `
+        <div class="rq-matching">
 
-      <button
-        type="button"
-        class="rq-option"
-        data-answer="Salah"
-      >
-        <span class="rq-option-id">✕</span>
-        <span class="rq-option-text">Salah</span>
-      </button>
-    `;
+          ${
+            (q.options || [])
+              .map(
+                (option, index) => {
 
-    return;
-  }
+                  const left =
+                    option.left ||
+                    option[0] ||
+                    "";
 
+                  const right =
+                    option.right ||
+                    option[1] ||
+                    "";
 
-  // ============================================================
-  // SHORT ANSWER
-  // ============================================================
+                  return `
+                    <div
+                      class="rq-match-row">
 
-  if (q.type === "short_answer") {
+                      <span>
+                        ${escapeHTML(left)}
+                      </span>
 
-    zone.innerHTML = `
+                      <span>→</span>
+
+                      <input
+                        type="text"
+                        data-match="${index}"
+                        placeholder="Jawaban">
+
+                    </div>
+                  `;
+                }
+              )
+              .join("")
+          }
+
+        </div>
+      `;
+    }
+
+    return `
       <input
         id="rq-short-answer"
         class="rq-short-answer"
         type="text"
-        autocomplete="off"
-        placeholder="Tulis jawabanmu..."
-      >
+        placeholder="Ketik jawabanmu..."
+        autocomplete="off">
     `;
-
-    return;
   }
 
+  /* =========================================================
+     19. ESCAPE HTML
+     ========================================================= */
 
-  // ============================================================
-  // MATCHING
-  // ============================================================
+  function escapeHTML(value) {
 
-  if (q.type === "matching") {
-
-    const opts =
-      Array.isArray(q.options)
-        ? q.options
-        : [];
-
-    zone.innerHTML = `
-
-      <p class="rq-mini-label">
-        Pilih pasangan sesuai urutan.
-      </p>
-
-      <div class="rq-matching-list">
-
-        ${opts.map((opt, i) => `
-
-          <label class="rq-match-row">
-
-            <span>
-              ${formatText(opt)}
-            </span>
-
-            <select
-              data-match-index="${i}"
-            >
-
-              <option value="">
-                Pilih
-              </option>
-
-              ${opts.map((_, j) => `
-                <option value="${j}">
-                  ${j + 1}
-                </option>
-              `).join("")}
-
-            </select>
-
-          </label>
-
-        `).join("")}
-
-      </div>
-
-    `;
-
-    return;
+    return String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
+  /* =========================================================
+     20. PILIHAN JAWABAN
+     ========================================================= */
 
-  // ============================================================
-  // FALLBACK
-  // ============================================================
+  function selectOption(value) {
 
-  zone.innerHTML = `
-    <input
-      id="rq-short-answer"
-      class="rq-short-answer"
-      type="text"
-      autocomplete="off"
-      placeholder="Tulis jawabanmu..."
-    >
-  `;
-}
+    APP.selectedAnswer = value;
+
+    $$(".rq-option").forEach(
+      (button) => {
+
+        button.classList.toggle(
+          "selected",
+          button.dataset.value ===
+            String(value)
+        );
+      }
+    );
+  }
+
+  /* =========================================================
+     21. AMBIL JAWABAN
+     ========================================================= */
 
   function collectAnswer() {
 
     const q =
       APP.currentQuestion;
 
-    if (!q) return null;
+    if (
+      q.type === "multiple_choice" ||
+      q.type === "true_false"
+    ) {
 
-    if (q.type === "short_answer") {
-
-      return (
-        $("#rq-short-answer")
-          ?.value
-          .trim() || ""
-      );
+      return APP.selectedAnswer;
     }
 
-    if (q.type === "matching") {
+    if (
+      q.type === "short_answer"
+    ) {
 
-      return $$(
-        "[data-match-index]"
-      )
-        .map(el => el.value)
-        .join(",");
+      return $(
+        "#rq-short-answer"
+      )?.value.trim() || "";
+    }
+
+    if (
+      q.type === "matching"
+    ) {
+
+      const inputs =
+        $$("[data-match]");
+
+      return inputs.map(
+        (input) =>
+          input.value.trim()
+      );
     }
 
     return APP.selectedAnswer;
   }
 
-  function updateSubmitState() {
+  /* =========================================================
+     22. NORMALISASI JAWABAN
+     ========================================================= */
 
-    const btn =
-      $("#rq-submit");
+  function normalize(value) {
 
-    if (!btn) return;
+    if (Array.isArray(value)) {
 
-    const answer =
-      collectAnswer();
-
-    btn.disabled = !answer;
-  }
-
-  // ============================================================
-  // EVALUATE ANSWER
-  // ============================================================
-
-  function evaluateAnswer(q, answer) {
-
-    if (q.type === "short_answer") {
-
-      const expected =
-        normalize(q.answer);
-
-      const actual =
-        normalize(answer);
-
-      if (expected === actual) {
-        return true;
-      }
-
-      const expectedNum =
-        expected.match(
-          /-?\d+(?:[.,]\d+)?/
-        );
-
-      const actualNum =
-        actual.match(
-          /-?\d+(?:[.,]\d+)?/
-        );
-
-      if (
-        expectedNum &&
-        actualNum &&
-        expectedNum[0].replace(",", ".") ===
-          actualNum[0].replace(",", ".")
-      ) {
-        return true;
-      }
-
-      return false;
-    }
-
-    if (q.type === "matching") {
-
-      const expected =
-        Array.isArray(q.answer)
-          ? q.answer
-              .map(normalize)
-              .join("|")
-          : normalize(q.answer);
-
-      return (
-        normalize(answer)
-          .replace(/,/g, "|") ===
-        expected.replace(/,/g, "|")
+      return value.map(
+        (item) =>
+          String(item)
+            .trim()
+            .toLowerCase()
       );
     }
 
-    return (
-      normalize(answer) ===
-      normalize(q.answer)
-    );
+    return String(value ?? "")
+      .trim()
+      .toLowerCase();
   }
 
-  // ============================================================
-  // SUBMIT
-  // ============================================================
+  /* =========================================================
+     23. CEK JAWABAN
+     ========================================================= */
+
+  function evaluateAnswer(
+    userAnswer,
+    correctAnswer
+  ) {
+
+    const user =
+      normalize(userAnswer);
+
+    const correct =
+      normalize(correctAnswer);
+
+    if (
+      Array.isArray(user) &&
+      Array.isArray(correct)
+    ) {
+
+      if (
+        user.length !==
+        correct.length
+      ) {
+        return false;
+      }
+
+      return user.every(
+        (value, index) =>
+          value === correct[index]
+      );
+    }
+
+    /*
+     * Untuk jawaban angka,
+     * 24 dan "24" dianggap sama.
+     */
+
+    if (
+      !Array.isArray(user) &&
+      !Array.isArray(correct)
+    ) {
+
+      const userNumber =
+        Number(user);
+
+      const correctNumber =
+        Number(correct);
+
+      if (
+        user !== "" &&
+        correct !== "" &&
+        !Number.isNaN(userNumber) &&
+        !Number.isNaN(correctNumber)
+      ) {
+
+        return (
+          userNumber ===
+          correctNumber
+        );
+      }
+    }
+
+    return user === correct;
+  }
+
+  /* =========================================================
+     24. SUBMIT JAWABAN
+     ========================================================= */
 
   function submitAnswer() {
 
     const q =
       APP.currentQuestion;
 
-    if (!q || APP.lastResult) {
+    if (!q) {
       return;
     }
 
-    const answer =
+    const userAnswer =
       collectAnswer();
 
-    if (!answer) {
+    if (
+      userAnswer === null ||
+      userAnswer === "" ||
+      (
+        Array.isArray(userAnswer) &&
+        userAnswer.every(
+          (item) => item === ""
+        )
+      )
+    ) {
 
       alert(
-        "Pilih atau tuliskan jawaban terlebih dahulu."
+        "Pilih atau isi jawaban terlebih dahulu."
       );
 
       return;
     }
 
-    const correct =
+    const isCorrect =
       evaluateAnswer(
-        q,
-        answer
+        userAnswer,
+        q.answer
       );
 
     APP.session.attempts++;
@@ -1435,204 +1292,138 @@ if (!Q.length) {
     APP.progress.attempts++;
 
     APP.lastResult = {
-      correct,
-      answer
+      question: q,
+      userAnswer,
+      correctAnswer: q.answer,
+      isCorrect
     };
 
-    APP.session.answered.push(
-      q.id
-    );
-
-    APP.answeredIds.add(q.id);
-
-    if (correct) {
+    if (isCorrect) {
 
       APP.session.correct++;
 
       APP.session.score +=
-        Number(q.score || 10);
-
-      showFeedback(
-        true,
-        q
-      );
+        q.score || 10;
 
     } else {
 
       APP.session.wrong++;
 
+      /*
+       * Simpan kesalahan
+       */
+
+      const mistake = {
+
+        id: q.id,
+
+        mission:
+          q.mission,
+
+        question:
+          q.question,
+
+        stimulus:
+          q.stimulus,
+
+        userAnswer,
+
+        correctAnswer:
+          q.answer,
+
+        explanation:
+          q.explanation,
+
+        errorCode:
+          q.errorCode,
+
+        feedback:
+          q.feedback,
+
+        time:
+          new Date().toISOString()
+      };
+
       APP.session.mistakes.push(
-        q.id
+        mistake
       );
 
-      addMistake(q);
-
-      showFeedback(
-        false,
-        q
+      APP.progress.mistakes.push(
+        mistake
       );
     }
+
+    APP.session.answered.push(
+      q.id
+    );
+
+    showFeedback(
+      isCorrect
+    );
 
     saveProgress();
-
-    updateGameScore();
   }
 
-  function updateGameScore() {
-
-    const score =
-      $("#rq-score");
-
-    if (score) {
-
-      score.textContent =
-        `${APP.session.score} poin`;
-
-    }
-  }
-
-  // ============================================================
-  // FEEDBACK
-  // ============================================================
+  /* =========================================================
+     25. FEEDBACK
+     ========================================================= */
 
   function showFeedback(
-    correct,
-    q
+    isCorrect
   ) {
 
-    const area =
-      $("#rq-feedback-area");
+    const q =
+      APP.currentQuestion;
 
-    if (!area) return;
+    const box =
+      $("#rq-feedback-box");
 
     const title =
-      correct
-        ? "🎉 Jawaban Tepat!"
-        : "🧩 Belum Tepat";
+      $("#rq-feedback-title");
+
+    const message =
+      $("#rq-feedback-message");
 
     const explanation =
-      q.explanation
-        ? formatText(q.explanation)
-        : "";
+      $("#rq-feedback-explanation");
 
-    const error =
-      !correct && q.errorCode
-        ? `
-          <div class="rq-error-code">
-
-            <strong>
-              ${escapeHTML(q.errorCode)}
-            </strong>
-
-            —
-            ${escapeHTML(
-              getErrorLabel(q.errorCode)
-            )}
-
-          </div>
-        `
-        : "";
-
-    area.innerHTML = `
-
-      <div
-        class="rq-feedback ${
-          correct
-            ? "correct"
-            : "wrong"
-        }"
-      >
-
-        <h3>
-          ${title}
-        </h3>
-
-        ${error}
-
-        ${
-          explanation
-            ? `<p>${explanation}</p>`
-            : ""
-        }
-
-        ${
-          !APP.bossMode &&
-          !correct &&
-          q.feedback
-            ? `
-              <div class="rq-coach">
-                🤖
-                ${formatText(q.feedback)}
-              </div>
-            `
-            : ""
-        }
-
-        <button
-          class="rq-btn ${
-            correct
-              ? "rq-btn-primary"
-              : "rq-btn-secondary"
-          }"
-          data-action="next-question"
-        >
-
-          ${
-            APP.currentQuestionIndex ===
-            APP.currentQuestions.length - 1
-              ? "Lihat Hasil"
-              : "Lanjut →"
-          }
-
-        </button>
-
-      </div>
-
-    `;
-
-    const submit =
-      $("#rq-submit");
-
-    if (submit) {
-      submit.disabled = true;
+    if (!box) {
+      return;
     }
 
-    $$(".rq-option").forEach(
-      btn => {
+    box.style.display = "";
 
-        btn.disabled = true;
+    if (title) {
 
-        if (
-          normalize(
-            btn.dataset.answer
-          ) ===
-          normalize(q.answer)
-        ) {
+      title.textContent =
+        isCorrect
+          ? "🎉 Jawaban Benar!"
+          : "💡 Belum Tepat";
+    }
 
-          btn.classList.add(
-            "correct-option"
-          );
-        }
+    if (message) {
 
-        if (
-          APP.lastResult &&
-          !correct &&
-          normalize(
-            btn.dataset.answer
-          ) ===
-          normalize(
-            APP.lastResult.answer
-          )
-        ) {
+      message.textContent =
+        isCorrect
+          ? "Hebat! Kamu menemukan jawaban yang tepat."
+          : (
+              q.feedback ||
+              "Coba perhatikan kembali informasi pada soal."
+            );
+    }
 
-          btn.classList.add(
-            "wrong-option"
-          );
-        }
+    if (explanation) {
 
-      }
-    );
+      explanation.textContent =
+        q.explanation || "";
+    }
+
+    showScreen("feedback");
   }
+
+  /* =========================================================
+     26. SOAL BERIKUTNYA
+     ========================================================= */
 
   function nextQuestion() {
 
@@ -1645,294 +1436,391 @@ if (!Q.length) {
 
       finishMission();
 
-    } else {
-
-      renderQuestion();
-
-    }
-  }
-
-  // ============================================================
-  // HINT
-  // ============================================================
-
-  function showHint() {
-
-    const q =
-      APP.currentQuestion;
-
-    if (!q || APP.bossMode) {
       return;
     }
 
-    const area =
-      $("#rq-feedback-area");
-
-    if (!area) return;
-
-    let hint = q.hint;
-
-    if (!hint) {
-
-      const hints = {
-
-        E1:
-          "Tentukan dua besaran yang benar-benar sedang dibandingkan.",
-
-        E2:
-          "Ingat urutan: besaran yang disebut pertama ditulis lebih dulu.",
-
-        E3:
-          "Cari faktor yang sama-sama dapat membagi kedua bilangan.",
-
-        E4:
-          "Bandingkan perubahan kedua besaran dengan faktor pengali yang sama.",
-
-        E5:
-          "Baca kembali situasinya. Tanyakan: angka ini mewakili apa?"
-
-      };
-
-      hint =
-        hints[q.errorCode] ||
-        "Baca informasi pada soal secara perlahan, lalu tentukan apa yang sebenarnya ditanyakan.";
-    }
-
-    area.innerHTML = `
-
-      <div class="rq-feedback hint">
-
-        <h3>
-          💡 Petunjuk
-        </h3>
-
-        <p>
-          ${formatText(hint)}
-        </p>
-
-      </div>
-
-    `;
+    showQuestion();
   }
 
-  // ============================================================
-  // MISTAKE LAB
-  // ============================================================
+  /* =========================================================
+     27. SELESAI MISSION
+     ========================================================= */
 
-  function addMistake(q) {
+  function finishMission() {
 
-    const existing =
-      APP.progress.mistakes.find(
-        item => item.id === q.id
-      );
+    stopTimer();
 
-    if (existing) {
+    const session =
+      APP.session;
 
-      existing.count++;
+    if (!session) {
+      showScreen("map");
+      return;
+    }
 
-      existing.lastAt =
-        new Date().toISOString();
+    const total =
+      APP.currentQuestions.length;
+
+    const score =
+      session.score;
+
+    const record = {
+
+      score,
+
+      total,
+
+      correct:
+        session.correct,
+
+      wrong:
+        session.wrong,
+
+      attempts:
+        session.attempts,
+
+      completed: true,
+
+      completedAt:
+        new Date().toISOString()
+    };
+
+    if (
+      APP.currentMission ===
+      "PRETEST"
+    ) {
+
+      APP.progress.pretest =
+        record;
+
+    } else if (
+      APP.bossMode ||
+      APP.currentMission === "BOSS"
+    ) {
+
+      APP.progress.boss =
+        record;
 
     } else {
 
-      APP.progress.mistakes.push({
-
-        id: q.id,
-
-        mission: q.mission,
-
-        errorCode:
-          q.errorCode || "",
-
-        count: 1,
-
-        repaired: false,
-
-        lastAt:
-          new Date().toISOString()
-
-      });
-
+      APP.progress.missions[
+        APP.currentMission
+      ] = record;
     }
 
     saveProgress();
+
+    APP.lastResult = record;
+
+    renderResult();
+
+    showScreen("result");
   }
+
+  /* =========================================================
+     28. HASIL
+     ========================================================= */
+
+  function renderResult() {
+
+    const result =
+      $("#rq-result");
+
+    if (!result) {
+      return;
+    }
+
+    const record =
+      APP.lastResult;
+
+    const percent =
+      calculatePercent(record);
+
+    const missionName =
+      APP.bossMode
+        ? "Boss Challenge"
+        : (
+            MISSIONS[
+              APP.currentMission
+            ]?.title ||
+            APP.currentMission
+          );
+
+    result.innerHTML = `
+      <div class="rq-result-card">
+
+        <div class="rq-result-icon">
+          ${
+            percent >= 80
+              ? "🏆"
+              : percent >= 60
+              ? "⭐"
+              : "💪"
+          }
+        </div>
+
+        <h2>
+          ${escapeHTML(
+            missionName
+          )}
+        </h2>
+
+        <p>
+          ${escapeHTML(
+            APP.progress.studentName
+          )}
+        </p>
+
+        <div class="rq-result-score">
+          ${percent}%
+        </div>
+
+        <p>
+          Benar:
+          ${record.correct || 0}
+          dari
+          ${record.total || 0}
+          soal
+        </p>
+
+        <div class="rq-result-actions">
+
+          <button
+            data-action="map">
+            🗺️ Kembali ke Mission Map
+          </button>
+
+        </div>
+
+      </div>
+    `;
+  }
+
+  /* =========================================================
+     29. MISTAKE LAB
+     ========================================================= */
 
   function renderMistakeLab() {
 
-    const area =
-      $("#rq-mistake-content");
+    const container =
+      $("#rq-mistake-list");
 
-    if (!area) return;
+    if (!container) {
+      return;
+    }
 
     const mistakes =
       APP.progress.mistakes || [];
 
     if (!mistakes.length) {
 
-      area.innerHTML = `
+      container.innerHTML = `
+        <div class="rq-empty-state">
 
-        <div class="rq-empty">
-
-          <div class="rq-empty-icon">
-            🌱
+          <div style="font-size:48px;">
+            🎉
           </div>
 
           <h3>
-            Belum ada kesalahan yang tersimpan.
+            Belum ada kesalahan
           </h3>
 
           <p>
-            Setiap kesalahan akan menjadi bahan belajar di sini.
+            Terus pertahankan ketelitianmu!
           </p>
 
         </div>
-
       `;
 
       return;
     }
 
-    const errorCount = {};
+    container.innerHTML =
+      mistakes
+        .map(
+          (mistake, index) => `
+            <div
+              class="rq-mistake-card">
 
-    mistakes.forEach(
-      m => {
-
-        errorCount[m.errorCode || "-"] =
-          (
-            errorCount[
-              m.errorCode || "-"
-            ] || 0
-          ) + m.count;
-
-      }
-    );
-
-    area.innerHTML = `
-
-      <div class="rq-error-summary">
-
-        ${Object.entries(errorCount)
-          .map(
-            ([code, count]) => `
-
-              <div
-                class="rq-error-chip"
-              >
+              <div>
 
                 <strong>
-                  ${escapeHTML(code)}
+                  Kesalahan ${index + 1}
                 </strong>
 
-                <span>
-                  ${count}×
-                </span>
+                ${
+                  mistake.errorCode
+                    ? `
+                      <span>
+                        ${escapeHTML(
+                          mistake.errorCode
+                        )}
+                      </span>
+                    `
+                    : ""
+                }
 
               </div>
 
-            `
-          )
-          .join("")}
+              <h3>
+                ${escapeHTML(
+                  mistake.question
+                )}
+              </h3>
 
-      </div>
+              ${
+                mistake.stimulus
+                  ? `
+                    <p>
+                      ${escapeHTML(
+                        mistake.stimulus
+                      )}
+                    </p>
+                  `
+                  : ""
+              }
 
+              <p>
+                <strong>
+                  Jawabanmu:
+                </strong>
 
-      <div class="rq-mistake-list">
+                ${escapeHTML(
+                  formatAnswer(
+                    mistake.userAnswer
+                  )
+                )}
+              </p>
 
-        ${mistakes
-          .map(m => {
+              <p>
+                <strong>
+                  Jawaban benar:
+                </strong>
 
-            const q =
-              Q.find(
-                item =>
-                  item.id === m.id
-              );
+                ${escapeHTML(
+                  formatAnswer(
+                    mistake.correctAnswer
+                  )
+                )}
+              </p>
 
-            if (!q) return "";
+              ${
+                mistake.explanation
+                  ? `
+                    <div>
+                      💡
+                      ${escapeHTML(
+                        mistake.explanation
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
 
-            return `
-
-              <article
-                class="rq-mistake-card"
-              >
-
-                <div
-                  class="rq-mistake-head"
-                >
-
-                  <span>
-                    ${escapeHTML(
-                      m.errorCode || ""
-                    )}
-                  </span>
-
-                  <small>
-                    ${escapeHTML(
-                      getMissionName(
-                        q.mission
-                      )
-                    )}
-                  </small>
-
-                </div>
-
-                <h3>
-                  ${formatText(
-                    q.question
-                  )}
-                </h3>
-
-                <p>
-                  <strong>
-                    Kesalahan yang perlu diperiksa:
-                  </strong>
-
-                  ${escapeHTML(
-                    getErrorLabel(
-                      q.errorCode
-                    )
-                  )}
-                </p>
-
-                <p>
-                  <strong>
-                    Pembahasan:
-                  </strong>
-
-                  ${formatText(
-                    q.explanation
-                  )}
-                </p>
-
-                <button
-                  class="rq-btn rq-btn-small"
-                  data-repair-id="${escapeHTML(
-                    q.id
-                  )}"
-                >
-                  🔧 Coba Lagi
-                </button>
-
-              </article>
-
-            `;
-
-          })
-          .join("")}
-
-      </div>
-
-    `;
+            </div>
+          `
+        )
+        .join("");
   }
 
-  function retryQuestion(id) {
+  /* =========================================================
+     30. FORMAT ANSWER
+     ========================================================= */
+
+  function formatAnswer(answer) {
+
+    if (Array.isArray(answer)) {
+
+      return answer.join(" | ");
+    }
+
+    return String(answer ?? "");
+  }
+
+  /* =========================================================
+     31. HINT
+     ========================================================= */
+
+  function showHint() {
+
+    if (APP.bossMode) {
+
+      alert(
+        "Boss Challenge tidak menyediakan petunjuk."
+      );
+
+      return;
+    }
+
+    const q =
+      APP.currentQuestion;
+
+    if (!q) {
+      return;
+    }
+
+    let hint =
+      q.hint;
+
+    if (!hint) {
+
+      const hints = {
+
+        E1:
+          "Perhatikan dua besaran yang sedang dibandingkan.",
+
+        E2:
+          "Perhatikan urutan kedua besaran dalam perbandingan.",
+
+        E3:
+          "Coba sederhanakan kedua bilangan dengan pembagi yang sama.",
+
+        E4:
+          "Gunakan faktor pengali yang sama pada kedua bagian rasio.",
+
+        E5:
+          "Baca kembali informasi dalam cerita sebelum menghitung."
+      };
+
+      hint =
+        hints[q.errorCode] ||
+        "Baca kembali informasi penting pada soal.";
+    }
+
+    alert(
+      `💡 PETUNJUK\n\n${hint}`
+    );
+  }
+
+  /* =========================================================
+     32. RETRY SOAL
+     ========================================================= */
+
+  function retryQuestion(index) {
+
+    const mistakes =
+      APP.progress.mistakes || [];
+
+    const mistake =
+      mistakes[index];
+
+    if (!mistake) {
+      return;
+    }
 
     const q =
       Q.find(
-        item => item.id === id
+        (item) =>
+          item.id === mistake.id
       );
 
-    if (!q) return;
+    if (!q) {
+      alert(
+        "Soal tidak ditemukan."
+      );
+
+      return;
+    }
 
     APP.currentMission =
       q.mission;
@@ -1940,21 +1828,19 @@ if (!Q.length) {
     APP.currentQuestions =
       [q];
 
-    APP.currentQuestionIndex = 0;
+    APP.currentQuestionIndex =
+      0;
 
-    APP.currentQuestion = null;
+    APP.currentQuestion =
+      q;
 
     APP.selectedAnswer = null;
-
-    APP.lastResult = null;
 
     APP.isRetry = true;
 
     APP.bossMode = false;
 
     APP.session = {
-
-      mission: q.mission,
 
       score: 0,
 
@@ -1964,561 +1850,278 @@ if (!Q.length) {
 
       attempts: 0,
 
-      startedAt: Date.now(),
-
       mistakes: [],
 
       answered: []
-
     };
 
-    showScreen("game");
-
-    renderQuestion();
+    showQuestion();
   }
 
-  // ============================================================
-  // FINISH / RESULT
-  // ============================================================
-
-  function finishMission() {
-
-    stopTimer();
-
-    const total =
-      APP.currentQuestions.length;
-
-    const percent =
-      scorePercent(
-        APP.session.score,
-        total * 10
-      );
-
-    const correct =
-      APP.session.correct;
-
-    const mission =
-      APP.currentMission;
-
-    if (!APP.isRetry) {
-
-      if (mission === "PRETEST") {
-
-        APP.progress.pretest = {
-
-          score:
-            APP.session.score,
-
-          total:
-            total * 10,
-
-          completed:
-            true
-
-        };
-
-      } else if (mission === "BOSS") {
-
-        APP.progress.boss = {
-
-          score:
-            APP.session.score,
-
-          total:
-            total * 10,
-
-          completed:
-            true
-
-        };
-
-      } else {
-
-        APP.progress.missions[mission] = {
-
-          score:
-            APP.session.score,
-
-          total:
-            total * 10,
-
-          correct,
-
-          wrong:
-            APP.session.wrong,
-
-          attempts:
-            APP.session.attempts,
-
-          completed:
-            true,
-
-          percent
-
-        };
-
-      }
-    }
-
-    saveProgress();
-
-    renderResult(
-      percent,
-      correct,
-      total,
-      mission
-    );
-
-    showScreen("result");
-  }
-
-  function renderResult(
-    percent,
-    correct,
-    total,
-    mission
-  ) {
-
-    const area =
-      $("#rq-result-content");
-
-    if (!area) return;
-
-    const label =
-      masteryLabel(percent);
-
-    const boss =
-      mission === "BOSS";
-
-    const retry =
-      APP.isRetry;
-
-    area.innerHTML = `
-
-      <div class="rq-result-icon">
-
-        ${
-          percent >= 80
-            ? "🏆"
-            : percent >= 60
-              ? "⭐"
-              : "🌱"
-        }
-
-      </div>
-
-      <div class="rq-kicker">
-
-        ${
-          boss
-            ? "BOSS CHALLENGE"
-            : escapeHTML(
-                getMissionName(
-                  mission
-                )
-              )
-        }
-
-      </div>
-
-      <h2>
-
-        ${
-          retry
-            ? "Percobaan Selesai"
-            : "Misi Selesai!"
-        }
-
-      </h2>
-
-      <div class="rq-big-score">
-        ${percent}%
-      </div>
-
-      <div class="rq-mastery">
-        ${label}
-      </div>
-
-      <p>
-        ${correct} dari ${total}
-        soal benar.
-      </p>
-
-      ${
-        !boss && !retry
-          ? `
-            <p class="rq-result-message">
-              Kesalahan bukan akhir misi.
-              Gunakan Mistake Lab untuk
-              memperbaiki strategi.
-            </p>
-          `
-          : ""
-      }
-
-      ${
-        retry
-          ? `
-            <p class="rq-result-message">
-              Coba lagi sampai kamu
-              memahami langkahnya.
-            </p>
-          `
-          : ""
-      }
-
-    `;
-  }
-
-  // ============================================================
-  // STUDENT SCORE REPORT
-  // ============================================================
+  /* =========================================================
+     33. NILAI SISWA
+     ========================================================= */
 
   function renderStudentScores() {
 
-    const area =
+    const container =
       $("#rq-score-content");
 
-    if (!area) return;
+    if (!container) {
+      return;
+    }
 
-    const rows = [
+    const p =
+      APP.progress;
 
-      [
-        "Pretest",
-        APP.progress.pretest
-      ],
-
-      ...missionOrder
-        .slice(1)
-        .map(id => [
-          getMissionName(id),
-          APP.progress.missions[id]
-        ]),
-
-      [
-        "Boss Challenge",
-        APP.progress.boss
-      ]
-
+    const missionIds = [
+      "PRETEST",
+      "RD",
+      "RB",
+      "RBR",
+      "RRL",
+      "RM",
+      "BOSS"
     ];
 
-    const completedScores =
-      rows.filter(
-        ([, r]) =>
-          r?.completed
-      );
-
-    const totalPoints =
-      completedScores.reduce(
-        (sum, [, r]) =>
-          sum + (r.score || 0),
-        0
-      );
-
-    const totalMax =
-      completedScores.reduce(
-        (sum, [, r]) =>
-          sum + (r.total || 0),
-        0
-      );
-
-    const overall =
-      scorePercent(
-        totalPoints,
-        totalMax
-      );
-
-    area.innerHTML = `
-
+    let html = `
       <div class="rq-student-summary">
 
-        <div>
+        <h2>
+          📊 Nilai Siswa
+        </h2>
 
-          <small>
-            Nama
-          </small>
+        <h3>
+          ${escapeHTML(
+            p.studentName
+          )}
+        </h3>
 
-          <strong>
-            ${escapeHTML(
-              APP.progress.studentName ||
-              "-"
-            )}
-          </strong>
-
-        </div>
-
-        <div>
-
-          <small>
-            Kelas
-          </small>
-
-          <strong>
-            ${escapeHTML(
-              APP.progress.studentClass ||
-              "-"
-            )}
-          </strong>
-
-        </div>
-
-        <div>
-
-          <small>
-            Rata-rata progres
-          </small>
-
-          <strong>
-            ${overall}%
-          </strong>
-
-        </div>
+        <p>
+          Kelas:
+          ${escapeHTML(
+            p.studentClass
+          )}
+        </p>
 
       </div>
 
+      <table class="rq-score-table">
 
-      <div class="rq-score-table-wrap">
+        <thead>
 
-        <table class="rq-score-table">
+          <tr>
+            <th>Misi</th>
+            <th>Benar</th>
+            <th>Total</th>
+            <th>Nilai</th>
+            <th>Status</th>
+          </tr>
 
-          <thead>
+        </thead>
 
-            <tr>
-
-              <th>
-                Misi
-              </th>
-
-              <th>
-                Skor
-              </th>
-
-              <th>
-                Persentase
-              </th>
-
-              <th>
-                Status
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            ${rows
-              .map(
-                ([name, r]) => {
-
-                  const pct =
-                    r?.total
-                      ? scorePercent(
-                          r.score,
-                          r.total
-                        )
-                      : 0;
-
-                  return `
-
-                    <tr>
-
-                      <td>
-                        ${escapeHTML(
-                          name
-                        )}
-                      </td>
-
-                      <td>
-                        ${
-                          r?.completed
-                            ? `${r.score}/${r.total}`
-                            : "—"
-                        }
-                      </td>
-
-                      <td>
-                        ${
-                          r?.completed
-                            ? `${pct}%`
-                            : "—"
-                        }
-                      </td>
-
-                      <td>
-                        ${
-                          r?.completed
-                            ? masteryLabel(pct)
-                            : "Belum"
-                        }
-                      </td>
-
-                    </tr>
-
-                  `;
-
-                }
-              )
-              .join("")}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-
-      <div class="rq-report-actions">
-
-        <button
-          class="rq-btn rq-btn-primary"
-          data-action="download-report"
-        >
-          ⬇️ Unduh Rekap
-        </button>
-
-        <button
-          class="rq-btn rq-btn-secondary"
-          data-action="reset-progress"
-        >
-          ↻ Reset Data
-        </button>
-
-      </div>
-
+        <tbody>
     `;
+
+    missionIds.forEach(
+      (id) => {
+
+        let record;
+
+        if (id === "PRETEST") {
+
+          record = p.pretest;
+
+        } else if (
+          id === "BOSS"
+        ) {
+
+          record = p.boss;
+
+        } else {
+
+          record =
+            p.missions[id];
+        }
+
+        const percent =
+          calculatePercent(record);
+
+        const status =
+          record?.completed
+            ? getMasteryStatus(
+                percent
+              )
+            : "Belum dikerjakan";
+
+        html += `
+          <tr>
+
+            <td>
+              ${
+                id === "PRETEST"
+                  ? "Pretest"
+                  : id === "BOSS"
+                  ? "Boss Challenge"
+                  : (
+                      MISSIONS[id]?.title ||
+                      id
+                    )
+              }
+            </td>
+
+            <td>
+              ${
+                record?.correct ??
+                "-"
+              }
+            </td>
+
+            <td>
+              ${
+                record?.total ??
+                "-"
+              }
+            </td>
+
+            <td>
+              ${
+                record?.completed
+                  ? percent + "%"
+                  : "-"
+              }
+            </td>
+
+            <td>
+              ${status}
+            </td>
+
+          </tr>
+        `;
+      }
+    );
+
+    html += `
+        </tbody>
+
+      </table>
+    `;
+
+    container.innerHTML = html;
   }
 
-  // ============================================================
-  // DOWNLOAD REPORT
-  // ============================================================
+  /* =========================================================
+     34. STATUS PENGUASAAN
+     ========================================================= */
+
+  function getMasteryStatus(
+    percent
+  ) {
+
+    if (percent >= 80) {
+      return "Tuntas";
+    }
+
+    if (percent >= 60) {
+      return "Perlu Penguatan";
+    }
+
+    return "Perlu Bimbingan";
+  }
+
+  /* =========================================================
+     35. DOWNLOAD REPORT
+     ========================================================= */
 
   function downloadReport() {
 
-    const rows = [
+    const p =
+      APP.progress;
 
-      [
-        "Pretest",
-        APP.progress.pretest
-      ],
+    let rows = [];
 
-      ...missionOrder
-        .slice(1)
-        .map(id => [
-          getMissionName(id),
-          APP.progress.missions[id]
-        ]),
+    rows.push([
+      "Nama Siswa",
+      "Kelas",
+      "Misi",
+      "Benar",
+      "Total",
+      "Nilai",
+      "Status"
+    ]);
 
-      [
-        "Boss Challenge",
-        APP.progress.boss
-      ]
-
+    const missionIds = [
+      "PRETEST",
+      "RD",
+      "RB",
+      "RBR",
+      "RRL",
+      "RM",
+      "BOSS"
     ];
 
-    const csv = [
+    missionIds.forEach(
+      (id) => {
 
-      [
-        "MATH MISSION — RATIO QUEST"
-      ],
+        let record;
 
-      [
-        "Nama",
-        APP.progress.studentName
-      ],
+        if (id === "PRETEST") {
 
-      [
-        "Kelas",
-        APP.progress.studentClass
-      ],
+          record = p.pretest;
 
-      [],
+        } else if (
+          id === "BOSS"
+        ) {
 
-      [
-        "Misi",
-        "Skor",
-        "Maksimal",
-        "Persentase",
-        "Status"
-      ],
+          record = p.boss;
 
-      ...rows.map(
-        ([name, r]) => {
+        } else {
 
-          const pct =
-            r?.total
-              ? scorePercent(
-                  r.score,
-                  r.total
-                )
-              : 0;
-
-          return [
-
-            name,
-
-            r?.score ?? "",
-
-            r?.total ?? "",
-
-            r?.completed
-              ? `${pct}%`
-              : "",
-
-            r?.completed
-              ? masteryLabel(pct)
-              : "Belum"
-
-          ];
-
+          record =
+            p.missions[id];
         }
-      ),
 
-      [],
+        const percent =
+          calculatePercent(record);
 
-      [
-        "Error Code",
-        "Jumlah"
-      ],
+        rows.push([
+          p.studentName,
+          p.studentClass,
+          id,
+          record?.correct ?? 0,
+          record?.total ?? 0,
+          record?.completed
+            ? percent
+            : 0,
+          record?.completed
+            ? getMasteryStatus(
+                percent
+              )
+            : "Belum dikerjakan"
+        ]);
+      }
+    );
 
-      ...Object.entries(
-
-        APP.progress.mistakes.reduce(
-          (acc, m) => {
-
-            acc[
-              m.errorCode || "-"
-            ] =
-              (
-                acc[
-                  m.errorCode || "-"
-                ] || 0
-              ) + m.count;
-
-            return acc;
-
-          },
-          {}
+    const csv =
+      rows
+        .map(
+          (row) =>
+            row
+              .map(
+                (cell) =>
+                  `"${String(cell)
+                    .replaceAll(
+                      '"',
+                      '""'
+                    )}"`
+              )
+              .join(",")
         )
-
-      )
-
-    ]
-      .map(
-        row =>
-          row
-            .map(
-              cell =>
-                `"${String(cell ?? "")
-                  .replace(/"/g, '""')}"`
-            )
-            .join(",")
-      )
-      .join("\n");
+        .join("\n");
 
     const blob =
       new Blob(
-        ["\ufeff" + csv],
+        [csv],
         {
           type:
             "text/csv;charset=utf-8;"
@@ -2528,30 +2131,29 @@ if (!Q.length) {
     const url =
       URL.createObjectURL(blob);
 
-    const a =
+    const link =
       document.createElement("a");
 
-    a.href = url;
+    link.href = url;
 
-    a.download =
-      `RatioQuest_${
-        (
-          APP.progress.studentName ||
-          "Siswa"
-        ).replace(
-          /[^a-z0-9]+/gi,
-          "_"
-        )
-      }.csv`;
+    link.download =
+      `Nilai_${p.studentName.replace(
+        /\s+/g,
+        "_"
+      )}.csv`;
 
-    a.click();
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
 
     URL.revokeObjectURL(url);
   }
 
-  // ============================================================
-  // TIMER
-  // ============================================================
+  /* =========================================================
+     36. TIMER
+     ========================================================= */
 
   function startTimer(seconds) {
 
@@ -2565,28 +2167,13 @@ if (!Q.length) {
 
         APP.timerSeconds--;
 
-        const el =
-          $("#rq-timer");
-
-        if (el) {
-
-          el.textContent =
-            formatTime(
-              APP.timerSeconds
-            );
-
-        }
-
         if (
           APP.timerSeconds <= 0
         ) {
 
           stopTimer();
 
-          if (!APP.lastResult) {
-            submitAnswer();
-          }
-
+          submitAnswer();
         }
 
       }, 1000);
@@ -2600,108 +2187,62 @@ if (!Q.length) {
         APP.timer
       );
 
+      APP.timer = null;
+    }
+  }
+
+  /* =========================================================
+     37. ENSURE APP SHELL
+     ========================================================= */
+
+  function ensureAppShell() {
+
+    const app =
+      $("#app");
+
+    if (!app) {
+      console.error(
+        "❌ Elemen #app tidak ditemukan."
+      );
+
+      return;
     }
 
-    APP.timer = null;
+    /*
+     * Jangan membuat ulang HTML
+     * jika sudah dibuat oleh index.html.
+     */
+
+    console.log(
+      "✅ App shell ditemukan."
+    );
   }
 
-  function formatTime(seconds) {
-
-    const m =
-      Math.floor(
-        seconds / 60
-      )
-        .toString()
-        .padStart(2, "0");
-
-    const s =
-      Math.max(
-        0,
-        seconds % 60
-      )
-        .toString()
-        .padStart(2, "0");
-
-    return `${m}:${s}`;
-  }
-
-  // ============================================================
-  // EVENT DELEGATION
-  // ============================================================
+  /* =========================================================
+     38. EVENT DELEGATION
+     ========================================================= */
 
   document.addEventListener(
     "click",
-    event => {
+    (event) => {
 
-      const missionButton =
-        event.target.closest(
-          "[data-mission]"
-        );
-
-      if (
-        missionButton &&
-        !missionButton.disabled
-      ) {
-
-        launchMission(
-          missionButton.dataset.mission
-        );
-
-        return;
-      }
-
-      const option =
-        event.target.closest(
-          ".rq-option"
-        );
-
-      if (
-        option &&
-        !option.disabled &&
-        !APP.lastResult
-      ) {
-
-        $$(".rq-option")
-          .forEach(btn =>
-            btn.classList.remove(
-              "selected"
-            )
-          );
-
-        option.classList.add(
-          "selected"
-        );
-
-        APP.selectedAnswer =
-          option.dataset.answer;
-
-        updateSubmitState();
-
-        return;
-      }
-
-      const action =
+      const target =
         event.target.closest(
           "[data-action]"
         );
 
-      if (!action) return;
+      if (!target) {
+        return;
+      }
 
-      switch (
-        action.dataset.action
-      ) {
+      const action =
+        target.dataset.action;
 
-        case "home":
+      switch (action) {
 
-          showScreen("start");
-
-          break;
-
-        case "map":
-
-          showScreen("map");
-
-          break;
+        /* =========================
+           START
+           ========================= */
 
         case "start":
 
@@ -2709,17 +2250,67 @@ if (!Q.length) {
 
           break;
 
+        /* =========================
+           MISSION
+           ========================= */
+
+        case "mission":
+
+          runQuestionBank(
+            target.dataset.mission,
+            false
+          );
+
+          break;
+
+        /* =========================
+           BOSS
+           ========================= */
+
+        case "boss":
+
+          runQuestionBank(
+            "BOSS",
+            true
+          );
+
+          break;
+
+        /* =========================
+           OPTION
+           ========================= */
+
+        case "option":
+
+          selectOption(
+            target.dataset.value
+          );
+
+          break;
+
+        /* =========================
+           SUBMIT
+           ========================= */
+
         case "submit":
 
           submitAnswer();
 
           break;
 
-        case "next-question":
+        /* =========================
+           NEXT
+           ========================= */
+
+        case "next":
 
           nextQuestion();
 
           break;
+
+        /* =========================
+           HINT
+           ========================= */
 
         case "hint":
 
@@ -2727,17 +2318,39 @@ if (!Q.length) {
 
           break;
 
+        /* =========================
+           MAP
+           ========================= */
+
+        case "map":
+
+          showScreen("map");
+
+          break;
+
+        /* =========================
+           HOME
+           ========================= */
+
+        case "home":
+
+          showScreen("start");
+
+          break;
+
+        /* =========================
+           MISTAKE LAB
+           ========================= */
+
         case "mistake":
 
           showScreen("mistake");
 
           break;
 
-        case "boss":
-
-          launchMission("BOSS");
-
-          break;
+        /* =========================
+           SCORES
+           ========================= */
 
         case "scores":
 
@@ -2745,153 +2358,156 @@ if (!Q.length) {
 
           break;
 
-        case "download-report":
+        /* =========================
+           DOWNLOAD
+           ========================= */
+
+        case "download":
 
           downloadReport();
 
           break;
 
-        case "reset-progress":
+        /* =========================
+           RESET
+           ========================= */
 
-          if (
-            confirm(
-              "Hapus semua progres siswa ini?"
-            )
-          ) {
+        case "reset":
 
-            resetProgress();
-
-            showScreen("start");
-
-            syncStartForm();
-
-          }
+          resetProgress();
 
           break;
 
+        /* =========================
+           RETRY
+           ========================= */
+
+        case "retry":
+
+          retryQuestion(
+            Number(
+              target.dataset.index
+            )
+          );
+
+          break;
+
+        default:
+
+          console.warn(
+            "Action tidak dikenal:",
+            action
+          );
       }
-
-      const repairId =
-        action.dataset.repairId;
-
-      if (repairId) {
-
-        retryQuestion(
-          repairId
-        );
-
-      }
-
     }
   );
+
+  /* =========================================================
+     39. INPUT ENTER
+     ========================================================= */
 
   document.addEventListener(
-    "input",
-    event => {
+    "keydown",
+    (event) => {
 
       if (
-        event.target.matches(
-          "#rq-short-answer"
-        )
+        event.key !== "Enter"
       ) {
-
-        updateSubmitState();
-
+        return;
       }
 
+      const active =
+        document.activeElement;
+
+      if (
+        active?.id ===
+        "rq-student-name"
+      ) {
+
+        startGame();
+      }
+
+      if (
+        active?.id ===
+        "rq-short-answer"
+      ) {
+
+        submitAnswer();
+      }
     }
   );
 
-  document.addEventListener(
-    "change",
-    event => {
-
-      if (
-        event.target.matches(
-          "[data-match-index]"
-        )
-      ) {
-
-        updateSubmitState();
-
-      }
-
-    }
-  );
-
-  // ============================================================
-  // SYNC FORM
-  // ============================================================
-
-  function syncStartForm() {
-
-    const name =
-      $("#rq-name") ||
-      $("#studentName");
-
-    const cls =
-      $("#rq-class") ||
-      $("#studentClass");
-
-    if (name) {
-
-      name.value =
-        APP.progress.studentName ||
-        "";
-
-    }
-
-    if (cls) {
-
-      cls.value =
-        APP.progress.studentClass ||
-        "VI A";
-
-    }
-  }
-
-  // ============================================================
-  // INITIALIZATION
-  // ============================================================
+  /* =========================================================
+     40. INIT
+     ========================================================= */
 
   function init() {
 
-    if (!Q.length) {
+    console.log(
+      "🚀 RATIO QUEST DIMULAI"
+    );
 
-      console.error(
-        "questions.js belum termuat. " +
-        "Pastikan questions.js dipanggil " +
-        "sebelum script.js."
-      );
+    console.log(
+      "Jumlah soal:",
+      Q.length
+    );
 
-    }
+    console.log(
+      "Bank soal:",
+      BANKS
+    );
 
-    loadProgress();
+    /*
+     * SANGAT PENTING:
+     *
+     * Saat halaman pertama kali dibuka,
+     * JANGAN mengambil progress siswa lama.
+     *
+     * Siswa baru harus memilih namanya
+     * terlebih dahulu.
+     */
+
+    APP.progress =
+      createEmptyProgress();
+
+    APP.answeredIds.clear();
+
+    APP.mistakeIds = [];
+
+    APP.session = null;
+
+    APP.currentMission = null;
+
+    APP.currentQuestion = null;
+
+    APP.currentQuestions = [];
+
+    APP.currentQuestionIndex = 0;
 
     ensureAppShell();
 
     syncStartForm();
 
+    /*
+     * TIDAK ADA lagi:
+     *
+     * loadProgress();
+     *
+     * karena itu yang menyebabkan
+     * progress siswa sebelumnya
+     * muncul saat halaman dibuka.
+     */
+
     showScreen("start");
 
     console.log(
-      "MATH MISSION — RATIO QUEST siap."
-    );
-
-    console.log(
-      `Bank soal: ${Q.length} soal.`
-    );
-
-    console.table(
-      Object.fromEntries(
-        Object.entries(BANKS)
-          .map(
-            ([key, value]) =>
-              [key, value.length]
-          )
-      )
+      "👤 Silakan masukkan nama siswa."
     );
   }
+
+  /* =========================================================
+     41. JALANKAN
+     ========================================================= */
 
   if (
     document.readyState ===
@@ -2906,26 +2522,6 @@ if (!Q.length) {
   } else {
 
     init();
-
   }
-
-  // ============================================================
-  // PUBLIC API
-  // ============================================================
-
-  window.RATIO_QUEST_APP =
-    APP;
-
-  window.RATIO_QUEST_START =
-    startGame;
-
-  window.RATIO_QUEST_SHOW_SCREEN =
-    showScreen;
-
-  window.RATIO_QUEST_LAUNCH_MISSION =
-    launchMission;
-
-  window.RATIO_QUEST_RESET =
-    resetProgress;
 
 })();
