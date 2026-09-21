@@ -3560,3 +3560,78 @@ select:focus-visible {
         width: 100%;
     }
 }
+/* 1. JUDUL LANDING PAGE */
+#rq-start h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  text-align: center;
+}
+#rq-start h2,
+#rq-start .subtitle {
+  font-size: clamp(18px, 2.5vw, 24px);
+  line-height: 1.4;
+  font-weight: 700;
+  text-align: center;
+}
+/* 2. STIMULUS */
+#rq-game .stimulus,
+#rq-game .question-stimulus,
+#rq-game .stimulus-box,
+#rq-game [class*="stimulus"] {
+  font-size: 20px;
+  line-height: 1.65;
+  font-weight: 600;
+}
+#rq-game .stimulus p,
+#rq-game .stimulus li,
+#rq-game .stimulus td,
+#rq-game .stimulus th {
+  font-size: 20px;
+  line-height: 1.6;
+}
+/* 3. PERTANYAAN */
+#rq-game .question,
+#rq-game .question-text,
+#rq-game .question-title,
+#rq-game [class*="question-text"] {
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: 800;
+}
+#rq-game .question p,
+#rq-game .question-text p {
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: 800;
+}
+/* 4. PILIHAN JAWABAN */
+#rq-game .answer-option,
+#rq-game .option,
+#rq-game .choice,
+#rq-game label {
+  font-size: 20px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+#rq-game .answer-option span,
+#rq-game .option span,
+#rq-game .choice span {
+  font-size: 20px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+/* 5. FEEDBACK */
+#rq-game .feedback,
+#rq-game .feedback-box,
+#rq-game [class*="feedback"] {
+  font-size: 19px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+#rq-game .feedback p,
+#rq-game .feedback-box p {
+  font-size: 19px;
+  line-height: 1.6;
+}
