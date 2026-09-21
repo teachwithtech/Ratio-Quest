@@ -478,22 +478,18 @@ const questions = [
             "Cerita : pengetahuan = 6 : 9."
     },
 
-
     {
-    id: "RD15",
-    mission: "RD",
-    missionName: "Ratio Detective",
-    level: "KU",
-    type: "matching",
+       id: "RD15",
+       mission: "RD",
+       missionName: "Ratio Detective",
+       level: "KU",
+       type: "matching",
 
-    stimulus:
-        "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
+       stimulus:
+           "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
 
-    question: [
-        "Merah terhadap biru",
-        "Biru terhadap hijau",
-        "Hijau terhadap merah"
-    ],
+       question: "Pasangkanlah pernyataan rasio di sebelah kiri dengan nilai rasio paling sederhana di sebelah kanan dengan tepat!"\n"Merah terhadap biru"\n"Biru terhadap hijau"\n"Hijau terhadap merah"
+    ,
 
     options: [
         "2 : 3",
@@ -515,7 +511,6 @@ const questions = [
     feedback:
         "Baca rasio dari kiri ke kanan sesuai urutan yang diminta."
 }
-
 
     {
         id: "RD16",
