@@ -2353,3 +2353,10 @@ console.log(
     "Boss Challenge:",
     questionBanks.BOSS.length
 );
+console.log(
+    "Boss Challenge:",
+    questionBanks.BOSS.length
+);
+
+console.log("✅ QUESTIONS.JS BERHASIL DIMUAT");
+console.log("Jumlah bank soal =", window.RATIO_QUESTIONS.length);
