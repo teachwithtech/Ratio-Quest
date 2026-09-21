@@ -2389,4 +2389,1174 @@ select:focus-visible {
         box-shadow: none;
     }
 }
+/* =========================================================
+   40. RATIO QUEST — CURRENT GAME ENGINE COMPATIBILITY
+   Menyesuaikan CSS dengan class rq-* pada script.js
+========================================================= */
 
+
+/* =========================================================
+   SCREEN
+========================================================= */
+
+.rq-screen {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    padding: 30px 20px 50px;
+    animation: rqScreenIn 0.3s ease;
+}
+
+.rq-screen.active-screen,
+.rq-screen.active,
+.rq-screen.show {
+    display: block;
+}
+
+.rq-screen[hidden] {
+    display: none !important;
+}
+
+@keyframes rqScreenIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.rq-card {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+    padding: 28px;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+}
+
+
+/* =========================================================
+   START SCREEN
+========================================================= */
+
+.rq-start-card {
+    width: min(650px, 100%);
+    margin: 40px auto;
+    text-align: center;
+    padding: 45px 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.rq-start-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--cyan),
+            var(--green),
+            var(--yellow),
+            var(--orange)
+        );
+}
+
+.rq-logo {
+    width: 85px;
+    height: 85px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    font-size: 48px;
+
+    background: var(--blue-light);
+    border-radius: 50%;
+}
+
+.rq-kicker {
+    margin-bottom: 5px;
+
+    color: var(--blue);
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.rq-start-card h1 {
+    color: var(--blue-dark);
+    font-size: clamp(2.2rem, 7vw, 3.5rem);
+}
+
+.rq-start-card > p {
+    margin: 8px 0 25px;
+    color: var(--gray-500);
+    font-weight: 700;
+}
+
+.rq-form {
+    width: min(420px, 100%);
+    margin: 0 auto;
+    text-align: left;
+}
+
+.rq-form label {
+    display: block;
+    margin: 14px 0 6px;
+
+    color: var(--gray-700);
+    font-weight: 800;
+}
+
+.rq-form input {
+    width: 100%;
+    padding: 14px 16px;
+
+    background: var(--gray-50);
+
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+
+    font-size: 1rem;
+    outline: none;
+}
+
+.rq-form input:focus {
+    border-color: var(--blue);
+
+    background: var(--white);
+
+    box-shadow:
+        0 0 0 4px var(--blue-light);
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.rq-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+.rq-topbar > div,
+.rq-topbar > span {
+    min-width: 0;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.rq-btn {
+    border: none;
+    border-radius: var(--radius-sm);
+
+    padding: 12px 20px;
+
+    font-weight: 800;
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.rq-btn:hover {
+    transform: translateY(-2px);
+}
+
+.rq-btn:active {
+    transform: translateY(0);
+}
+
+.rq-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.rq-btn-primary {
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            #3b82f6
+        );
+
+    box-shadow:
+        0 5px 0 var(--blue-dark);
+}
+
+.rq-btn-primary:hover {
+    box-shadow:
+        0 7px 0 var(--blue-dark);
+}
+
+.rq-btn-secondary {
+    color: var(--blue-dark);
+    background: var(--blue-light);
+}
+
+.rq-btn-small {
+    padding: 8px 13px;
+    font-size: 0.85rem;
+}
+
+.rq-btn-hint {
+    color: #854d0e;
+    background: var(--yellow-light);
+}
+
+
+/* =========================================================
+   MISSION MAP
+========================================================= */
+
+.rq-mission-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-top: 22px;
+}
+
+.rq-mission-card {
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        42px 52px 1fr;
+
+    grid-template-rows:
+        auto auto auto;
+
+    column-gap: 12px;
+    row-gap: 4px;
+
+    align-items: center;
+
+    width: 100%;
+    min-height: 130px;
+
+    padding: 17px;
+
+    text-align: left;
+
+    background: white;
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.rq-mission-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--blue);
+    box-shadow: var(--shadow);
+}
+
+.rq-mission-card.locked {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.rq-mission-card.locked:hover {
+    transform: none;
+}
+
+.rq-mission-number {
+    grid-row: 1 / 4;
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--blue-dark);
+    background: var(--blue-light);
+
+    border-radius: 50%;
+
+    font-weight: 900;
+}
+
+.rq-mission-icon {
+    grid-row: 1 / 4;
+
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+
+    background: var(--gray-100);
+    border-radius: 15px;
+}
+
+.rq-mission-card strong {
+    align-self: end;
+    font-size: 1.1rem;
+}
+
+.rq-mission-card small {
+    color: var(--gray-500);
+    line-height: 1.4;
+}
+
+.rq-mission-status {
+    color: var(--green-dark);
+    font-weight: 900;
+    font-size: 0.85rem;
+}
+
+
+/* Mission colors */
+
+.rq-mission-card[data-mission="PRETEST"] {
+    border-left: 6px solid var(--cyan);
+}
+
+.rq-mission-card[data-mission="RD"] {
+    border-left: 6px solid var(--blue);
+}
+
+.rq-mission-card[data-mission="RB"] {
+    border-left: 6px solid var(--green);
+}
+
+.rq-mission-card[data-mission="RBR"] {
+    border-left: 6px solid var(--orange);
+}
+
+.rq-mission-card[data-mission="RRL"] {
+    border-left: 6px solid var(--pink);
+}
+
+.rq-mission-card[data-mission="RM"] {
+    border-left: 6px solid var(--purple);
+}
+
+
+/* =========================================================
+   SPECIAL BUTTONS
+========================================================= */
+
+.rq-special-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.rq-special {
+    padding: 16px;
+
+    color: var(--gray-900);
+
+    background: white;
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius);
+
+    font-weight: 800;
+
+    box-shadow: var(--shadow-sm);
+}
+
+.rq-special:hover {
+    border-color: var(--blue);
+    background: var(--blue-light);
+}
+
+
+/* =========================================================
+   PLAYER BADGE
+========================================================= */
+
+#rq-player-badge {
+    padding: 8px 13px;
+
+    background: var(--blue-light);
+
+    color: var(--blue-dark);
+
+    border-radius: 20px;
+
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   GAME SCREEN
+========================================================= */
+
+.rq-game-card {
+    width: min(950px, 100%);
+    margin: 0 auto;
+}
+
+#rq-game-title {
+    flex: 1;
+
+    text-align: center;
+
+    font-weight: 900;
+    color: var(--blue-dark);
+}
+
+#rq-score {
+    min-width: 100px;
+
+    padding: 8px 13px;
+
+    text-align: center;
+
+    color: #854d0e;
+
+    background: var(--yellow-light);
+
+    border-radius: 20px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   GAME PROGRESS
+========================================================= */
+
+.rq-progress {
+    width: 100%;
+    height: 10px;
+
+    margin-bottom: 24px;
+
+    overflow: hidden;
+
+    background: var(--gray-200);
+
+    border-radius: 20px;
+}
+
+#rq-progress-bar {
+    height: 100%;
+    width: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--cyan)
+        );
+
+    border-radius: inherit;
+
+    transition: width 0.3s ease;
+}
+
+
+/* =========================================================
+   QUESTION
+========================================================= */
+
+.rq-question-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 14px;
+
+    color: var(--gray-500);
+
+    font-size: 0.85rem;
+    font-weight: 800;
+}
+
+.rq-question {
+    margin-bottom: 20px;
+
+    padding: 22px;
+
+    color: var(--gray-900);
+
+    background: var(--white);
+
+    border:
+        2px solid var(--blue-light);
+
+    border-radius: var(--radius);
+
+    font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+
+    font-weight: 800;
+
+    line-height: 1.6;
+}
+
+.rq-stimulus {
+    margin-bottom: 18px;
+
+    padding: 18px 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eff6ff,
+            #ffffff
+        );
+
+    border:
+        2px solid var(--blue-light);
+
+    border-radius: var(--radius);
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   ANSWER ZONE
+========================================================= */
+
+.rq-answer-zone {
+    display: grid;
+
+    gap: 12px;
+
+    margin: 20px 0;
+}
+
+
+/* =========================================================
+   ANSWER OPTIONS
+========================================================= */
+
+.rq-option {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px 17px;
+
+    text-align: left;
+
+    color: var(--gray-900);
+
+    background: var(--gray-50);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius);
+
+    font-size: 1.05rem;
+
+    font-weight: 700;
+
+    box-shadow: 0 3px 0 rgba(15, 23, 42, 0.05);
+
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+.rq-option:hover {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    transform: translateX(3px);
+}
+
+.rq-option.selected {
+    border-color: var(--blue);
+
+    background: var(--blue-light);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.rq-option.correct-option {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: var(--green-dark);
+}
+
+.rq-option.wrong-option {
+    border-color: var(--red);
+    background: var(--red-light);
+    color: #991b1b;
+}
+
+.rq-option-id {
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--blue-dark);
+
+    background: white;
+
+    border-radius: 50%;
+
+    font-weight: 900;
+}
+
+.rq-option-text {
+    flex: 1;
+}
+
+
+/* =========================================================
+   ACTION ROW
+========================================================= */
+
+.rq-action-row {
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   FEEDBACK
+========================================================= */
+
+#rq-feedback-area {
+    margin-top: 18px;
+}
+
+.rq-feedback {
+    padding: 20px;
+
+    border-radius: var(--radius);
+
+    border: 2px solid var(--gray-200);
+}
+
+.rq-feedback.correct {
+    background: var(--green-light);
+    border-color: #86efac;
+}
+
+.rq-feedback.wrong {
+    background: var(--red-light);
+    border-color: #fca5a5;
+}
+
+.rq-feedback.hint {
+    background: var(--yellow-light);
+    border-color: #fde68a;
+}
+
+.rq-feedback h3 {
+    margin-bottom: 8px;
+}
+
+.rq-feedback.correct h3 {
+    color: var(--green-dark);
+}
+
+.rq-feedback.wrong h3 {
+    color: #991b1b;
+}
+
+.rq-error-code {
+    display: inline-block;
+
+    margin: 8px 0;
+    padding: 7px 10px;
+
+    color: #9a3412;
+
+    background: var(--orange-light);
+
+    border-radius: 10px;
+
+    font-size: 0.85rem;
+}
+
+.rq-coach {
+    margin-top: 12px;
+
+    padding: 13px;
+
+    background: var(--blue-light);
+
+    border-radius: var(--radius-sm);
+
+    color: var(--blue-dark);
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   SHORT ANSWER
+========================================================= */
+
+.rq-short-answer {
+    width: 100%;
+
+    padding: 15px 17px;
+
+    font-size: 1.1rem;
+
+    background: var(--gray-50);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius-sm);
+
+    outline: none;
+}
+
+.rq-short-answer:focus {
+    border-color: var(--blue);
+
+    background: white;
+
+    box-shadow:
+        0 0 0 4px var(--blue-light);
+}
+
+
+/* =========================================================
+   MATCHING
+========================================================= */
+
+.rq-matching-list {
+    display: grid;
+    gap: 10px;
+}
+
+.rq-match-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 15px;
+
+    background: var(--gray-50);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius-sm);
+}
+
+.rq-match-row select {
+    min-width: 90px;
+
+    padding: 8px;
+
+    border:
+        2px solid var(--gray-300);
+
+    border-radius: 8px;
+
+    background: white;
+
+    font-weight: 800;
+}
+
+.rq-mini-label {
+    margin-bottom: 12px;
+
+    color: var(--gray-500);
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+.rq-result-card {
+    width: min(650px, 100%);
+
+    margin: 40px auto;
+
+    text-align: center;
+}
+
+.rq-result-icon {
+    font-size: 70px;
+    margin-bottom: 10px;
+}
+
+.rq-big-score {
+    margin: 20px auto;
+
+    width: 170px;
+    height: 170px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #854d0e;
+
+    background: var(--yellow-light);
+
+    border:
+        8px solid var(--yellow);
+
+    border-radius: 50%;
+
+    font-family: "Fredoka", "Nunito", sans-serif;
+
+    font-size: 3rem;
+    font-weight: 900;
+}
+
+.rq-mastery {
+    display: inline-block;
+
+    padding: 9px 15px;
+
+    color: var(--green-dark);
+
+    background: var(--green-light);
+
+    border-radius: 20px;
+
+    font-weight: 900;
+}
+
+.rq-result-message {
+    margin: 18px auto;
+
+    max-width: 500px;
+
+    padding: 14px;
+
+    background: var(--blue-light);
+
+    border-radius: var(--radius);
+}
+
+
+/* =========================================================
+   MISTAKE LAB
+========================================================= */
+
+.rq-empty {
+    padding: 40px;
+
+    text-align: center;
+
+    background: var(--gray-50);
+
+    border-radius: var(--radius);
+}
+
+.rq-empty-icon {
+    font-size: 50px;
+}
+
+.rq-error-summary {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin: 20px 0;
+}
+
+.rq-error-chip {
+    display: flex;
+
+    gap: 8px;
+
+    padding: 8px 12px;
+
+    background: var(--orange-light);
+
+    border-radius: 20px;
+
+    color: #9a3412;
+}
+
+.rq-mistake-list {
+    display: grid;
+
+    gap: 15px;
+}
+
+.rq-mistake-card {
+    padding: 20px;
+
+    background: white;
+
+    border:
+        2px solid var(--gray-200);
+
+    border-left:
+        6px solid var(--orange);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.rq-mistake-head {
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.rq-mistake-head span {
+    padding: 4px 9px;
+
+    background: var(--red-light);
+
+    color: #991b1b;
+
+    border-radius: 10px;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   SCORE DASHBOARD
+========================================================= */
+
+.rq-student-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin: 20px 0;
+}
+
+.rq-student-summary > div {
+    padding: 15px;
+
+    background: var(--gray-100);
+
+    border-radius: var(--radius-sm);
+}
+
+.rq-student-summary small {
+    display: block;
+
+    color: var(--gray-500);
+}
+
+.rq-student-summary strong {
+    display: block;
+
+    margin-top: 3px;
+
+    font-size: 1.1rem;
+}
+
+.rq-score-table-wrap {
+    width: 100%;
+
+    overflow-x: auto;
+
+    margin-top: 20px;
+
+    border-radius: var(--radius);
+}
+
+.rq-score-table {
+    width: 100%;
+
+    min-width: 650px;
+
+    border-collapse: collapse;
+}
+
+.rq-score-table th,
+.rq-score-table td {
+    padding: 12px;
+
+    border-bottom:
+        1px solid var(--gray-200);
+
+    text-align: center;
+}
+
+.rq-score-table th {
+    color: white;
+
+    background: var(--blue);
+
+    font-weight: 800;
+}
+
+.rq-report-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .rq-mission-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rq-special-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rq-student-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .rq-screen {
+        padding: 15px 10px 30px;
+    }
+
+    .rq-card {
+        padding: 20px 15px;
+    }
+
+    .rq-start-card {
+        margin: 15px auto;
+        padding: 35px 20px;
+    }
+
+    .rq-topbar {
+        flex-wrap: wrap;
+    }
+
+    #rq-game-title {
+        order: 3;
+        width: 100%;
+    }
+
+    .rq-action-row {
+        flex-direction: column;
+    }
+
+    .rq-action-row .rq-btn {
+        width: 100%;
+    }
+
+    .rq-mission-card {
+        grid-template-columns: 40px 48px 1fr;
+    }
+
+    .rq-mission-number {
+        width: 36px;
+        height: 36px;
+    }
+
+    .rq-mission-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .rq-question {
+        padding: 17px;
+    }
+
+    .rq-option {
+        padding: 13px;
+    }
+
+    .rq-report-actions {
+        flex-direction: column;
+    }
+
+    .rq-report-actions .rq-btn {
+        width: 100%;
+    }
+}
