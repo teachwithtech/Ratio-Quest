@@ -479,39 +479,35 @@ const questions = [
     },
 
     {
-       id: "RD15",
-       mission: "RD",
-       missionName: "Ratio Detective",
-       level: "KU",
-       type: "matching",
+    id: "RD15",
+    mission: "RD",
+    missionName: "Ratio Detective",
+    level: "A",
+    type: "multiple_choice",
 
-       stimulus:
-           "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
+    stimulus:
+        "Di dalam kotak terdapat:\n\n🔴 8 kelereng merah\n🔵 12 kelereng biru\n🟢 4 kelereng hijau",
 
-       question: "Pasangkanlah pernyataan rasio di sebelah kiri dengan nilai rasio paling sederhana di sebelah kanan dengan tepat!"\n"Merah terhadap biru"\n"Biru terhadap hijau"\n"Hijau terhadap merah"
-    ,
+    question:
+        "Rasio kelereng biru terhadap kelereng merah dalam bentuk paling sederhana adalah …",
 
     options: [
         "2 : 3",
-        "3 : 4",
-        "2 : 1"
+        "3 : 2",
+        "8 : 12",
+        "12 : 4"
     ],
 
-    answer: [
-        "2 : 3",
-        "3 : 4",
-        "2 : 1"
-    ],
+    answer: "3 : 2",
 
     explanation:
-        "Baca rasio dari kiri ke kanan sesuai urutan yang diminta lalu sederhanakan (Merah:Biru = 4:6 disederhanakan menjadi 2:3; Biru:Hijau = 6:8 menjadi 3:4; Hijau:Merah = 8:4 menjadi 2:1).",
+        "Biru : merah = 12 : 8. Kedua bilangan dibagi 4, sehingga menjadi 3 : 2.",
 
     errorCode: "E2",
 
     feedback:
-        "Baca rasio dari kiri ke kanan sesuai urutan yang diminta."
-}
-
+        "Perhatikan urutan perbandingan. Biru disebut terlebih dahulu, jadi 12 menjadi bilangan pertama. 12 : 8 kemudian disederhanakan menjadi 3 : 2."
+},
     {
         id: "RD16",
         mission: "RD",
