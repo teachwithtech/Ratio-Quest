@@ -490,7 +490,7 @@ const questions = [
             "diketahui jumlah tiga kelereng dengan rincian sebagai berikut.\nKelereng merah = 4\nKelereng biru = 6\nKelereng hijau = 8",
 
         question:
-            "Pasangkanlah pernyataan rasio di sebelah kiri dengan nilai rasio paling sederhana di sebelah kanan dengan tepat!",
+            "Pasangkanlah pernyataan rasio di sebelah kiri dengan nilai rasio paling sederhana di sebelah kanan dengan tepat!\n1. merah : biru = 2 : 3\n2. biru : hijau = 3 : 4\n3. hijau : merah = 4 : 2",
 
         options: [
             "Rasio merah terhadap biru",
