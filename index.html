@@ -42,9 +42,9 @@
        ===================================================== -->
 
   <link
-    rel="stylesheet"
-    href="style.css"
-  >
+  rel="stylesheet"
+  href="./style.css?v=2"
+>
 
 </head>
 
@@ -530,17 +530,17 @@
        JAVASCRIPT
        ===================================================== -->
 
-  <!--
-    PENTING:
+<script src="./questions.js?v=2"></script>
 
-    questions.js HARUS dipanggil lebih dahulu
-    karena script.js membaca data soal dari file ini.
-  -->
+<script>
+  console.log("=== CEK RATIO QUEST ===");
+  console.log("RATIO_QUESTIONS:", window.RATIO_QUESTIONS);
+  console.log(
+    "Jumlah soal:",
+    window.RATIO_QUESTIONS
+      ? window.RATIO_QUESTIONS.length
+      : 0
+  );
+</script>
 
-  <script src="questions.js"></script>
-  <script src="script.js"></script>
-
-
-</body>
-
-</html>
+<script src="./script.js?v=2"></script>
