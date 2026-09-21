@@ -1,0 +1,2393 @@
+```css
+/* =========================================================
+   MATH MISSION — RATIO QUEST
+   "Misi Menemukan Perbandingan yang Tepat"
+
+   STYLE SYSTEM
+   - Bright & friendly
+   - High readability
+   - Grade 6 friendly
+   - Responsive
+   - No dark interface
+========================================================= */
+
+
+/* =========================================================
+   1. ROOT VARIABLES
+========================================================= */
+
+:root {
+
+    --blue: #2563eb;
+    --blue-dark: #1e40af;
+    --blue-light: #dbeafe;
+
+    --yellow: #facc15;
+    --yellow-light: #fef9c3;
+
+    --green: #22c55e;
+    --green-dark: #15803d;
+    --green-light: #dcfce7;
+
+    --orange: #f97316;
+    --orange-light: #ffedd5;
+
+    --red: #ef4444;
+    --red-light: #fee2e2;
+
+    --purple: #8b5cf6;
+    --purple-light: #ede9fe;
+
+    --cyan: #06b6d4;
+    --cyan-light: #cffafe;
+
+    --pink: #ec4899;
+    --pink-light: #fce7f3;
+
+    --white: #ffffff;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-500: #64748b;
+    --gray-700: #334155;
+    --gray-900: #0f172a;
+
+    --shadow-sm:
+        0 4px 12px rgba(15, 23, 42, 0.08);
+
+    --shadow:
+        0 10px 30px rgba(15, 23, 42, 0.10);
+
+    --shadow-lg:
+        0 18px 45px rgba(15, 23, 42, 0.15);
+
+    --radius-sm: 10px;
+    --radius: 18px;
+    --radius-lg: 28px;
+
+    --transition: 0.2s ease;
+}
+
+
+/* =========================================================
+   2. RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        "Nunito",
+        Arial,
+        sans-serif;
+
+    color: var(--gray-900);
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff 0%,
+            #f8fafc 45%,
+            #fefce8 100%
+        );
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   3. GENERAL TYPOGRAPHY
+========================================================= */
+
+h1,
+h2,
+h3,
+h4,
+button {
+    font-family:
+        "Fredoka",
+        "Nunito",
+        sans-serif;
+}
+
+h1 {
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+h2 {
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+h3 {
+    font-weight: 600;
+}
+
+p {
+    color: var(--gray-700);
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   4. GAME CONTAINER
+========================================================= */
+
+#game {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   5. SCREEN SYSTEM
+========================================================= */
+
+.screen {
+    display: none;
+
+    width: 100%;
+    min-height: 100vh;
+
+    padding: 30px 24px 50px;
+
+    animation: screenIn 0.35s ease;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes screenIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   6. WELCOME SCREEN
+========================================================= */
+
+#welcome-screen {
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px 20px;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(37, 99, 235, 0.12),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(250, 204, 21, 0.18),
+            transparent 25%
+        );
+}
+
+#welcome-screen.active {
+    display: flex;
+}
+
+.welcome-card {
+
+    width: min(650px, 100%);
+
+    padding: 45px 40px;
+
+    text-align: center;
+
+    background: var(--white);
+
+    border:
+        1px solid rgba(226, 232, 240, 0.8);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.welcome-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--cyan),
+            var(--green),
+            var(--yellow),
+            var(--orange)
+        );
+}
+
+
+/* =========================================================
+   7. GAME LOGO
+========================================================= */
+
+.game-logo {
+    margin-bottom: 15px;
+}
+
+.logo-icon {
+
+    width: 75px;
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    font-size: 42px;
+
+    background: var(--blue-light);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 8px 0 rgba(37, 99, 235, 0.12);
+}
+
+.game-logo h1 {
+
+    font-size: clamp(2rem, 6vw, 3.4rem);
+
+    letter-spacing: 1px;
+
+    color: var(--blue-dark);
+}
+
+.game-logo h2 {
+
+    margin-top: 2px;
+
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+
+    color: var(--orange);
+}
+
+.tagline {
+
+    margin-top: 8px;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    color: var(--gray-500);
+}
+
+
+/* =========================================================
+   8. WELCOME CHARACTER
+========================================================= */
+
+.welcome-character {
+
+    width: 110px;
+    height: 110px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 15px auto;
+
+    font-size: 64px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--yellow-light),
+            var(--blue-light)
+        );
+
+    border-radius: 50%;
+
+    box-shadow: var(--shadow-sm);
+
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+/* =========================================================
+   9. WELCOME MESSAGE
+========================================================= */
+
+.welcome-message {
+
+    margin: 20px auto;
+
+    max-width: 500px;
+}
+
+.welcome-message p:first-child {
+
+    font-size: 1.2rem;
+
+    margin-bottom: 5px;
+}
+
+.anti-fear {
+
+    margin-top: 18px;
+
+    padding: 14px 18px;
+
+    background: var(--yellow-light);
+
+    border:
+        1px solid #fde68a;
+
+    border-radius: var(--radius);
+
+    color: #713f12;
+
+    font-size: 0.95rem;
+}
+
+
+/* =========================================================
+   10. PLAYER FORM
+========================================================= */
+
+.player-form {
+
+    width: min(420px, 100%);
+
+    margin: 25px auto 0;
+
+    text-align: left;
+}
+
+.player-form label {
+
+    display: block;
+
+    margin: 13px 0 6px;
+
+    font-weight: 800;
+
+    color: var(--gray-700);
+}
+
+.player-form input,
+.player-form select {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    font-size: 1rem;
+
+    background: var(--gray-50);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius-sm);
+
+    outline: none;
+
+    transition: var(--transition);
+}
+
+.player-form input:focus,
+.player-form select:focus {
+
+    border-color: var(--blue);
+
+    background: var(--white);
+
+    box-shadow:
+        0 0 0 4px var(--blue-light);
+}
+
+
+/* =========================================================
+   11. BUTTON SYSTEM
+========================================================= */
+
+button {
+
+    border: none;
+
+    cursor: pointer;
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+
+    font-weight: 700;
+}
+
+button:hover {
+
+    transform: translateY(-2px);
+}
+
+button:active {
+
+    transform: translateY(0);
+}
+
+
+/* PRIMARY BUTTON */
+
+.primary-btn {
+
+    width: 100%;
+
+    margin-top: 20px;
+
+    padding: 14px 22px;
+
+    color: var(--white);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            #3b82f6
+        );
+
+    border-radius: var(--radius-sm);
+
+    box-shadow:
+        0 5px 0 var(--blue-dark);
+
+    font-size: 1rem;
+}
+
+.primary-btn:hover {
+
+    box-shadow:
+        0 7px 0 var(--blue-dark);
+}
+
+
+/* SECONDARY BUTTON */
+
+.secondary-btn {
+
+    padding: 12px 20px;
+
+    color: var(--blue-dark);
+
+    background: var(--blue-light);
+
+    border-radius: var(--radius-sm);
+}
+
+
+/* WARNING BUTTON */
+
+.warning-btn {
+
+    padding: 12px 18px;
+
+    color: #9a3412;
+
+    background: var(--orange-light);
+
+    border-radius: var(--radius-sm);
+}
+
+
+/* DANGER BUTTON */
+
+.danger-btn {
+
+    padding: 12px 18px;
+
+    color: #991b1b;
+
+    background: var(--red-light);
+
+    border-radius: var(--radius-sm);
+}
+
+
+/* BOSS BUTTON */
+
+.boss-btn {
+
+    width: 100%;
+
+    padding: 15px 22px;
+
+    color: var(--white);
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #a855f7
+        );
+
+    border-radius: var(--radius-sm);
+
+    box-shadow:
+        0 5px 0 #5b21b6;
+
+    font-size: 1rem;
+}
+
+.boss-btn:hover {
+
+    box-shadow:
+        0 7px 0 #5b21b6;
+}
+
+
+/* =========================================================
+   12. GAME HEADER
+========================================================= */
+
+.game-header {
+
+    width: min(1100px, 100%);
+
+    margin: 0 auto 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 12px 16px;
+
+    background: var(--white);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.player-info {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.player-info .avatar {
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--blue-light);
+
+    border-radius: 50%;
+
+    font-size: 25px;
+}
+
+.player-info strong {
+
+    display: block;
+
+    font-family: "Fredoka";
+
+    font-size: 1rem;
+}
+
+.player-info small {
+
+    color: var(--gray-500);
+}
+
+.header-score {
+
+    padding: 8px 14px;
+
+    background: var(--yellow-light);
+
+    border-radius: 30px;
+
+    font-family: "Fredoka";
+
+    font-size: 1rem;
+
+    color: #854d0e;
+}
+
+
+/* =========================================================
+   13. MISSION HEADER
+========================================================= */
+
+.mission-header {
+
+    width: min(1000px, 100%);
+
+    margin: 0 auto 25px;
+
+    text-align: center;
+}
+
+.eyebrow {
+
+    margin-bottom: 4px;
+
+    font-size: 0.8rem;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    color: var(--blue);
+}
+
+.mission-header h1 {
+
+    font-size: clamp(2rem, 5vw, 3rem);
+
+    color: var(--gray-900);
+}
+
+.mission-header p {
+
+    margin-top: 5px;
+}
+
+
+/* =========================================================
+   14. PROGRESS
+========================================================= */
+
+.progress-overview {
+
+    width: min(1000px, 100%);
+
+    margin: 0 auto 25px;
+
+    padding: 15px 18px;
+
+    background: var(--white);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.progress-label {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+
+    font-size: 0.9rem;
+
+    font-weight: 700;
+}
+
+.progress-bar {
+
+    width: 100%;
+
+    height: 12px;
+
+    overflow: hidden;
+
+    background: var(--gray-200);
+
+    border-radius: 20px;
+}
+
+.progress-fill {
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--blue),
+            var(--cyan)
+        );
+
+    transition:
+        width 0.5s ease;
+}
+
+
+/* =========================================================
+   15. MISSION MAP
+========================================================= */
+
+.mission-map {
+
+    width: min(1000px, 100%);
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   16. MISSION CARD
+========================================================= */
+
+.mission-card {
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns: 45px 55px 1fr auto;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 125px;
+
+    padding: 18px;
+
+    background: var(--white);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+
+    overflow: hidden;
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition);
+}
+
+.mission-card:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: var(--shadow);
+
+    border-color: var(--blue);
+}
+
+.mission-card.locked {
+
+    opacity: 0.65;
+
+    filter: grayscale(0.25);
+
+    cursor: not-allowed;
+}
+
+.mission-card.locked:hover {
+
+    transform: none;
+
+    border-color: var(--gray-200);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.mission-number {
+
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--blue-light);
+
+    color: var(--blue-dark);
+
+    border-radius: 50%;
+
+    font-family: "Fredoka";
+
+    font-size: 1.1rem;
+}
+
+.mission-icon {
+
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
+
+    background: var(--gray-100);
+
+    border-radius: 15px;
+}
+
+.mission-content {
+
+    min-width: 0;
+}
+
+.mission-label {
+
+    font-size: 0.68rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+
+    color: var(--blue);
+}
+
+.mission-content h2 {
+
+    margin: 2px 0;
+
+    font-size: 1.2rem;
+}
+
+.mission-content p {
+
+    font-size: 0.82rem;
+
+    line-height: 1.4;
+}
+
+.mission-status {
+
+    font-size: 1.25rem;
+}
+
+.mission-btn {
+
+    padding: 8px 12px;
+
+    color: var(--white);
+
+    background: var(--green);
+
+    border-radius: 9px;
+
+    font-size: 0.8rem;
+}
+
+
+/* MISSION COLORS */
+
+.mission-card[data-mission="PRETEST"] {
+    border-left: 6px solid var(--cyan);
+}
+
+.mission-card[data-mission="RD"] {
+    border-left: 6px solid var(--blue);
+}
+
+.mission-card[data-mission="RB"] {
+    border-left: 6px solid var(--green);
+}
+
+.mission-card[data-mission="RBR"] {
+    border-left: 6px solid var(--orange);
+}
+
+.mission-card[data-mission="RRL"] {
+    border-left: 6px solid var(--pink);
+}
+
+.mission-card[data-mission="RM"] {
+    border-left: 6px solid var(--purple);
+}
+
+
+/* =========================================================
+   17. BOSS CARD
+========================================================= */
+
+.boss-card {
+
+    grid-column: 1 / -1;
+
+    border:
+        2px solid #c4b5fd;
+
+    background:
+        linear-gradient(
+            135deg,
+            #faf5ff,
+            #ffffff
+        );
+}
+
+.boss-card .mission-number {
+
+    color: #6d28d9;
+
+    background: var(--purple-light);
+}
+
+.boss-card .mission-icon {
+
+    background: var(--purple-light);
+}
+
+.boss-card .mission-label {
+
+    color: #7c3aed;
+}
+
+
+/* =========================================================
+   18. TEACHER TOOLS
+========================================================= */
+
+.teacher-tools {
+
+    width: min(1000px, 100%);
+
+    margin: 25px auto 0;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   19. QUESTION HEADER
+========================================================= */
+
+.question-header {
+
+    width: min(1100px, 100%);
+
+    margin: 0 auto 8px;
+
+    display: grid;
+
+    grid-template-columns: 50px 1fr auto;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 16px;
+
+    background: var(--white);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-btn {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--blue-dark);
+
+    background: var(--blue-light);
+
+    border-radius: 50%;
+
+    font-size: 1.3rem;
+}
+
+.question-mission-info span {
+
+    display: block;
+
+    font-size: 0.7rem;
+
+    font-weight: 800;
+
+    color: var(--blue);
+
+    letter-spacing: 0.8px;
+}
+
+.question-mission-info strong {
+
+    display: block;
+
+    font-family: "Fredoka";
+
+    font-size: 1.1rem;
+}
+
+.question-counter {
+
+    padding: 7px 12px;
+
+    color: var(--blue-dark);
+
+    background: var(--blue-light);
+
+    border-radius: 20px;
+
+    font-weight: 800;
+}
+
+.question-progress {
+
+    width: min(1100px, 100%);
+
+    height: 8px;
+
+    margin: 0 auto 20px;
+
+    background: var(--gray-200);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   20. QUESTION LAYOUT
+========================================================= */
+
+.question-layout {
+
+    width: min(1100px, 100%);
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(250px, 0.8fr)
+        minmax(400px, 1.5fr);
+
+    gap: 20px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   21. STIMULUS CARD
+========================================================= */
+
+.stimulus-card {
+
+    padding: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #eff6ff,
+            #ffffff
+        );
+
+    border:
+        2px solid var(--blue-light);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-sm);
+
+    min-height: 160px;
+}
+
+.stimulus-title {
+
+    display: inline-block;
+
+    margin-bottom: 12px;
+
+    padding: 5px 10px;
+
+    color: var(--blue-dark);
+
+    background: var(--blue-light);
+
+    border-radius: 20px;
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+}
+
+#stimulus-content {
+
+    font-size: 1rem;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   22. QUESTION CARD
+========================================================= */
+
+.question-card {
+
+    padding: 28px;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow);
+
+    border:
+        1px solid var(--gray-200);
+}
+
+.question-type {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.question-type span {
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: var(--gray-100);
+
+    color: var(--gray-700);
+
+    font-size: 0.7rem;
+
+    font-weight: 800;
+}
+
+#question-level-label {
+
+    color: var(--blue-dark);
+
+    background: var(--blue-light);
+}
+
+.question-card h2 {
+
+    margin-bottom: 22px;
+
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   23. ANSWER AREA
+========================================================= */
+
+#answer-area,
+#boss-answer-area {
+
+    display: grid;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+
+/* Generic answer option */
+
+.answer-option {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    text-align: left;
+
+    color: var(--gray-900);
+
+    background: var(--gray-50);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius-sm);
+
+    font-size: 1rem;
+
+    font-weight: 700;
+}
+
+.answer-option:hover {
+
+    border-color: var(--blue);
+
+    background: var(--blue-light);
+}
+
+.answer-option.selected {
+
+    border-color: var(--blue);
+
+    background: var(--blue-light);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   24. FEEDBACK SCREEN
+========================================================= */
+
+#feedback-screen {
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+#feedback-screen.active {
+
+    display: flex;
+}
+
+.feedback-card {
+
+    width: min(650px, 100%);
+
+    padding: 40px;
+
+    text-align: center;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+}
+
+#feedback-icon {
+
+    width: 90px;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    font-size: 48px;
+
+    background: var(--green-light);
+
+    border-radius: 50%;
+}
+
+#feedback-title {
+
+    font-size: 2rem;
+
+    color: var(--green-dark);
+}
+
+#feedback-message {
+
+    margin-top: 5px;
+}
+
+.explanation-box {
+
+    margin-top: 25px;
+
+    padding: 18px;
+
+    text-align: left;
+
+    background: var(--green-light);
+
+    border:
+        1px solid #bbf7d0;
+
+    border-radius: var(--radius);
+}
+
+.explanation-title {
+
+    margin-bottom: 5px;
+
+    color: var(--green-dark);
+
+    font-weight: 800;
+}
+
+.error-analysis-box {
+
+    margin-top: 15px;
+
+    padding: 18px;
+
+    text-align: left;
+
+    background: var(--orange-light);
+
+    border:
+        1px solid #fed7aa;
+
+    border-radius: var(--radius);
+}
+
+.error-title {
+
+    margin-bottom: 5px;
+
+    color: #9a3412;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   25. HIDDEN
+========================================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   26. MISTAKE LAB
+========================================================= */
+
+#mistake-lab-screen {
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(249, 115, 22, 0.10),
+            transparent 30%
+        );
+}
+
+.simple-header {
+
+    width: min(1000px, 100%);
+
+    margin: 0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+.simple-header h1 {
+
+    font-size: 1.6rem;
+}
+
+.mistake-lab-card {
+
+    width: min(800px, 100%);
+
+    margin: auto;
+
+    padding: 35px;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow);
+
+    border-top:
+        6px solid var(--orange);
+}
+
+.mistake-badge {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    color: #9a3412;
+
+    background: var(--orange-light);
+
+    border-radius: 20px;
+
+    font-size: 0.7rem;
+
+    font-weight: 800;
+}
+
+.mistake-lab-card h2 {
+
+    margin-top: 8px;
+
+    font-size: 1.8rem;
+}
+
+.error-code-box {
+
+    margin: 25px 0;
+
+    padding: 20px;
+
+    text-align: center;
+
+    background: var(--red-light);
+
+    border-radius: var(--radius);
+}
+
+.error-code-box span {
+
+    display: block;
+
+    font-size: 0.7rem;
+
+    font-weight: 800;
+
+    color: #991b1b;
+}
+
+#error-code {
+
+    display: block;
+
+    margin: 5px;
+
+    font-family: "Fredoka";
+
+    font-size: 2.5rem;
+
+    color: var(--red);
+}
+
+.mistake-section,
+.hint-box,
+.repair-box {
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    border-radius: var(--radius);
+}
+
+.mistake-section {
+
+    background: var(--gray-100);
+}
+
+.hint-box {
+
+    background: var(--yellow-light);
+
+    border:
+        1px solid #fde68a;
+}
+
+.repair-box {
+
+    background: var(--blue-light);
+
+    border:
+        1px solid #bfdbfe;
+}
+
+.mistake-section h3,
+.hint-box h3,
+.repair-box h3 {
+
+    margin-bottom: 7px;
+
+    font-size: 1rem;
+}
+
+
+/* =========================================================
+   27. BOSS INTRO
+========================================================= */
+
+#boss-screen {
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(139, 92, 246, 0.15),
+            transparent 40%
+        );
+}
+
+#boss-screen.active {
+
+    display: flex;
+}
+
+.boss-intro {
+
+    width: min(650px, 100%);
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+
+    border:
+        2px solid #ddd6fe;
+}
+
+.boss-icon {
+
+    width: 105px;
+    height: 105px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    font-size: 58px;
+
+    background: var(--purple-light);
+
+    border-radius: 50%;
+}
+
+.boss-intro h1 {
+
+    font-size: clamp(2rem, 5vw, 3rem);
+
+    color: #6d28d9;
+}
+
+.boss-intro > p:not(.eyebrow) {
+
+    margin: 8px 0 20px;
+}
+
+.boss-rules {
+
+    display: grid;
+
+    gap: 8px;
+
+    margin-bottom: 25px;
+}
+
+.boss-rules div {
+
+    padding: 10px;
+
+    background: var(--gray-100);
+
+    border-radius: 10px;
+
+    font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   28. BOSS QUESTION
+========================================================= */
+
+.boss-header {
+
+    border:
+        2px solid #ddd6fe;
+}
+
+.boss-header .question-mission-info span {
+
+    color: #7c3aed;
+}
+
+.boss-question-card {
+
+    width: min(850px, 100%);
+
+    margin: auto;
+
+    padding: 30px;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow);
+
+    border:
+        2px solid #ddd6fe;
+}
+
+#boss-stimulus-container {
+
+    margin-bottom: 20px;
+}
+
+#boss-question-text {
+
+    margin-bottom: 20px;
+
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   29. RESULT SCREEN
+========================================================= */
+
+#result-screen {
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+#result-screen.active {
+
+    display: flex;
+}
+
+.result-card {
+
+    width: min(650px, 100%);
+
+    padding: 40px;
+
+    text-align: center;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+}
+
+.result-icon {
+
+    font-size: 65px;
+
+    margin-bottom: 10px;
+}
+
+.result-card h1 {
+
+    font-size: 2.3rem;
+}
+
+.result-score {
+
+    margin: 25px auto;
+
+    width: 180px;
+    height: 180px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background: var(--yellow-light);
+
+    border:
+        8px solid var(--yellow);
+
+    border-radius: 50%;
+}
+
+.result-score span {
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    color: #854d0e;
+}
+
+.result-score strong {
+
+    font-family: "Fredoka";
+
+    font-size: 3rem;
+
+    color: #854d0e;
+}
+
+.result-stat-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+.result-stat {
+
+    padding: 13px;
+
+    background: var(--gray-100);
+
+    border-radius: var(--radius-sm);
+}
+
+.result-stat span {
+
+    display: block;
+
+    font-size: 0.75rem;
+
+    color: var(--gray-500);
+}
+
+.result-stat strong {
+
+    font-family: "Fredoka";
+
+    font-size: 1.4rem;
+}
+
+.mastery-box {
+
+    margin-top: 18px;
+
+    padding: 13px;
+
+    background: var(--green-light);
+
+    color: var(--green-dark);
+
+    border-radius: var(--radius);
+
+    font-weight: 800;
+}
+
+.result-actions {
+
+    margin-top: 20px;
+}
+
+.result-actions .secondary-btn {
+
+    width: 100%;
+
+    margin-top: 10px;
+}
+
+
+/* =========================================================
+   30. SCORE DASHBOARD
+========================================================= */
+
+.score-dashboard {
+
+    width: min(1100px, 100%);
+
+    margin: auto;
+
+    padding: 25px;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow);
+}
+
+.dashboard-title {
+
+    margin-bottom: 20px;
+}
+
+.dashboard-title h2 {
+
+    font-size: 1.7rem;
+}
+
+.student-summary {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.student-summary div {
+
+    padding: 15px;
+
+    background: var(--gray-100);
+
+    border-radius: var(--radius-sm);
+}
+
+.student-summary span {
+
+    display: block;
+
+    font-size: 0.75rem;
+
+    color: var(--gray-500);
+}
+
+.student-summary strong {
+
+    font-family: "Fredoka";
+
+    font-size: 1.1rem;
+}
+
+
+/* =========================================================
+   31. SCORE TABLE
+========================================================= */
+
+.score-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: var(--radius);
+}
+
+.score-table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 650px;
+}
+
+.score-table th,
+.score-table td {
+
+    padding: 12px;
+
+    text-align: center;
+
+    border-bottom:
+        1px solid var(--gray-200);
+}
+
+.score-table th {
+
+    color: var(--white);
+
+    background: var(--blue);
+
+    font-family: "Fredoka";
+
+    font-weight: 500;
+}
+
+.score-table tbody tr:hover {
+
+    background: var(--gray-50);
+}
+
+
+/* =========================================================
+   32. ERROR PATTERN
+========================================================= */
+
+.error-pattern-card {
+
+    margin-top: 20px;
+
+    padding: 18px;
+
+    background: var(--orange-light);
+
+    border-radius: var(--radius);
+}
+
+.error-pattern-card h3 {
+
+    color: #9a3412;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   33. SCORE ACTIONS
+========================================================= */
+
+.score-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.score-actions .primary-btn {
+
+    width: auto;
+
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   34. COMPLETION
+========================================================= */
+
+#completion-screen {
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(250, 204, 21, 0.18),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(34, 197, 94, 0.12),
+            transparent 25%
+        );
+}
+
+#completion-screen.active {
+
+    display: flex;
+}
+
+.completion-card {
+
+    width: min(650px, 100%);
+
+    padding: 45px 35px;
+
+    text-align: center;
+
+    background: var(--white);
+
+    border-radius: var(--radius-lg);
+
+    box-shadow: var(--shadow-lg);
+}
+
+.completion-icon {
+
+    font-size: 80px;
+
+    animation: floating 3s ease-in-out infinite;
+}
+
+.completion-card h1 {
+
+    margin-top: 5px;
+
+    font-size: 3rem;
+
+    color: #ca8a04;
+}
+
+.final-score {
+
+    margin: 25px auto;
+
+    width: 180px;
+
+    padding: 20px;
+
+    background: var(--yellow-light);
+
+    border-radius: var(--radius);
+}
+
+.final-score span {
+
+    display: block;
+
+    font-size: 0.7rem;
+
+    font-weight: 800;
+}
+
+.final-score strong {
+
+    display: block;
+
+    font-family: "Fredoka";
+
+    font-size: 2.7rem;
+
+    color: #854d0e;
+}
+
+.achievement {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 15px;
+
+    text-align: left;
+
+    background: var(--purple-light);
+
+    border-radius: var(--radius);
+
+    margin-bottom: 20px;
+}
+
+.achievement-icon {
+
+    font-size: 40px;
+}
+
+.achievement strong {
+
+    font-family: "Fredoka";
+
+    color: #6d28d9;
+}
+
+.achievement p {
+
+    font-size: 0.85rem;
+}
+
+
+/* =========================================================
+   35. FORM ELEMENTS CREATED BY JAVASCRIPT
+========================================================= */
+
+.answer-input {
+
+    width: 100%;
+
+    padding: 14px 16px;
+
+    background: var(--gray-50);
+
+    border:
+        2px solid var(--gray-200);
+
+    border-radius: var(--radius-sm);
+
+    font-size: 1.1rem;
+
+    outline: none;
+}
+
+.answer-input:focus {
+
+    border-color: var(--blue);
+
+    box-shadow:
+        0 0 0 4px var(--blue-light);
+}
+
+
+/* =========================================================
+   36. RESPONSIVE — TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .mission-map {
+
+        grid-template-columns: 1fr;
+    }
+
+    .boss-card {
+
+        grid-column: auto;
+    }
+
+    .question-layout {
+
+        grid-template-columns: 1fr;
+    }
+
+    .stimulus-card {
+
+        min-height: auto;
+    }
+}
+
+
+/* =========================================================
+   37. RESPONSIVE — MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .screen {
+
+        padding:
+            18px 12px 35px;
+    }
+
+    .welcome-card {
+
+        padding:
+            35px 20px;
+    }
+
+    .game-logo h1 {
+
+        font-size: 2rem;
+    }
+
+    .game-logo h2 {
+
+        font-size: 1.5rem;
+    }
+
+    .game-header {
+
+        padding: 10px;
+    }
+
+    .mission-card {
+
+        grid-template-columns:
+            40px 48px 1fr;
+
+        padding: 14px;
+
+        gap: 8px;
+    }
+
+    .mission-status {
+
+        display: none;
+    }
+
+    .mission-btn {
+
+        grid-column: 3;
+
+        justify-self: start;
+
+        margin-top: 5px;
+    }
+
+    .mission-content h2 {
+
+        font-size: 1.05rem;
+    }
+
+    .mission-content p {
+
+        font-size: 0.75rem;
+    }
+
+    .question-header {
+
+        grid-template-columns:
+            40px 1fr auto;
+
+        padding: 9px;
+    }
+
+    .question-card,
+    .boss-question-card {
+
+        padding: 20px 16px;
+    }
+
+    .feedback-card,
+    .result-card,
+    .boss-intro,
+    .completion-card {
+
+        padding: 30px 20px;
+    }
+
+    .result-stat-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .student-summary {
+
+        grid-template-columns: 1fr;
+    }
+
+    .score-actions {
+
+        flex-direction: column;
+    }
+
+    .score-actions .primary-btn,
+    .score-actions button {
+
+        width: 100%;
+    }
+
+    .simple-header h1 {
+
+        font-size: 1.25rem;
+    }
+
+}
+
+
+/* =========================================================
+   38. ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+
+    outline:
+        3px solid rgba(37, 99, 235, 0.35);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   39. PRINT
+========================================================= */
+
+@media print {
+
+    body {
+
+        background: white;
+    }
+
+    .screen {
+
+        display: none !important;
+    }
+
+    #score-screen {
+
+        display: block !important;
+    }
+
+    .score-actions,
+    .simple-header button {
+
+        display: none !important;
+    }
+
+    .score-dashboard {
+
+        box-shadow: none;
+    }
+}
+```
