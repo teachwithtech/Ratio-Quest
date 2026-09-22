@@ -14,151 +14,455 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 
+
 <body>
 
-  <!-- ==================================================
-       APP CONTAINER
-       WAJIB ADA KARENA script.js MENCARI #app
-       ================================================== -->
+<div id="app">
 
-  <div id="app">
 
-    <!-- LANDING PAGE -->
+  <!-- =====================================================
+       LANDING PAGE
+       ===================================================== -->
 
-    <section
-      id="rq-start"
-      class="screen active"
-    >
+  <section
+    id="rq-start"
+    class="rq-screen"
+  >
 
-      <div class="start-card">
+    <div class="start-card">
 
-        <div class="game-logo">
-          🎯
-        </div>
+      <div class="game-logo">
+        🎯
+      </div>
 
-        <h1>
-          MATH MISSION
-        </h1>
+      <h1>
+        MATH MISSION
+      </h1>
+
+      <h2>
+        RATIO QUEST
+      </h2>
+
+      <p class="subtitle">
+        Misi Menemukan Perbandingan yang Tepat
+      </p>
+
+
+      <div class="start-form">
+
+        <label for="rq-student-name">
+          Nama Siswa
+        </label>
+
+        <input
+          type="text"
+          id="rq-student-name"
+          placeholder="Masukkan nama kamu"
+          autocomplete="off"
+        >
+
+
+        <label for="rq-student-class">
+          Kelas
+        </label>
+
+        <input
+          type="text"
+          id="rq-student-class"
+          value="VI A"
+        >
+
+
+        <button
+          id="rq-start-btn"
+          data-action="start"
+          type="button"
+        >
+          🚀 MULAI MISI
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       MISSION MAP
+       ===================================================== -->
+
+  <section
+    id="rq-map"
+    class="rq-screen"
+  >
+
+    <div class="game-header">
+
+      <div>
+        <strong>
+          🎯 MATH MISSION — RATIO QUEST
+        </strong>
+      </div>
+
+      <div id="rq-current-student">
+        👦 Siswa
+      </div>
+
+    </div>
+
+
+    <div class="mission-map">
+
+      <div class="mission-map-header">
 
         <h2>
-          RATIO QUEST
+          🗺️ MISSION MAP
         </h2>
 
-        <p class="subtitle">
-          Misi Menemukan Perbandingan yang Tepat
+        <p>
+          Selesaikan setiap misi untuk
+          membuka tantangan berikutnya.
         </p>
 
-        <div class="start-form">
+      </div>
 
-          <label for="rq-student-name">
-            Nama Siswa
-          </label>
 
-          <input
-            type="text"
-            id="rq-student-name"
-            placeholder="Masukkan nama kamu"
-            autocomplete="off"
-          >
+      <!-- TEMPAT KARTU MISI DIBUAT JAVASCRIPT -->
 
-          <label for="rq-student-class">
-            Kelas
-          </label>
+      <div id="rq-mission-list"></div>
 
-          <input
-            type="text"
-            id="rq-student-class"
-            value="VI A"
-          >
 
-          <button
-            id="rq-start-btn"
-            data-action="start"
-            type="button"
-          >
-            🚀 MULAI MISI
-          </button>
+      <!-- BOSS -->
 
+      <div
+        id="rq-boss-card"
+        class="rq-mission-card boss-card"
+      ></div>
+
+
+      <!-- MENU TAMBAHAN -->
+
+      <div class="map-menu">
+
+        <button
+          type="button"
+          data-action="mistake"
+        >
+          🧩 Mistake Lab
+        </button>
+
+        <button
+          type="button"
+          data-action="scores"
+        >
+          📊 Nilai Siswa
+        </button>
+
+        <button
+          type="button"
+          data-action="home"
+        >
+          🏠 Beranda
+        </button>
+
+        <button
+          type="button"
+          data-action="reset"
+        >
+          🔄 Reset Progress
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       QUESTION SCREEN
+       ===================================================== -->
+
+  <section
+    id="rq-question"
+    class="rq-screen"
+  >
+
+    <div class="game-header">
+
+      <div>
+        🎯 RATIO QUEST
+      </div>
+
+      <div id="rq-question-number">
+        1 / 5
+      </div>
+
+    </div>
+
+
+    <div class="question-layout">
+
+      <div
+        id="rq-stimulus"
+        class="stimulus"
+      ></div>
+
+
+      <div
+        id="rq-question-text"
+        class="question-text"
+      ></div>
+
+
+      <div
+        id="rq-answer-area"
+        class="answer-area"
+      ></div>
+
+
+      <div class="question-actions">
+
+        <button
+          type="button"
+          data-action="hint"
+        >
+          💡 Petunjuk
+        </button>
+
+        <button
+          type="button"
+          data-action="submit"
+        >
+          ✅ Periksa Jawaban
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       FEEDBACK
+       ===================================================== -->
+
+  <section
+    id="rq-feedback"
+    class="rq-screen"
+  >
+
+    <div class="feedback-card">
+
+      <div
+        id="rq-feedback-box"
+        class="rq-feedback-box"
+      >
+
+        <h2 id="rq-feedback-title">
+          🎉 Jawaban
+        </h2>
+
+        <p id="rq-feedback-message">
+        </p>
+
+        <div
+          id="rq-feedback-explanation"
+        >
         </div>
 
       </div>
 
-    </section>
+
+      <button
+        type="button"
+        data-action="next"
+      >
+        ➡️ Soal Berikutnya
+      </button>
+
+    </div>
+
+  </section>
 
 
-    <!-- AREA YANG AKAN DIGUNAKAN GAME -->
 
-    <section
-      id="rq-map"
-      class="screen"
-    ></section>
+  <!-- =====================================================
+       RESULT
+       ===================================================== -->
 
-    <section
-      id="rq-game"
-      class="screen"
-    ></section>
+  <section
+    id="rq-result"
+    class="rq-screen"
+  >
 
-    <section
-      id="rq-feedback"
-      class="screen"
-    ></section>
-
-    <section
-      id="rq-mistake-lab"
-      class="screen"
-    ></section>
-
-    <section
-      id="rq-boss"
-      class="screen"
-    ></section>
-
-    <section
-      id="rq-scores"
-      class="screen"
-    ></section>
-
-  </div>
+  </section>
 
 
-  <!-- ==================================================
-       QUESTIONS
-       ================================================== -->
 
-  <script src="./questions.js"></script>
+  <!-- =====================================================
+       MISTAKE LAB
+       ===================================================== -->
 
+  <section
+    id="rq-mistake-lab"
+    class="rq-screen"
+  >
 
-  <!-- ==================================================
-       CEK BANK SOAL
-       ================================================== -->
+    <div class="game-header">
 
-  <script>
+      <h2>
+        🧩 MISTAKE LAB
+      </h2>
 
-    console.log("=================================");
-    console.log("🎯 RATIO QUEST");
-    console.log("=================================");
-
-    console.log(
-      "Jumlah soal:",
-      window.RATIO_QUESTIONS?.length
-    );
-
-    console.log(
-      "Bank soal:",
-      window.RATIO_QUESTION_BANKS
-    );
-
-    console.log("=================================");
-
-  </script>
+    </div>
 
 
-  <!-- ==================================================
-       GAME ENGINE
-       ================================================== -->
+    <div
+      id="rq-mistake-list"
+    ></div>
 
-  <script src="./script.js"></script>
+
+    <div class="question-actions">
+
+      <button
+        type="button"
+        data-action="map"
+      >
+        🗺️ Kembali ke Mission Map
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       NILAI SISWA
+       ===================================================== -->
+
+  <section
+    id="rq-scores"
+    class="rq-screen"
+  >
+
+    <div class="game-header">
+
+      <h2>
+        📊 NILAI SISWA
+      </h2>
+
+    </div>
+
+
+    <div
+      id="rq-score-content"
+    ></div>
+
+
+    <div class="question-actions">
+
+      <button
+        type="button"
+        data-action="download"
+      >
+        📥 Download Nilai
+      </button>
+
+      <button
+        type="button"
+        data-action="map"
+      >
+        🗺️ Kembali ke Mission Map
+      </button>
+
+    </div>
+
+  </section>
+
+
+
+  <!-- =====================================================
+       BOSS SCREEN
+       ===================================================== -->
+
+  <section
+    id="rq-boss"
+    class="rq-screen"
+  >
+
+    <div class="game-header">
+
+      <h2>
+        👑 BOSS CHALLENGE
+      </h2>
+
+    </div>
+
+    <p>
+      Tantangan akhir Ratio Quest.
+    </p>
+
+    <button
+      type="button"
+      data-action="boss"
+    >
+      👑 Mulai Boss Challenge
+    </button>
+
+    <button
+      type="button"
+      data-action="map"
+    >
+      🗺️ Kembali
+    </button>
+
+  </section>
+
+
+</div>
+
+
+<!-- =====================================================
+     BANK SOAL
+     ===================================================== -->
+
+<script src="./questions.js"></script>
+
+
+<script>
+
+console.log("================================");
+console.log("🎯 RATIO QUEST");
+console.log("================================");
+
+console.log(
+  "Jumlah soal:",
+  window.RATIO_QUESTIONS?.length
+);
+
+console.log(
+  "Bank soal:",
+  window.RATIO_QUESTION_BANKS
+);
+
+console.log("================================");
+
+</script>
+
+
+<!-- =====================================================
+     GAME ENGINE
+     ===================================================== -->
+
+<script src="./script.js"></script>
+
 
 </body>
-
 </html>
