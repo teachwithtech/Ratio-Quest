@@ -466,15 +466,14 @@
      ========================================================= */
 
   const missionOrder = [
-    "PRETEST",
-    "RD",
-    "RB",
-    "RBR",
-    "RRL",
-    "RM",
-    "BOSS"
-  ];
-
+  "PRETEST",
+  "RD",
+  "RB",
+  "RL",
+  "RM",
+  "BOSS"
+];
+ 
   /* =========================================================
      13. STATUS MISSION
      ========================================================= */
@@ -490,8 +489,8 @@
 
     if (id === "BOSS") {
 
-      const allMissionsDone =
-        ["RD", "RB", "RBR", "RRL", "RM"]
+     const allMissionsDone =
+  ["RD", "RB", "RL", "RM"]
           .every(
             (mission) =>
               APP.progress.missions[
@@ -563,14 +562,12 @@
     }
 
     const missionIds = [
-      "PRETEST",
-      "RD",
-      "RB",
-      "RBR",
-      "RRL",
-      "RM"
-    ];
-
+  "PRETEST",
+  "RD",
+  "RB",
+  "RL",
+  "RM"
+];
     container.innerHTML = "";
 
     missionIds.forEach((id) => {
@@ -1875,14 +1872,13 @@
       APP.progress;
 
     const missionIds = [
-      "PRETEST",
-      "RD",
-      "RB",
-      "RBR",
-      "RRL",
-      "RM",
-      "BOSS"
-    ];
+  "PRETEST",
+  "RD",
+  "RB",
+  "RL",
+  "RM",
+  "BOSS"
+];
 
     let html = `
       <div class="rq-student-summary">
