@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
   <meta charset="UTF-8">
 
   <meta
@@ -10,124 +8,61 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>
-    MATH MISSION — RATIO QUEST
-  </title>
+  <title>MATH MISSION - RATIO QUEST</title>
 
-  <meta
-    name="description"
-    content="MATH MISSION — RATIO QUEST: Misi Menemukan Perbandingan yang Tepat"
-  >
-
-  <!-- GOOGLE FONT -->
-
-  <link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
-  >
-
-  <link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  >
-
-  <link
-    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- STYLE -->
-
-  <link
-    rel="stylesheet"
-    href="./style.css"
-  >
-
+  <link rel="stylesheet" href="./style.css">
 </head>
-
 
 <body>
 
-<main id="app">
+  <!-- =========================
+       LANDING PAGE
+       ========================= -->
+  <section id="rq-start" class="screen active">
 
+    <div class="start-card">
 
-  <!-- =====================================================
-       START SCREEN
-       ===================================================== -->
-
-  <section
-    id="rq-start"
-    class="rq-screen"
-  >
-
-    <div class="rq-card rq-start-card">
-
-      <div class="rq-logo">
-        🧭
-      </div>
-
-      <div class="rq-kicker">
-        MATH MISSION
+      <div class="game-logo">
+        🎯
       </div>
 
       <h1>
-        RATIO QUEST
+        MATH MISSION
       </h1>
 
-      <p class="rq-subtitle">
+      <h2>
+        RATIO QUEST
+      </h2>
+
+      <p class="subtitle">
         Misi Menemukan Perbandingan yang Tepat
       </p>
 
-      <div class="rq-start-description">
-
-        <p>
-          Selamat datang, calon
-          <strong>Ratio Master!</strong>
-        </p>
-
-        <p>
-          Pecahkan berbagai misi,
-          temukan kesalahanmu,
-          dan buktikan kemampuanmu
-          dalam menggunakan perbandingan.
-        </p>
-
-      </div>
-
-
-      <!-- FORM SISWA -->
-
-      <div class="rq-form">
+      <div class="start-form">
 
         <label for="rq-student-name">
-          👤 Nama Siswa
+          Nama Siswa
         </label>
 
         <input
-          id="rq-student-name"
           type="text"
-          maxlength="40"
-          placeholder="Tulis nama kamu..."
+          id="rq-student-name"
+          placeholder="Masukkan nama kamu"
           autocomplete="off"
         >
 
-
         <label for="rq-student-class">
-          🏫 Kelas
+          Kelas
         </label>
 
         <input
-          id="rq-student-class"
           type="text"
+          id="rq-student-class"
           value="VI A"
-          maxlength="10"
         >
-
 
         <button
           id="rq-start-btn"
-          class="rq-btn rq-btn-primary"
           data-action="start"
           type="button"
         >
@@ -136,567 +71,29 @@
 
       </div>
 
-
-      <div class="rq-motto">
-
-        Jangan Takut Salah.
-
-        <br>
-
-        <strong>
-          Kesalahan adalah bagian dari belajar.
-        </strong>
-
-      </div>
-
     </div>
 
   </section>
 
 
-
-  <!-- =====================================================
-       MISSION MAP
-       ===================================================== -->
-
-  <section
-    id="rq-map"
-    class="rq-screen"
-  >
-
-    <div class="rq-card">
-
-
-      <!-- TOP BAR -->
-
-      <div class="rq-topbar">
-
-        <button
-          class="rq-btn rq-btn-small"
-          data-action="home"
-          type="button"
-        >
-          ⌂ Beranda
-        </button>
-
-
-        <div
-          id="rq-current-student"
-          class="rq-player-badge"
-        >
-        </div>
-
-      </div>
-
-
-      <div class="rq-kicker">
-        MISSION MAP
-      </div>
-
-
-      <h2>
-        🗺️ Pilih Misi
-      </h2>
-
-
-      <p class="rq-section-description">
-
-        Selesaikan setiap misi untuk menjadi
-        Ratio Master.
-
-      </p>
-
-
-      <!-- MISSION LIST -->
-
-      <div
-        id="rq-mission-list"
-        class="rq-mission-grid"
-      >
-      </div>
-
-
-      <!-- BOSS -->
-
-      <div
-        id="rq-boss-card"
-        class="rq-special-grid"
-      >
-      </div>
-
-
-      <!-- SPECIAL -->
-
-      <div class="rq-special-title">
-        Tantangan Khusus
-      </div>
-
-
-      <div class="rq-special-grid">
-
-
-        <button
-          class="rq-special"
-          data-action="mistake"
-          type="button"
-        >
-
-          <span class="rq-special-icon">
-            🧩
-          </span>
-
-          <span>
-
-            <strong>
-              Mistake Lab
-            </strong>
-
-            <small>
-              Belajar dari kesalahan
-            </small>
-
-          </span>
-
-        </button>
-
-
-        <button
-          class="rq-special"
-          data-action="scores"
-          type="button"
-        >
-
-          <span class="rq-special-icon">
-            📊
-          </span>
-
-          <span>
-
-            <strong>
-              Nilai Siswa
-            </strong>
-
-            <small>
-              Lihat perkembangan
-            </small>
-
-          </span>
-
-        </button>
-
-
-        <button
-          class="rq-special"
-          data-action="reset"
-          type="button"
-        >
-
-          <span class="rq-special-icon">
-            🔄
-          </span>
-
-          <span>
-
-            <strong>
-              Reset Progress
-            </strong>
-
-            <small>
-              Mulai kembali dari awal
-            </small>
-
-          </span>
-
-        </button>
-
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       QUESTION SCREEN
-       ===================================================== -->
-
-  <section
-    id="rq-question"
-    class="rq-screen"
-  >
-
-    <div class="rq-card rq-game-card">
-
-
-      <!-- TOP BAR -->
-
-      <div class="rq-topbar">
-
-
-        <button
-          class="rq-btn rq-btn-small"
-          data-action="map"
-          type="button"
-        >
-          ← Mission Map
-        </button>
-
-
-        <div
-          id="rq-question-number"
-          class="rq-game-title"
-        >
-          1 / 5
-        </div>
-
-
-        <div
-          id="rq-score"
-          class="rq-score"
-        >
-          0 poin
-        </div>
-
-      </div>
-
-
-      <!-- STIMULUS -->
-
-      <div
-        id="rq-stimulus"
-        class="rq-stimulus"
-      >
-      </div>
-
-
-      <!-- QUESTION -->
-
-      <div class="rq-question-container">
-
-        <h2
-          id="rq-question-text"
-        >
-        </h2>
-
-      </div>
-
-
-      <!-- ANSWER -->
-
-      <div
-        id="rq-answer-area"
-        class="rq-answer-area"
-      >
-      </div>
-
-
-      <!-- ACTION -->
-
-      <div class="rq-question-actions">
-
-
-        <button
-          class="rq-btn"
-          data-action="hint"
-          type="button"
-        >
-          💡 Petunjuk
-        </button>
-
-
-        <button
-          class="rq-btn rq-btn-primary"
-          data-action="submit"
-          type="button"
-        >
-          ✓ Periksa Jawaban
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       FEEDBACK SCREEN
-       ===================================================== -->
-
-  <section
-    id="rq-feedback"
-    class="rq-screen"
-  >
-
-    <div class="rq-card">
-
-
-      <div
-        id="rq-feedback-box"
-        class="rq-feedback-box"
-      >
-
-        <h2
-          id="rq-feedback-title"
-        >
-        </h2>
-
-
-        <p
-          id="rq-feedback-message"
-        >
-        </p>
-
-
-        <div
-          id="rq-feedback-explanation"
-          class="rq-explanation"
-        >
-        </div>
-
-
-        <button
-          class="rq-btn rq-btn-primary"
-          data-action="next"
-          type="button"
-        >
-          Lanjut ➜
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       RESULT SCREEN
-       ===================================================== -->
-
-  <section
-    id="rq-result"
-    class="rq-screen"
-  >
-
-    <div class="rq-card rq-result-card">
-
-
-      <div
-        id="rq-result-content"
-      >
-      </div>
-
-
-      <div class="rq-result-actions">
-
-        <button
-          class="rq-btn rq-btn-primary"
-          data-action="map"
-          type="button"
-        >
-          🗺️ Kembali ke Mission Map
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       MISTAKE LAB
-       ===================================================== -->
-
-  <section
-    id="rq-mistake-lab"
-    class="rq-screen"
-  >
-
-    <div class="rq-card">
-
-
-      <div class="rq-topbar">
-
-        <button
-          class="rq-btn rq-btn-small"
-          data-action="map"
-          type="button"
-        >
-          ← Mission Map
-        </button>
-
-      </div>
-
-
-      <div class="rq-kicker">
-        MISTAKE LAB
-      </div>
-
-
-      <h2>
-        🧩 Belajar dari Kesalahan
-      </h2>
-
-
-      <p class="rq-section-description">
-
-        Kesalahan bukan kegagalan.
-
-        Temukan kesalahanmu,
-        pahami penyebabnya,
-        lalu coba lagi.
-
-      </p>
-
-
-      <div
-        id="rq-mistake-list"
-      >
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       STUDENT SCORES
-       ===================================================== -->
-
-  <section
-    id="rq-scores"
-    class="rq-screen"
-  >
-
-    <div class="rq-card">
-
-
-      <div class="rq-topbar">
-
-        <button
-          class="rq-btn rq-btn-small"
-          data-action="map"
-          type="button"
-        >
-          ← Mission Map
-        </button>
-
-      </div>
-
-
-      <div class="rq-kicker">
-        STUDENT REPORT
-      </div>
-
-
-      <h2>
-        📊 Nilai Siswa
-      </h2>
-
-
-      <p class="rq-section-description">
-
-        Pantau perkembangan belajar
-        dan pola kesalahanmu.
-
-      </p>
-
-
-      <div
-        id="rq-score-content"
-      >
-      </div>
-
-
-      <div
-        class="rq-result-actions"
-      >
-
-        <button
-          class="rq-btn rq-btn-primary"
-          data-action="download"
-          type="button"
-        >
-          📥 Download Nilai
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-
-  <!-- =====================================================
-       BOSS SCREEN
-       ===================================================== -->
-
-  <section
-    id="rq-boss"
-    class="rq-screen"
-  >
-
-    <div class="rq-card">
-
-      <div class="rq-kicker">
-        BOSS CHALLENGE
-      </div>
-
-      <h2>
-        👑 Boss Challenge
-      </h2>
-
-      <p>
-        Siap menghadapi tantangan terakhir?
-      </p>
-
-      <button
-        class="rq-btn rq-btn-primary"
-        data-action="boss"
-        type="button"
-      >
-        🚀 Mulai Boss Challenge
-      </button>
-
-    </div>
-
-  </section>
-
-
-</main>
-
-
-
-<!-- =====================================================
-     JAVASCRIPT
-     ===================================================== -->
-
-<script src="./questions.js"></script>
-
-<script>
-  console.log("=== CEK QUESTIONS ===");
-  console.log(
-    "RATIO_QUESTIONS:",
-    window.RATIO_QUESTIONS
-  );
-  console.log(
-    "Jumlah:",
-    window.RATIO_QUESTIONS?.length
-  );
-</script>
-
-<script src="./script.js"></script>
-
+  <!-- =========================
+       JAVASCRIPT
+       ========================= -->
+
+  <script src="./questions.js"></script>
+
+  <script>
+    console.log("================================");
+    console.log("RATIO QUEST");
+    console.log("questions.js berhasil dipanggil");
+    console.log(
+      "Jumlah soal:",
+      window.RATIO_QUESTIONS?.length
+    );
+    console.log("================================");
+  </script>
+
+  <script src="./script.js"></script>
 
 </body>
-
 </html>
