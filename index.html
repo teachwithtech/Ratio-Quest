@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
 
@@ -8,92 +9,156 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>MATH MISSION - RATIO QUEST</title>
+  <title>MATH MISSION — RATIO QUEST</title>
 
   <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
 
-  <!-- =========================
-       LANDING PAGE
-       ========================= -->
-  <section id="rq-start" class="screen active">
+  <!-- ==================================================
+       APP CONTAINER
+       WAJIB ADA KARENA script.js MENCARI #app
+       ================================================== -->
 
-    <div class="start-card">
+  <div id="app">
 
-      <div class="game-logo">
-        🎯
+    <!-- LANDING PAGE -->
+
+    <section
+      id="rq-start"
+      class="screen active"
+    >
+
+      <div class="start-card">
+
+        <div class="game-logo">
+          🎯
+        </div>
+
+        <h1>
+          MATH MISSION
+        </h1>
+
+        <h2>
+          RATIO QUEST
+        </h2>
+
+        <p class="subtitle">
+          Misi Menemukan Perbandingan yang Tepat
+        </p>
+
+        <div class="start-form">
+
+          <label for="rq-student-name">
+            Nama Siswa
+          </label>
+
+          <input
+            type="text"
+            id="rq-student-name"
+            placeholder="Masukkan nama kamu"
+            autocomplete="off"
+          >
+
+          <label for="rq-student-class">
+            Kelas
+          </label>
+
+          <input
+            type="text"
+            id="rq-student-class"
+            value="VI A"
+          >
+
+          <button
+            id="rq-start-btn"
+            data-action="start"
+            type="button"
+          >
+            🚀 MULAI MISI
+          </button>
+
+        </div>
+
       </div>
 
-      <h1>
-        MATH MISSION
-      </h1>
-
-      <h2>
-        RATIO QUEST
-      </h2>
-
-      <p class="subtitle">
-        Misi Menemukan Perbandingan yang Tepat
-      </p>
-
-      <div class="start-form">
-
-        <label for="rq-student-name">
-          Nama Siswa
-        </label>
-
-        <input
-          type="text"
-          id="rq-student-name"
-          placeholder="Masukkan nama kamu"
-          autocomplete="off"
-        >
-
-        <label for="rq-student-class">
-          Kelas
-        </label>
-
-        <input
-          type="text"
-          id="rq-student-class"
-          value="VI A"
-        >
-
-        <button
-          id="rq-start-btn"
-          data-action="start"
-          type="button"
-        >
-          🚀 MULAI MISI
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
+    </section>
 
 
-  <!-- =========================
-       JAVASCRIPT
-       ========================= -->
+    <!-- AREA YANG AKAN DIGUNAKAN GAME -->
+
+    <section
+      id="rq-map"
+      class="screen"
+    ></section>
+
+    <section
+      id="rq-game"
+      class="screen"
+    ></section>
+
+    <section
+      id="rq-feedback"
+      class="screen"
+    ></section>
+
+    <section
+      id="rq-mistake-lab"
+      class="screen"
+    ></section>
+
+    <section
+      id="rq-boss"
+      class="screen"
+    ></section>
+
+    <section
+      id="rq-scores"
+      class="screen"
+    ></section>
+
+  </div>
+
+
+  <!-- ==================================================
+       QUESTIONS
+       ================================================== -->
 
   <script src="./questions.js"></script>
 
+
+  <!-- ==================================================
+       CEK BANK SOAL
+       ================================================== -->
+
   <script>
-    console.log("================================");
-    console.log("RATIO QUEST");
-    console.log("questions.js berhasil dipanggil");
+
+    console.log("=================================");
+    console.log("🎯 RATIO QUEST");
+    console.log("=================================");
+
     console.log(
       "Jumlah soal:",
       window.RATIO_QUESTIONS?.length
     );
-    console.log("================================");
+
+    console.log(
+      "Bank soal:",
+      window.RATIO_QUESTION_BANKS
+    );
+
+    console.log("=================================");
+
   </script>
+
+
+  <!-- ==================================================
+       GAME ENGINE
+       ================================================== -->
 
   <script src="./script.js"></script>
 
 </body>
+
 </html>
