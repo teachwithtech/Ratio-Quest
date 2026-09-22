@@ -3637,68 +3637,18 @@ select:focus-visible {
 }
 
 /* =========================================================
-   RATIO QUEST v2 — UX POLISH
-   ========================================================= */
-#rq-start,
-#rq-map,
-#rq-question,
-#rq-feedback,
-#rq-result,
-#rq-mistake-lab,
-#rq-scores,
-#rq-boss { min-height: 100vh; }
-
-#rq-start .start-card { position: relative; overflow: hidden; }
-#rq-start .start-card::after {
-  content: "✦  ✦  ✦";
-  position: absolute; top: 16px; right: 22px;
-  color: var(--yellow); font-size: 20px; letter-spacing: 8px;
-  opacity: .8;
-}
-
-/* The original file contains an older #rq-game selector set.
-   These selectors make the larger text rules apply to the actual #app markup. */
-#app .stimulus,
-#app .question-stimulus,
-#app .stimulus-box,
-#app [class*="stimulus"] { font-size: 20px; line-height: 1.65; font-weight: 600; }
-#app .question,
-#app .question-text,
-#app .question-title,
-#app [class*="question-text"] { font-size: 23px; line-height: 1.5; font-weight: 800; }
-#app .rq-option { font-size: 20px; line-height: 1.45; font-weight: 700; }
-
-.rq-overall-progress {
-  margin: 0 auto 18px;
-  width: min(1000px, 100%);
-  padding: 14px 18px;
-  background: rgba(255,255,255,.96);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-}
-.rq-overall-progress-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:8px; }
-.rq-overall-progress-head span { color:var(--gray-500); font-size:.9rem; font-weight:700; }
-.rq-overall-progress-track { height:12px; background:var(--gray-200); border-radius:20px; overflow:hidden; }
-.rq-overall-progress-fill { height:100%; background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green)); border-radius:inherit; transition:width .5s ease; }
-
-.rq-question-progress { display:flex; gap:7px; margin-bottom:18px; }
-.rq-question-progress span { flex:1; height:7px; border-radius:99px; background:var(--gray-200); }
-.rq-question-progress span.done { background:var(--green); }
-.rq-question-progress span.current { background:var(--blue); box-shadow:0 0 0 3px var(--blue-light); }
-
-.rq-mission-card.done { border-color: var(--green); }
-.rq-mission-card.available { border-color: var(--blue-light); }
-.rq-mission-card.locked { filter:saturate(.7); }
-.rq-mission-card[data-mission="PRETEST"] { border-left:6px solid var(--cyan); }
-.rq-mission-card[data-mission="RD"] { border-left:6px solid var(--blue); }
-.rq-mission-card[data-mission="RB"] { border-left:6px solid var(--green); }
-.rq-mission-card[data-mission="RL"] { border-left:6px solid var(--orange); }
-.rq-mission-card[data-mission="RM"] { border-left:6px solid var(--purple); }
-
-@media (max-width: 680px) {
-  .rq-overall-progress-head { flex-direction:column; gap:2px; }
-  #app .question-text { font-size:20px; }
-  #app .stimulus { font-size:18px; }
-  #app .rq-option { font-size:18px; }
-}
+   RATIO QUEST GAMIFICATION V3
+========================================================= */
+.rq-quest-intro{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:4px 0 18px}
+.rq-eyebrow{font-size:.75rem;font-weight:900;letter-spacing:1.6px;color:var(--blue);margin-bottom:3px}
+.rq-quest-intro h2{margin:0;font-size:clamp(1.65rem,4vw,2.25rem)}
+.rq-quest-intro p{margin-top:3px}
+.rq-hero-badge{white-space:nowrap;padding:11px 16px;border-radius:999px;background:var(--yellow-light);color:#854d0e;font-weight:900;box-shadow:var(--shadow-sm)}
+.rq-player-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 14px}
+.rq-stat{display:flex;align-items:center;gap:9px;padding:12px;border:2px solid var(--gray-200);border-radius:15px;background:#fff;box-shadow:var(--shadow-sm)}
+.rq-stat>span{font-size:25px}.rq-stat small{display:block;color:var(--gray-500);font-size:.72rem;font-weight:800}.rq-stat strong{display:block;color:var(--gray-900)}
+.rq-stat.xp{border-color:#fde68a;background:linear-gradient(135deg,#fff,#fffbeb)}
+.rq-overall-progress{padding:12px 14px;border-radius:15px;background:var(--gray-50);margin-bottom:18px}.rq-overall-progress>div:first-child{display:flex;justify-content:space-between;font-size:.85rem;font-weight:900;margin-bottom:7px}.rq-progress-track{height:12px;border-radius:99px;background:var(--gray-200);overflow:hidden}.rq-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green));transition:width .5s ease}
+.rq-mission-label{font-size:.68rem;letter-spacing:1px;font-weight:900;color:var(--blue);margin-bottom:2px}.rq-mission-card.done{border-color:#86efac;background:linear-gradient(135deg,#fff,#f0fdf4)}.rq-mission-card.locked{filter:saturate(.65)}.rq-mini-progress{height:7px;background:var(--gray-200);border-radius:99px;overflow:hidden;margin:7px 0 4px}.rq-mini-progress span{display:block;height:100%;background:var(--green);border-radius:inherit}.rq-lock{font-size:24px;opacity:.7}.rq-retry-btn{margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--blue-light);color:var(--blue-dark);font-weight:900}.rq-mistake-tip{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--yellow-light);color:#713f12}.rq-mistake-explanation{margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--green-light);color:#14532d}
+@media(max-width:700px){.rq-player-stats{grid-template-columns:repeat(2,1fr)}.rq-quest-intro{align-items:flex-start;flex-direction:column}.rq-hero-badge{align-self:flex-start}.rq-mission-card{grid-template-columns:38px 48px 1fr}.rq-mission-action{grid-column:1/-1;justify-self:stretch}.rq-mission-action button{width:100%;margin-top:8px}}
+.rq-quest-intro{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:4px 0 18px}.rq-eyebrow{font-size:.75rem;font-weight:900;letter-spacing:1.6px;color:var(--blue);margin-bottom:3px}.rq-quest-intro h2{margin:0;font-size:clamp(1.65rem,4vw,2.25rem)}.rq-quest-intro p{margin-top:3px}.rq-hero-badge{white-space:nowrap;padding:11px 16px;border-radius:999px;background:var(--yellow-light);color:#854d0e;font-weight:900;box-shadow:var(--shadow-sm)}.rq-player-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:10px 0 14px}.rq-stat{display:flex;align-items:center;gap:9px;padding:12px;border:2px solid var(--gray-200);border-radius:15px;background:#fff;box-shadow:var(--shadow-sm)}.rq-stat>span{font-size:25px}.rq-stat small{display:block;color:var(--gray-500);font-size:.72rem;font-weight:800}.rq-stat strong{display:block}.rq-stat.xp{border-color:#fde68a;background:linear-gradient(135deg,#fff,#fffbeb)}.rq-overall-progress{padding:12px 14px;border-radius:15px;background:var(--gray-50);margin-bottom:18px}.rq-overall-progress>div:first-child{display:flex;justify-content:space-between;font-size:.85rem;font-weight:900;margin-bottom:7px}.rq-progress-track{height:12px;border-radius:99px;background:var(--gray-200);overflow:hidden}.rq-progress-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--cyan),var(--green));transition:width .5s ease}.rq-mission-label{font-size:.68rem;letter-spacing:1px;font-weight:900;color:var(--blue);margin-bottom:2px}.rq-mission-card.done{border-color:#86efac;background:linear-gradient(135deg,#fff,#f0fdf4)}.rq-mini-progress{height:7px;background:var(--gray-200);border-radius:99px;overflow:hidden;margin:7px 0 4px}.rq-mini-progress span{display:block;height:100%;background:var(--green);border-radius:inherit}.rq-lock{font-size:24px;opacity:.7}.rq-retry-btn{margin-top:12px;padding:10px 14px;border-radius:12px;background:var(--blue-light);color:var(--blue-dark);font-weight:900}.rq-mistake-tip{margin-top:10px;padding:10px 12px;border-radius:12px;background:var(--yellow-light);color:#713f12}.rq-mistake-explanation{margin-top:8px;padding:10px 12px;border-radius:12px;background:var(--green-light);color:#14532d}@media(max-width:700px){.rq-player-stats{grid-template-columns:repeat(2,1fr)}.rq-quest-intro{align-items:flex-start;flex-direction:column}.rq-hero-badge{align-self:flex-start}.rq-mission-card{grid-template-columns:38px 48px 1fr}.rq-mission-action{grid-column:1/-1;justify-self:stretch}.rq-mission-action button{width:100%;margin-top:8px}}
