@@ -60,6 +60,10 @@
 
       attempts: 0,
 
+      xp: 0,
+
+      badges: [],
+
       lastPlayed: null
     };
   }
@@ -165,7 +169,9 @@
 
           missions: data.missions || {},
 
-          mistakes: data.mistakes || []
+          mistakes: data.mistakes || [],
+          xp: Number(data.xp || 0),
+          badges: Array.isArray(data.badges) ? data.badges : []
         };
 
         console.log(
@@ -388,7 +394,6 @@
       ".rq-screen"
     ).forEach((el) => {
       el.style.display = "none";
-      el.classList.remove("active", "active-screen", "show");
     });
   }
 
@@ -442,9 +447,6 @@
     }
 
     if (target) {
-      // .rq-screen memang display:none secara default.
-      // Aktifkan screen dengan class agar CSS menampilkannya.
-      target.classList.add("active");
       target.style.display = "";
     }
 
@@ -477,6 +479,21 @@
   "RM",
   "BOSS"
 ];
+
+  const BADGES = [
+    { id: "first-step", icon: "🌱", name: "Langkah Pertama", test: p => p.pretest?.completed },
+    { id: "detective", icon: "🔎", name: "Detektif Rasio", test: p => p.missions?.RD?.completed },
+    { id: "builder", icon: "🧱", name: "Ratio Builder", test: p => p.missions?.RB?.completed },
+    { id: "real-life", icon: "🌍", name: "Rasio di Dunia Nyata", test: p => p.missions?.RL?.completed },
+    { id: "master", icon: "🧠", name: "Ratio Master", test: p => p.missions?.RM?.completed },
+    { id: "mistake-hunter", icon: "🧩", name: "Pemburu Kesalahan", test: p => (p.mistakes || []).length > 0 },
+    { id: "perfect", icon: "💎", name: "Perfect Mission", test: p => Object.values(p.missions || {}).some(r => r.completed && r.wrong === 0) },
+    { id: "boss", icon: "👑", name: "Boss Slayer", test: p => p.boss?.completed }
+  ];
+  function getRank(xp) { if (xp >= 400) return { icon: "👑", name: "Ratio Master" }; if (xp >= 250) return { icon: "🧠", name: "Ahli Rasio" }; if (xp >= 120) return { icon: "⭐", name: "Penjelajah Rasio" }; return { icon: "🌱", name: "Pemula" }; }
+  function refreshBadges() { const p=APP.progress; if(!Array.isArray(p.badges)) p.badges=[]; BADGES.forEach(b=>{if(b.test(p)&&!p.badges.includes(b.id))p.badges.push(b.id);}); return p.badges; }
+  function awardXP(amount) { APP.progress.xp=Number(APP.progress.xp||0)+Math.max(0,Number(amount)||0); refreshBadges(); saveProgress(); }
+  function getOverallProgress() { const ids=["PRETEST","RD","RB","RL","RM","BOSS"]; const done=ids.filter(id=>id==="PRETEST"?APP.progress.pretest?.completed:id==="BOSS"?APP.progress.boss?.completed:APP.progress.missions?.[id]?.completed).length; return Math.round(done/ids.length*100); }
  
   /* =========================================================
      13. STATUS MISSION
@@ -557,238 +574,12 @@
      ========================================================= */
 
   function renderMissionMap() {
-
-    const container =
-      $("#rq-mission-list");
-
-    if (!container) {
-      return;
-    }
-
-    const missionIds = [
-  "PRETEST",
-  "RD",
-  "RB",
-  "RL",
-  "RM"
-];
-    container.innerHTML = "";
-
-    missionIds.forEach((id) => {
-
-      const info =
-        MISSIONS[id] || {};
-
-      const status =
-        missionStatus(id);
-
-      const record =
-        id === "PRETEST"
-          ? APP.progress.pretest
-          : APP.progress.missions[id];
-
-      const percent =
-        record?.completed
-          ? calculatePercent(record)
-          : 0;
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        `rq-mission-card ${status}`;
-
-      card.dataset.mission = id;
-
-      card.innerHTML = `
-        <div class="rq-mission-icon">
-          ${info.icon || "🎯"}
-        </div>
-
-        <div class="rq-mission-content">
-
-          <h3>
-            ${info.title || id}
-          </h3>
-
-          <p>
-            ${
-              info.description ||
-              "Misi Ratio Quest"
-            }
-          </p>
-
-          ${
-            status === "done"
-              ? `
-                <div class="rq-progress-text">
-                  Selesai • ${percent}%
-                </div>
-              `
-              : ""
-          }
-
-          ${
-            status === "locked"
-              ? `
-                <div class="rq-progress-text">
-                  🔒 Terkunci
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-
-        <div class="rq-mission-action">
-
-          ${
-            status === "available"
-              ? `
-                <button
-                  data-action="mission"
-                  data-mission="${id}">
-                  Mulai
-                </button>
-              `
-              : ""
-          }
-
-          ${
-            status === "done"
-              ? `
-                <button
-                  data-action="mission"
-                  data-mission="${id}">
-                  Ulangi
-                </button>
-              `
-              : ""
-          }
-
-        </div>
-      `;
-
-      container.appendChild(card);
-    });
-
-    /*
-     * BOSS
-     */
-
-    const bossContainer =
-      $("#rq-boss-card");
-
-    if (bossContainer) {
-
-      const status =
-        missionStatus("BOSS");
-
-      bossContainer.innerHTML = `
-        <div class="rq-mission-icon">
-          👑
-        </div>
-
-        <div class="rq-mission-content">
-
-          <h3>
-            Boss Challenge
-          </h3>
-
-          <p>
-            Tantangan akhir untuk
-            menguji penguasaan
-            perbandingan.
-          </p>
-
-          ${
-            status === "done"
-              ? `
-                <div>
-                  Selesai •
-                  ${calculatePercent(
-                    APP.progress.boss
-                  )}%
-                </div>
-              `
-              : ""
-          }
-
-          ${
-            status === "locked"
-              ? `
-                <div>
-                  🔒 Selesaikan semua misi
-                </div>
-              `
-              : ""
-          }
-
-        </div>
-
-        <div>
-
-          ${
-            status !== "locked"
-              ? `
-                <button
-                  data-action="boss">
-                  ${
-                    status === "done"
-                      ? "Ulangi"
-                      : "Mulai"
-                  }
-                </button>
-              `
-              : ""
-          }
-
-        </div>
-      `;
-    }
-
-    /*
-     * Nama siswa
-     */
-
-    const nameDisplay =
-      $("#rq-current-student");
-
-    if (nameDisplay) {
-
-      nameDisplay.textContent =
-        `${APP.progress.avatar} ${APP.progress.studentName}`;
-    }
-
-    renderMapProgress();
-  }
-
-  function renderMapProgress() {
-    const map = $("#rq-map .mission-map");
-    if (!map) return;
-
-    let bar = $("#rq-overall-progress");
-    if (!bar) {
-      bar = document.createElement("div");
-      bar.id = "rq-overall-progress";
-      bar.className = "rq-overall-progress";
-      const header = map.querySelector(".mission-map-header");
-      header?.insertAdjacentElement("afterend", bar);
-    }
-
-    const ids = ["PRETEST", "RD", "RB", "RL", "RM", "BOSS"];
-    const done = ids.filter(id => missionStatus(id) === "done").length;
-    const percent = Math.round((done / ids.length) * 100);
-
-    bar.innerHTML = `
-      <div class="rq-overall-progress-head">
-        <strong>Perjalananmu</strong>
-        <span>${done}/${ids.length} misi selesai • ${percent}%</span>
-      </div>
-      <div class="rq-overall-progress-track" aria-label="Progress ${percent}%">
-        <div class="rq-overall-progress-fill" style="width:${percent}%"></div>
-      </div>
-    `;
+    const container=$("#rq-mission-list"); if(!container)return; refreshBadges();
+    const missionIds=["PRETEST","RD","RB","RL","RM"]; container.innerHTML="";
+    missionIds.forEach((id,i)=>{const info=MISSIONS[id]||{},status=missionStatus(id),record=id==="PRETEST"?APP.progress.pretest:APP.progress.missions[id],percent=record?.completed?calculatePercent(record):0,card=document.createElement("div"); card.className=`rq-mission-card ${status}`; card.dataset.mission=id; card.innerHTML=`<div class="rq-mission-number">${i+1}</div><div class="rq-mission-icon">${info.icon||"🎯"}</div><div class="rq-mission-content"><div class="rq-mission-label">${status==="done"?"✓ SELESAI":status==="locked"?"🔒 TERKUNCI":"⚡ MISI AKTIF"}</div><h3>${escapeHTML(info.title||id)}</h3><p>${escapeHTML(info.description||"Misi Ratio Quest")}</p>${status==="done"?`<div class="rq-mini-progress"><span style="width:${percent}%"></span></div><small>Nilai ${percent}% • ${record.correct||0}/${record.total||0} benar</small>`:`<small>${status==="locked"?"Selesaikan misi sebelumnya":"Siap untuk dijelajahi!"}</small>`}</div><div class="rq-mission-action">${status==="available"?`<button data-action="mission" data-mission="${id}">🚀 Mulai</button>`:status==="done"?`<button data-action="mission" data-mission="${id}">🔁 Ulangi</button>`:`<span class="rq-lock">🔒</span>`}</div>`; container.appendChild(card);});
+    const bossContainer=$("#rq-boss-card"); if(bossContainer){const status=missionStatus("BOSS");bossContainer.dataset.mission="BOSS";bossContainer.innerHTML=`<div class="rq-mission-number">👑</div><div class="rq-mission-icon">👑</div><div class="rq-mission-content"><div class="rq-mission-label">${status==="locked"?"🔒 FINAL BATTLE":"⚔️ FINAL BATTLE"}</div><h3>Boss Challenge</h3><p>Tantangan akhir untuk membuktikan kamu benar-benar menguasai rasio.</p><small>${status==="locked"?"Selesaikan semua misi utama":status==="done"?`✓ Boss ditaklukkan • ${calculatePercent(APP.progress.boss)}%`:"Saatnya menghadapi tantangan terakhir!"}</small></div><div class="rq-mission-action">${status!=="locked"?`<button data-action="boss">👑 ${status==="done"?"Ulangi":"Lawan Boss"}</button>`:`<span class="rq-lock">🔒</span>`}</div>`;}
+    const rank=getRank(Number(APP.progress.xp||0)),overall=getOverallProgress(),completed=["RD","RB","RL","RM"].filter(id=>APP.progress.missions[id]?.completed).length; if($("#rq-xp"))$("#rq-xp").textContent=`${APP.progress.xp||0} XP`;if($("#rq-badge-count"))$("#rq-badge-count").textContent=APP.progress.badges.length;if($("#rq-mistake-count"))$("#rq-mistake-count").textContent=APP.progress.mistakes.length;if($("#rq-mission-count"))$("#rq-mission-count").textContent=`${completed} / 4`;if($("#rq-map-badge"))$("#rq-map-badge").textContent=`${rank.icon} ${rank.name}`;if($("#rq-overall-percent"))$("#rq-overall-percent").textContent=`${overall}%`;if($("#rq-overall-fill"))$("#rq-overall-fill").style.width=`${overall}%`;
+    const nameDisplay=$("#rq-current-student");if(nameDisplay)nameDisplay.textContent=`${APP.progress.avatar} ${APP.progress.studentName}`;
   }
 
   /* =========================================================
@@ -884,7 +675,8 @@
 
       mistakes: [],
 
-      answered: []
+      answered: [],
+      xpEarned: 0
     };
 
     showQuestion();
@@ -928,20 +720,6 @@
 
       questionNumber.textContent =
         `${APP.currentQuestionIndex + 1} / ${APP.currentQuestions.length}`;
-    }
-
-    const qLayout = $("#rq-question .question-layout");
-    if (qLayout) {
-      let qProgress = $("#rq-question-progress");
-      if (!qProgress) {
-        qProgress = document.createElement("div");
-        qProgress.id = "rq-question-progress";
-        qProgress.className = "rq-question-progress";
-        qLayout.insertBefore(qProgress, qLayout.firstChild);
-      }
-      qProgress.innerHTML = APP.currentQuestions.map((_, i) =>
-        `<span class="${i < APP.currentQuestionIndex ? "done" : i === APP.currentQuestionIndex ? "current" : ""}"></span>`
-      ).join("");
     }
 
     if (questionText) {
@@ -1300,11 +1078,6 @@
 
   function submitAnswer() {
 
-    // Cegah jawaban terkirim dua kali ketika tombol diklik cepat.
-    if (APP.currentScreen !== "question") {
-      return;
-    }
-
     const q =
       APP.currentQuestion;
 
@@ -1354,8 +1127,7 @@
 
       APP.session.correct++;
 
-      APP.session.score +=
-        q.score || 10;
+      const firstTry=!APP.session.answered.includes(q.id); APP.session.score+=q.score||10; const earned=(q.score||10)+(firstTry?5:0); APP.session.xpEarned=(APP.session.xpEarned||0)+earned; awardXP(earned);
 
     } else {
 
@@ -1399,12 +1171,6 @@
       APP.session.mistakes.push(
         mistake
       );
-
-      // Simpan riwayat kesalahan, tetapi jangan menggandakan kesalahan
-      // yang sama dalam satu sesi.
-      if (!APP.session.mistakes.some(m => m.id === q.id)) {
-        APP.session.mistakes.push(mistake);
-      }
 
       APP.progress.mistakes.push(
         mistake
@@ -1536,17 +1302,14 @@
 
       attempts:
         session.attempts,
-
+      xpEarned: session.xpEarned || 0,
       completed: true,
-
-      questions: APP.currentQuestions.map(q => ({
-        id: q.id,
-        score: Number(q.score) || 10
-      })),
 
       completedAt:
         new Date().toISOString()
     };
+
+    awardXP((APP.bossMode || APP.currentMission === "BOSS") ? 50 : 25);
 
     if (
       APP.currentMission ===
@@ -1779,7 +1542,9 @@
                   `
                   : ""
               }
-
+              ${mistake.feedback ? `<div class="rq-mistake-tip">🧭 ${escapeHTML(mistake.feedback)}</div>` : ""}
+              ${mistake.explanation ? `<div class="rq-mistake-explanation">💡 ${escapeHTML(mistake.explanation)}</div>` : ""}
+              <button class="rq-retry-btn" data-action="retry" data-index="${index}">🎯 Latihan Lagi</button>
             </div>
           `
         )
@@ -1915,7 +1680,8 @@
 
       mistakes: [],
 
-      answered: []
+      answered: [],
+      xpEarned: 0
     };
 
     showQuestion();
@@ -2116,7 +1882,8 @@
       "PRETEST",
       "RD",
       "RB",
-      "RL",
+      "RBR",
+      "RRL",
       "RM",
       "BOSS"
     ];
