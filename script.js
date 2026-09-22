@@ -594,6 +594,8 @@
       card.className =
         `rq-mission-card ${status}`;
 
+      card.dataset.mission = id;
+
       card.innerHTML = `
         <div class="rq-mission-icon">
           ${info.icon || "🎯"}
@@ -753,6 +755,36 @@
       nameDisplay.textContent =
         `${APP.progress.avatar} ${APP.progress.studentName}`;
     }
+
+    renderMapProgress();
+  }
+
+  function renderMapProgress() {
+    const map = $("#rq-map .mission-map");
+    if (!map) return;
+
+    let bar = $("#rq-overall-progress");
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.id = "rq-overall-progress";
+      bar.className = "rq-overall-progress";
+      const header = map.querySelector(".mission-map-header");
+      header?.insertAdjacentElement("afterend", bar);
+    }
+
+    const ids = ["PRETEST", "RD", "RB", "RL", "RM", "BOSS"];
+    const done = ids.filter(id => missionStatus(id) === "done").length;
+    const percent = Math.round((done / ids.length) * 100);
+
+    bar.innerHTML = `
+      <div class="rq-overall-progress-head">
+        <strong>Perjalananmu</strong>
+        <span>${done}/${ids.length} misi selesai • ${percent}%</span>
+      </div>
+      <div class="rq-overall-progress-track" aria-label="Progress ${percent}%">
+        <div class="rq-overall-progress-fill" style="width:${percent}%"></div>
+      </div>
+    `;
   }
 
   /* =========================================================
@@ -892,6 +924,20 @@
 
       questionNumber.textContent =
         `${APP.currentQuestionIndex + 1} / ${APP.currentQuestions.length}`;
+    }
+
+    const qLayout = $("#rq-question .question-layout");
+    if (qLayout) {
+      let qProgress = $("#rq-question-progress");
+      if (!qProgress) {
+        qProgress = document.createElement("div");
+        qProgress.id = "rq-question-progress";
+        qProgress.className = "rq-question-progress";
+        qLayout.insertBefore(qProgress, qLayout.firstChild);
+      }
+      qProgress.innerHTML = APP.currentQuestions.map((_, i) =>
+        `<span class="${i < APP.currentQuestionIndex ? "done" : i === APP.currentQuestionIndex ? "current" : ""}"></span>`
+      ).join("");
     }
 
     if (questionText) {
@@ -1250,6 +1296,11 @@
 
   function submitAnswer() {
 
+    // Cegah jawaban terkirim dua kali ketika tombol diklik cepat.
+    if (APP.currentScreen !== "question") {
+      return;
+    }
+
     const q =
       APP.currentQuestion;
 
@@ -1344,6 +1395,12 @@
       APP.session.mistakes.push(
         mistake
       );
+
+      // Simpan riwayat kesalahan, tetapi jangan menggandakan kesalahan
+      // yang sama dalam satu sesi.
+      if (!APP.session.mistakes.some(m => m.id === q.id)) {
+        APP.session.mistakes.push(mistake);
+      }
 
       APP.progress.mistakes.push(
         mistake
@@ -1477,6 +1534,11 @@
         session.attempts,
 
       completed: true,
+
+      questions: APP.currentQuestions.map(q => ({
+        id: q.id,
+        score: Number(q.score) || 10
+      })),
 
       completedAt:
         new Date().toISOString()
@@ -2050,8 +2112,7 @@
       "PRETEST",
       "RD",
       "RB",
-      "RBR",
-      "RRL",
+      "RL",
       "RM",
       "BOSS"
     ];
