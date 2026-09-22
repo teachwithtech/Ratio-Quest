@@ -1,2362 +1,1560 @@
-// ============================================================
-// MATH MISSION — RATIO QUEST
-// "Misi Menemukan Perbandingan yang Tepat"
-// questions.js — Question Database
-// ============================================================
-//
-// 67 SOAL
-//
-// PRETEST       : 10 soal
-// RATIO DETECTIVE : 8 soal
-// RATIO BUILDER   : 8 soal
-// RATIO BRIDGE    : 8 soal
-// REAL LIFE       : 10 soal
-// RATIO MASTER    : 8 soal
-// BOSS CHALLENGE  : 15 soal
-//
-// Level kognitif:
-// KU = Pengetahuan & Pemahaman
-// A  = Aplikasi
-// P  = Penalaran
-//
-// Error Code:
-// E1 = Salah menentukan besaran yang dibandingkan
-// E2 = Salah urutan rasio
-// E3 = Salah menyederhanakan rasio
-// E4 = Salah menentukan rasio senilai
-// E5 = Salah memahami konteks
-//
-// ============================================================
-
-
-// ============================================================
-// DATA SOAL
-// ============================================================
-
-const questions = [
-
-    // ========================================================
-    // PRETEST — STARTING POINT
-    // ========================================================
-
-    {
-        id: "P01",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "Di meja terdapat 6 pensil biru dan 4 pensil merah.",
-
-        question:
-            "Berapakah rasio pensil biru terhadap pensil merah?",
-
-        options: [
-            "2 : 3",
-            "3 : 2",
-            "6 : 4",
-            "4 : 6"
-        ],
-
-        answer: "6 : 4",
-
-        explanation:
-            "Yang dibandingkan adalah biru terhadap merah, sehingga 6 : 4.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Perhatikan urutannya! Yang disebut pertama menjadi bilangan pertama. Biru : merah = 6 : 4."
-    },
-
-
-    {
-        id: "P02",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "🍎 🍎 🍎 🍎 🍎\n🍊 🍊 🍊",
-
-        question:
-            "Rasio apel terhadap jeruk adalah …",
-
-        options: [
-            "3 : 5",
-            "5 : 3",
-            "5 : 8",
-            "8 : 5"
-        ],
-
-        answer: "5 : 3",
-
-        explanation:
-            "Ada 5 apel dan 3 jeruk, sehingga rasionya 5 : 3.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Hitung dulu masing-masing benda. Apel ada 5 dan jeruk ada 3."
-    },
-
-
-    {
-        id: "P03",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "KU",
-        type: "short_answer",
-
-        stimulus:
-            "Di kelas terdapat 8 siswa laki-laki dan 12 siswa perempuan.",
-
-        question:
-            "Tuliskan rasio siswa laki-laki terhadap siswa perempuan.",
-
-        options: [],
-
-        answer: "8 : 12",
-
-        explanation:
-            "Kata 'terhadap' menunjukkan urutan perbandingan. Laki-laki : perempuan = 8 : 12.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Kata 'terhadap' menunjukkan urutan perbandingan. Laki-laki : perempuan."
-    },
-
-
-    {
-        id: "P04",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "Data buah:\n\nApel = 8\nJeruk = 12\nMangga = 4",
-
-        question:
-            "Rasio jeruk terhadap mangga adalah …",
-
-        options: [
-            "12 : 4",
-            "4 : 12",
-            "12 : 8",
-            "8 : 4"
-        ],
-
-        answer: "12 : 4",
-
-        explanation:
-            "Yang dibandingkan hanya jeruk dan mangga. Jeruk = 12 dan mangga = 4.",
-
-        errorCode: "E1/E2",
-
-        feedback:
-            "Cari dua data yang diminta saja: jeruk dan mangga."
-    },
-
-
-    {
-        id: "P05",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Bentuk paling sederhana dari 12 : 18 adalah …",
-
-        options: [
-            "2 : 3",
-            "3 : 2",
-            "6 : 9",
-            "4 : 9"
-        ],
-
-        answer: "2 : 3",
-
-        explanation:
-            "12 dan 18 sama-sama dapat dibagi 6, sehingga 12 : 18 = 2 : 3.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Cari bilangan yang dapat membagi kedua bagian. 12 dan 18 sama-sama dapat dibagi 6."
-    },
-
-
-    {
-        id: "P06",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Pasangan rasio yang senilai dengan 2 : 3 adalah …",
-
-        options: [
-            "4 : 5",
-            "4 : 6",
-            "6 : 8",
-            "8 : 10"
-        ],
-
-        answer: "4 : 6",
-
-        explanation:
-            "2 × 2 = 4 dan 3 × 2 = 6, sehingga 4 : 6 senilai dengan 2 : 3.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Pada rasio senilai, kedua bagian harus dikalikan dengan bilangan yang sama."
-    },
-
-
-    {
-        id: "P07",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Untuk membuat jus, diperlukan 2 buah jeruk untuk setiap 3 gelas air.\n\nJika digunakan 6 gelas air, berapa buah jeruk yang diperlukan?",
-
-        question:
-            "Berapa buah jeruk yang diperlukan?",
-
-        options: [
-            "2",
-            "3",
-            "4",
-            "6"
-        ],
-
-        answer: "4",
-
-        explanation:
-            "3 gelas air menjadi 6 gelas, berarti dikali 2. Maka jumlah jeruk juga dikali 2: 2 × 2 = 4.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Bandingkan faktor perubahan. Air berubah dari 3 menjadi 6, berarti dikali 2. Jeruk juga harus dikali 2."
-    },
-
-
-    {
-        id: "P08",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Resep salad menggunakan 3 wortel untuk setiap 2 buah tomat.\n\nJika ingin menggunakan 6 wortel, berapa tomat yang diperlukan?",
-
-        question:
-            "Berapa tomat yang diperlukan?",
-
-        options: [
-            "2",
-            "3",
-            "4",
-            "6"
-        ],
-
-        answer: "4",
-
-        explanation:
-            "Wortel dari 3 menjadi 6 berarti dikali 2. Tomat juga harus dikali 2: 2 × 2 = 4.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Wortel dari 3 menjadi 6 berarti dikali 2. Tomat juga harus dikali 2."
-    },
-
-
-    {
-        id: "P09",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Dina menyelesaikan:\n\n8 : 12 = 4 : 12",
-
-        question:
-            "Apa kesalahan Dina?",
-
-        options: [
-            "8 seharusnya ditambah 4",
-            "Hanya satu bilangan yang dibagi",
-            "Urutan rasio terbalik",
-            "12 seharusnya dikali 2"
-        ],
-
-        answer: "Hanya satu bilangan yang dibagi",
-
-        explanation:
-            "Saat menyederhanakan rasio, kedua bagian harus diperlakukan dengan operasi yang sama.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Saat menyederhanakan rasio, kedua bagian harus diperlakukan dengan operasi yang sama."
-    },
-
-
-    {
-        id: "P10",
-        mission: "PRETEST",
-        missionName: "Pretest",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Kelas VI memiliki 18 siswa. Perbandingan siswa laki-laki dan perempuan adalah 1 : 2.",
-
-        question:
-            "Berapa banyak siswa laki-laki?",
-
-        options: [
-            "6",
-            "8",
-            "9",
-            "12"
-        ],
-
-        answer: "6",
-
-        explanation:
-            "1 + 2 = 3 bagian. 18 ÷ 3 = 6. Laki-laki = 1 bagian = 6 siswa.",
-
-        errorCode: "E5",
-
-        feedback:
-            "Jangan langsung membagi 18 dengan angka pertama. Jumlahkan seluruh bagian rasio terlebih dahulu."
-    },
-
-
-    // ========================================================
-    // MISSION 1 — RATIO DETECTIVE
-    // ========================================================
-
-    {
-        id: "RD11",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "Ada 7 bola merah dan 5 bola biru.",
-
-        question:
-            "Dua kuantitas yang dibandingkan dalam rasio merah terhadap biru adalah …",
-
-        options: [
-            "merah dan semua bola",
-            "biru dan semua bola",
-            "merah dan biru",
-            "semua bola dan merah"
-        ],
-
-        answer: "merah dan biru",
-
-        explanation:
-            "Rasio merah terhadap biru hanya membandingkan dua kelompok tersebut.",
-
-        errorCode: "E1",
-
-        feedback:
-            "Rasio merah terhadap biru hanya membandingkan dua kelompok tersebut."
-    },
-
-
-    {
-        id: "RD12",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "🟩 🟩 🟩 🟩\n\n🟨 🟨 🟨 🟨 🟨 🟨",
-
-        question:
-            "Rasio hijau terhadap kuning adalah …",
-
-        options: [
-            "4 : 6",
-            "6 : 4",
-            "4 : 10",
-            "10 : 4"
-        ],
-
-        answer: "4 : 6",
-
-        explanation:
-            "Ada 4 kotak hijau dan 6 kotak kuning. Karena yang ditanya hijau terhadap kuning, rasionya 4 : 6.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Hijau disebut lebih dulu, jadi tuliskan jumlah hijau terlebih dahulu."
-    },
-
-
-    {
-        id: "RD13",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "Di taman ada 5 bunga mawar dan 8 bunga melati.",
-
-        question:
-            "Manakah kalimat rasio yang benar?",
-
-        options: [
-            "Mawar terhadap melati = 8 : 5",
-            "Mawar terhadap melati = 5 : 8",
-            "Melati terhadap mawar = 5 : 8",
-            "Mawar terhadap semua bunga = 5 : 8"
-        ],
-
-        answer: "Mawar terhadap melati = 5 : 8",
-
-        explanation:
-            "Mawar disebut pertama, sehingga 5 menjadi bilangan pertama.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Mawar disebut pertama. Jadi 5 menjadi bilangan pertama."
-    },
-
-
-    {
-        id: "RD14",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "KU",
-        type: "short_answer",
-
-        stimulus:
-            "Ada 6 buku cerita dan 9 buku pengetahuan.",
-
-        question:
-            "Tuliskan rasio buku cerita terhadap buku pengetahuan dalam bentuk a : b.",
-
-        options: [],
-
-        answer: "6 : 9",
-
-        explanation:
-            "Buku cerita : buku pengetahuan = 6 : 9.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Cerita : pengetahuan = 6 : 9."
-    },
-
-    {
-    id: "RD15",
+/* =========================================================
+   MATH MISSION — RATIO QUEST
+   BANK SOAL TERBARU — 40 SOAL
+   Grade VI SD / Fase C
+   ========================================================= */
+
+window.RATIO_MISSION_INFO = {
+
+  PRETEST: {
+    icon: "🧭",
+    title: "Pretest",
+    description: "Uji kemampuan awalmu tentang perbandingan."
+  },
+
+  RD: {
+    icon: "🔎",
+    title: "Ratio Detective",
+    description: "Temukan dan tentukan perbandingan dengan tepat."
+  },
+
+  RB: {
+    icon: "🧱",
+    title: "Ratio Builder",
+    description: "Bangun perbandingan senilai dan temukan nilai yang belum diketahui."
+  },
+
+  RL: {
+    icon: "🌍",
+    title: "Ratio in Real Life",
+    description: "Gunakan perbandingan untuk menyelesaikan masalah sehari-hari."
+  },
+
+  RM: {
+    icon: "🧠",
+    title: "Ratio Master",
+    description: "Analisis berbagai situasi perbandingan dan temukan kesalahannya."
+  },
+
+  BOSS: {
+    icon: "👑",
+    title: "Boss Challenge",
+    description: "Tantangan akhir untuk membuktikan kemampuanmu."
+  }
+
+};
+
+
+/* =========================================================
+   40 SOAL
+   ========================================================= */
+
+window.RATIO_QUESTIONS = [
+
+  /* =======================================================
+     PRETEST — 5 SOAL
+     ======================================================= */
+
+  {
+    id: "P01",
+    mission: "PRETEST",
+    missionName: "Pretest",
+    level: "KU",
+    type: "multiple_choice",
+
+    stimulus:
+      "Di sebuah kotak terdapat 6 kelereng merah dan 9 kelereng biru.",
+
+    question:
+      "Perbandingan kelereng merah terhadap kelereng biru adalah ...",
+
+    options: [
+      "A. 2 : 3",
+      "B. 3 : 2",
+      "C. 6 : 3",
+      "D. 9 : 6"
+    ],
+
+    answer: "A",
+
+    explanation:
+      "Perbandingan merah : biru = 6 : 9. Keduanya dibagi 3 sehingga menjadi 2 : 3.",
+
+    errorCode: "E2",
+
+    feedback:
+      "Ingat urutan perbandingan. Jika yang ditanyakan merah : biru, tuliskan jumlah merah terlebih dahulu, kemudian jumlah biru."
+  },
+
+  {
+    id: "P02",
+    mission: "PRETEST",
+    missionName: "Pretest",
+    level: "KU",
+    type: "multiple_choice",
+
+    stimulus:
+      "Di atas meja terdapat 4 apel dan 3 jeruk.",
+
+    question:
+      "Perbandingan apel terhadap jeruk adalah ...",
+
+    options: [
+      "A. 3 : 4",
+      "B. 4 : 3",
+      "C. 4 : 7",
+      "D. 7 : 4"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "Apel berjumlah 4 dan jeruk berjumlah 3. Jadi apel : jeruk = 4 : 3.",
+
+    errorCode: "E1",
+
+    feedback:
+      "Tentukan dahulu dua besaran yang dibandingkan. Apel dibandingkan dengan jeruk."
+  },
+
+  {
+    id: "P03",
+    mission: "PRETEST",
+    missionName: "Pretest",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Dalam sebuah kelas terdapat 12 siswa laki-laki dan 18 siswa perempuan.",
+
+    question:
+      "Bentuk paling sederhana dari perbandingan siswa laki-laki terhadap siswa perempuan adalah ...",
+
+    options: [
+      "A. 2 : 3",
+      "B. 3 : 2",
+      "C. 6 : 9",
+      "D. 12 : 18"
+    ],
+
+    answer: "A",
+
+    explanation:
+      "12 : 18 dibagi 6 sehingga diperoleh 2 : 3.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Untuk menyederhanakan perbandingan, bagi kedua bilangan dengan faktor yang sama."
+  },
+
+  {
+    id: "P04",
+    mission: "PRETEST",
+    missionName: "Pretest",
+    level: "A",
+    type: "matching",
+
+    stimulus:
+      "Pasangkan setiap perbandingan dengan bentuk sederhananya.",
+
+    question:
+      "Tuliskan jawaban dalam urutan yang benar.",
+
+    options: [
+      {
+        left: "1. 2 apel : 4 jeruk",
+        right: "1 : 2"
+      },
+      {
+        left: "2. 6 pensil : 2 penghapus",
+        right: "3 : 1"
+      },
+      {
+        left: "3. 3 merah : 2 biru",
+        right: "3 : 2"
+      }
+    ],
+
+    answer: [
+      "1:2",
+      "3:1",
+      "3:2"
+    ],
+
+    explanation:
+      "2 : 4 disederhanakan menjadi 1 : 2. 6 : 2 menjadi 3 : 1. 3 : 2 sudah paling sederhana.",
+
+    errorCode: "E1",
+
+    feedback:
+      "Perhatikan besaran pertama dan kedua sebelum menyederhanakan."
+  },
+
+  {
+    id: "P05",
+    mission: "PRETEST",
+    missionName: "Pretest",
+    level: "KU",
+    type: "matching",
+
+    stimulus:
+      "Pasangkan perbandingan dengan bentuk sederhananya.",
+
+    question:
+      "Tuliskan jawaban sesuai urutan soal.",
+
+    options: [
+      {
+        left: "1. 4 : 8",
+        right: "1 : 2"
+      },
+      {
+        left: "2. 6 : 9",
+        right: "2 : 3"
+      },
+      {
+        left: "3. 12 : 8",
+        right: "3 : 2"
+      }
+    ],
+
+    answer: [
+      "1:2",
+      "2:3",
+      "3:2"
+    ],
+
+    explanation:
+      "Setiap perbandingan disederhanakan dengan membagi kedua bilangan menggunakan faktor persekutuan yang sama.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Jangan hanya membagi salah satu bilangan. Kedua bagian perbandingan harus diperlakukan sama."
+  },
+
+
+  /* =======================================================
+     RATIO DETECTIVE — 5 SOAL
+     ======================================================= */
+
+  {
+    id: "RD01",
+    mission: "RD",
+    missionName: "Ratio Detective",
+    level: "KU",
+    type: "multiple_choice",
+
+    stimulus:
+      "Sebuah kotak berisi 8 bola merah dan 12 bola kuning.",
+
+    question:
+      "Perbandingan bola kuning terhadap bola merah dalam bentuk paling sederhana adalah ...",
+
+    options: [
+      "A. 2 : 3",
+      "B. 3 : 2",
+      "C. 8 : 12",
+      "D. 12 : 8"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "Kuning : merah = 12 : 8. Dibagi 4 menjadi 3 : 2.",
+
+    errorCode: "E2",
+
+    feedback:
+      "Urutan sangat penting. Karena yang ditanyakan kuning : merah, gunakan 12 terlebih dahulu."
+  },
+
+  {
+    id: "RD02",
     mission: "RD",
     missionName: "Ratio Detective",
     level: "A",
     type: "multiple_choice",
 
     stimulus:
-        "Di dalam kotak terdapat:\n\n🔴 8 kelereng merah\n🔵 12 kelereng biru\n🟢 4 kelereng hijau",
+      "Di sebuah rak terdapat 5 buku biru dan 10 buku merah.",
 
     question:
-        "Rasio kelereng biru terhadap kelereng merah dalam bentuk paling sederhana adalah …",
+      "Perbandingan buku biru terhadap seluruh buku adalah ...",
 
     options: [
-        "2 : 3",
-        "3 : 2",
-        "8 : 12",
-        "12 : 4"
+      "A. 1 : 2",
+      "B. 1 : 3",
+      "C. 2 : 3",
+      "D. 5 : 10"
     ],
 
-    answer: "3 : 2",
+    answer: "B",
 
     explanation:
-        "Biru : merah = 12 : 8. Kedua bilangan dibagi 4, sehingga menjadi 3 : 2.",
+      "Jumlah seluruh buku = 5 + 10 = 15. Jadi biru : seluruh buku = 5 : 15 = 1 : 3.",
+
+    errorCode: "E1",
+
+    feedback:
+      "Jika dibandingkan dengan seluruh benda, jumlah seluruh benda harus dihitung terlebih dahulu."
+  },
+
+  {
+    id: "RD03",
+    mission: "RD",
+    missionName: "Ratio Detective",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan jumlah makanan ringan dan minuman di kantin adalah 3 : 2. Jika makanan ringan berjumlah 12, berapa minuman yang tersedia?",
+
+    question:
+      "Jumlah minuman adalah ...",
+
+    options: [
+      "A. 6",
+      "B. 8",
+      "C. 10",
+      "D. 18"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "3 bagian makanan ringan = 12, sehingga 1 bagian = 4. Minuman = 2 × 4 = 8.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Cari nilai satu bagian terlebih dahulu, kemudian kalikan dengan jumlah bagian pada besaran kedua."
+  },
+
+  {
+    id: "RD04",
+    mission: "RD",
+    missionName: "Ratio Detective",
+    level: "A",
+    type: "matching",
+
+    stimulus:
+      "Sederhanakan setiap perbandingan berikut.",
+
+    question:
+      "Tuliskan bentuk sederhananya.",
+
+    options: [
+      {
+        left: "1. 10 : 15",
+        right: "2 : 3"
+      },
+      {
+        left: "2. 8 : 12",
+        right: "2 : 3"
+      },
+      {
+        left: "3. 18 : 12",
+        right: "3 : 2"
+      }
+    ],
+
+    answer: [
+      "2:3",
+      "2:3",
+      "3:2"
+    ],
+
+    explanation:
+      "10 : 15 dibagi 5 = 2 : 3. 8 : 12 dibagi 4 = 2 : 3. 18 : 12 dibagi 6 = 3 : 2.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Cari faktor persekutuan terbesar agar perbandingan menjadi paling sederhana."
+  },
+
+  {
+    id: "RD05",
+    mission: "RD",
+    missionName: "Ratio Detective",
+    level: "P",
+    type: "matching",
+
+    stimulus:
+      "Perhatikan pasangan benda berikut.",
+
+    question:
+      "Tentukan perbandingan sesuai urutan yang diminta.",
+
+    options: [
+      {
+        left: "1. 4 merah : 6 biru → merah : biru",
+        right: "2 : 3"
+      },
+      {
+        left: "2. 6 biru : 4 merah → biru : merah",
+        right: "3 : 2"
+      },
+      {
+        left: "3. 2 guru : 8 siswa → guru : siswa",
+        right: "1 : 4"
+      }
+    ],
+
+    answer: [
+      "2:3",
+      "3:2",
+      "1:4"
+    ],
+
+    explanation:
+      "Urutan benda harus mengikuti kalimat perbandingan. Setelah itu, sederhanakan jika diperlukan.",
 
     errorCode: "E2",
 
     feedback:
-        "Perhatikan urutan perbandingan. Biru disebut terlebih dahulu, jadi 12 menjadi bilangan pertama. 12 : 8 kemudian disederhanakan menjadi 3 : 2."
-},
-    {
-        id: "RD16",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "A",
-        type: "multiple_choice",
+      "Baca kata sebelum dan sesudah tanda titik dua. Itulah urutan perbandingan."
+  },
 
-        stimulus:
-            "Di kelas ada 12 siswa perempuan dan 8 siswa laki-laki.",
 
-        question:
-            "Rasio perempuan terhadap laki-laki adalah …",
+  /* =======================================================
+     RATIO BUILDER — 5 SOAL
+     ======================================================= */
 
-        options: [
-            "2 : 3",
-            "3 : 2",
-            "12 : 20",
-            "8 : 12"
-        ],
+  {
+    id: "RB01",
+    mission: "RB",
+    missionName: "Ratio Builder",
+    level: "KU",
+    type: "multiple_choice",
 
-        answer: "3 : 2",
+    stimulus:
+      "Sebuah kelompok memiliki 15 pensil merah dan 20 pensil biru.",
 
-        explanation:
-            "12 : 8 disederhanakan dengan membagi 4 menjadi 3 : 2.",
+    question:
+      "Perbandingan pensil merah terhadap pensil biru dalam bentuk sederhana adalah ...",
 
-        errorCode: "E2",
+    options: [
+      "A. 2 : 3",
+      "B. 3 : 4",
+      "C. 4 : 3",
+      "D. 15 : 20"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "15 : 20 dibagi 5 = 3 : 4.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Cari bilangan yang dapat membagi kedua bagian perbandingan."
+  },
+
+  {
+    id: "RB02",
+    mission: "RB",
+    missionName: "Ratio Builder",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan siswa yang membawa bekal dan tidak membawa bekal adalah 24 : 36.",
+
+    question:
+      "Bentuk sederhana dari perbandingan tersebut adalah ...",
+
+    options: [
+      "A. 2 : 3",
+      "B. 3 : 2",
+      "C. 4 : 6",
+      "D. 6 : 9"
+    ],
+
+    answer: "A",
+
+    explanation:
+      "24 dan 36 sama-sama dapat dibagi 12. Jadi 24 : 36 = 2 : 3.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Sederhanakan kedua bilangan menggunakan pembagi yang sama."
+  },
+
+  {
+    id: "RB03",
+    mission: "RB",
+    missionName: "Ratio Builder",
+    level: "A",
+    type: "multiple_choice",
 
-        feedback:
-            "12 : 8 dapat disederhanakan dengan membagi 4 menjadi 3 : 2."
-    },
-
-
-    {
-        id: "RD17",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Raka berkata:\n\n'Ada 4 bola merah dan 6 bola biru. Jadi rasio biru terhadap merah adalah 4 : 6.'",
-
-        question:
-            "Pernyataan Raka …",
-
-        options: [
-            "benar karena urutannya merah : biru",
-            "salah karena seharusnya 6 : 4",
-            "salah karena seharusnya 4 : 10",
-            "benar karena urutan tidak penting"
-        ],
-
-        answer: "salah karena seharusnya 6 : 4",
-
-        explanation:
-            "Rasio memperhatikan urutan. Biru : merah = 6 : 4.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Rasio memperhatikan urutan. Biru : merah = 6 : 4."
-    },
-
-
-    {
-        id: "RD18",
-        mission: "RD",
-        missionName: "Ratio Detective",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Nia: 6 apel dan 4 jeruk.\n\nApel : jeruk = 4 : 6.",
-
-        question:
-            "Kesalahan Nia adalah …",
-
-        options: [
-            "salah menghitung apel",
-            "salah menghitung jeruk",
-            "membalik urutan rasio",
-            "tidak menyederhanakan rasio"
-        ],
-
-        answer: "membalik urutan rasio",
-
-        explanation:
-            "Nia sudah menghitung dengan benar, tetapi urutannya terbalik. Apel : jeruk = 6 : 4.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Nia sudah menghitung dengan benar, tetapi urutannya terbalik. Apel : jeruk = 6 : 4."
-    },
-
-
-    // ========================================================
-    // MISSION 2 — RATIO BUILDER
-    // ========================================================
-
-    {
-        id: "RB19",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Bentuk paling sederhana dari 8 : 12 adalah …",
-
-        options: [
-            "2 : 3",
-            "3 : 2",
-            "4 : 6",
-            "8 : 4"
-        ],
-
-        answer: "2 : 3",
-
-        explanation:
-            "8 dan 12 sama-sama dapat dibagi 4.",
-
-        errorCode: "E3",
-
-        feedback:
-            "8 dan 12 sama-sama dapat dibagi 4."
-    },
-
-
-    {
-        id: "RB20",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Bilangan terbesar yang dapat membagi 12 dan 18 sekaligus adalah …",
-
-        options: [
-            "2",
-            "3",
-            "6",
-            "9"
-        ],
-
-        answer: "6",
-
-        explanation:
-            "6 adalah bilangan terbesar yang dapat membagi 12 dan 18 tanpa sisa.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Cari bilangan yang dapat membagi kedua angka tanpa sisa."
-    },
-
-
-    {
-        id: "RB21",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Rasio 15 : 20 jika disederhanakan menjadi …",
-
-        options: [
-            "2 : 3",
-            "3 : 4",
-            "4 : 5",
-            "5 : 4"
-        ],
-
-        answer: "3 : 4",
-
-        explanation:
-            "15 dan 20 sama-sama dibagi 5, sehingga menjadi 3 : 4.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Cari faktor yang sama pada kedua bilangan."
-    },
-
-
-    {
-        id: "RB22",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Ada 12 balon merah dan 8 balon putih.",
-
-        question:
-            "Rasio merah terhadap putih dalam bentuk paling sederhana adalah …",
-
-        options: [
-            "3 : 2",
-            "2 : 3",
-            "12 : 20",
-            "4 : 6"
-        ],
-
-        answer: "3 : 2",
-
-        explanation:
-            "12 : 8 dibagi 4 menjadi 3 : 2.",
-
-        errorCode: "E3",
-
-        feedback:
-            "12 : 8 dibagi 4 menjadi 3 : 2."
-    },
-
-
-    {
-        id: "RB23",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Di perpustakaan terdapat 18 buku cerita dan 12 buku sains.",
-
-        question:
-            "Rasio buku cerita terhadap buku sains dalam bentuk sederhana adalah …",
-
-        options: [
-            "3 : 2",
-            "2 : 3",
-            "18 : 30",
-            "6 : 5"
-        ],
-
-        answer: "3 : 2",
-
-        explanation:
-            "18 : 12 dapat dibagi 6 sehingga menjadi 3 : 2.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Cari bilangan yang dapat membagi kedua bagian rasio."
-    },
-
-
-    {
-        id: "RB24",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "10 : 15 → ?\n12 : 16 → ?\n18 : 24 → ?",
-
-        question:
-            "Pasangan bentuk sederhana yang benar adalah …",
-
-        options: [
-            "2:3, 3:4, 3:4",
-            "3:2, 4:3, 4:3",
-            "2:3, 4:3, 3:4",
-            "5:3, 3:4, 4:3"
-        ],
-
-        answer: "2:3, 3:4, 3:4",
-
-        explanation:
-            "10 : 15 = 2 : 3, 12 : 16 = 3 : 4, dan 18 : 24 = 3 : 4.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Sederhanakan setiap rasio dengan membagi kedua bilangan menggunakan faktor yang sama."
-    },
-
-
-    {
-        id: "RB25",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Bima:\n16 : 24\n= 8 : 24\n= 4 : 12",
-
-        question:
-            "Kesalahan pertama Bima adalah …",
-
-        options: [
-            "16 dibagi 2, tetapi 24 tidak dibagi 2",
-            "16 seharusnya dikali 2",
-            "24 seharusnya ditambah 8",
-            "tidak ada kesalahan"
-        ],
-
-        answer: "16 dibagi 2, tetapi 24 tidak dibagi 2",
-
-        explanation:
-            "Saat menyederhanakan rasio, kedua bilangan harus mengalami operasi yang sama.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Saat menyederhanakan rasio, kedua bilangan harus mengalami operasi yang sama."
-    },
-
-
-    {
-        id: "RB26",
-        mission: "RB",
-        missionName: "Ratio Builder",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Salsa mendapatkan:\n\n20 : 30 = 2 : 3\n\nGuru meminta Salsa memperbaiki langkahnya.",
-
-        question:
-            "Langkah yang paling tepat adalah …",
-
-        options: [
-            "20 ÷ 10 dan 30 ÷ 10",
-            "20 ÷ 2 dan 30 ÷ 3",
-            "20 − 10 dan 30 − 10",
-            "20 ÷ 5 dan 30 ÷ 10"
-        ],
-
-        answer: "20 ÷ 10 dan 30 ÷ 10",
-
-        explanation:
-            "Kedua bagian harus dibagi dengan bilangan yang sama. 20 dan 30 sama-sama dapat dibagi 10.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Kedua bagian harus dibagi dengan bilangan yang sama. 20 dan 30 sama-sama dapat dibagi 10."
-    },
-
-
-    // ========================================================
-    // MISSION 3 — RATIO BRIDGE
-    // ========================================================
-
-    {
-        id: "RBR27",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Manakah yang senilai dengan 3 : 4?",
-
-        options: [
-            "6 : 8",
-            "6 : 7",
-            "9 : 16",
-            "12 : 20"
-        ],
-
-        answer: "6 : 8",
-
-        explanation:
-            "3 dan 4 sama-sama dikalikan 2 menjadi 6 dan 8.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Kedua bagian harus dikalikan dengan faktor yang sama."
-    },
-
-
-    {
-        id: "RBR28",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Pensil : Penghapus\n\n2 : 3\n4 : 6\n6 : ?",
-
-        question:
-            "Nilai yang tepat adalah …",
-
-        options: [
-            "7",
-            "8",
-            "9",
-            "10"
-        ],
-
-        answer: "9",
-
-        explanation:
-            "Pola 2 → 4 → 6. Penghapus mengikuti faktor yang sama: 3 → 6 → 9.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Pola 2 → 4 → 6. Penghapus juga mengikuti faktor yang sama: 3 → 6 → 9."
-    },
-
-
-    {
-        id: "RBR29",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "A",
-        type: "short_answer",
-
-        stimulus:
-            "Gelas jus : Buah\n\n2 : 4\n4 : 8\n6 : ?",
-
-        question:
-            "Nilai yang tepat adalah …",
-
-        options: [],
-
-        answer: "12",
-
-        explanation:
-            "Setiap 1 gelas jus berpasangan dengan 2 buah. Jika gelas menjadi 6, buah = 6 × 2 = 12.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Perhatikan pola pasangan. Saat gelas bertambah, jumlah buah bertambah dengan faktor yang sama."
-    },
-
-
-    {
-        id: "RBR30",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Untuk setiap 2 sendok sirup diperlukan 5 sendok air.",
-
-        question:
-            "Manakah pasangan yang memiliki rasio sirup : air yang sama?",
-
-        options: [
-            "4 : 10",
-            "6 : 10",
-            "8 : 15",
-            "10 : 20"
-        ],
-
-        answer: "4 : 10",
-
-        explanation:
-            "2 : 5 dikalikan 2 menjadi 4 : 10.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Kalikan kedua bagian dengan faktor yang sama."
-    },
-
-
-    {
-        id: "RBR31",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Manakah pasangan yang tidak senilai dengan 4 : 5?",
-
-        options: [
-            "8 : 10",
-            "12 : 15",
-            "16 : 20",
-            "20 : 30"
-        ],
-
-        answer: "20 : 30",
-
-        explanation:
-            "4 : 5 senilai dengan 8 : 10, 12 : 15, dan 16 : 20. Namun 20 : 30 disederhanakan menjadi 2 : 3.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Coba sederhanakan setiap rasio. Rasio yang senilai akan memiliki bentuk sederhana yang sama."
-    },
-
-
-    {
-        id: "RBR32",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Kotak : Bola\n\n1 : 3\n2 : 6\n3 : 9\n4 : ?",
-
-        question:
-            "Berapa bola dalam 4 kotak?",
-
-        options: [
-            "10",
-            "11",
-            "12",
-            "13"
-        ],
-
-        answer: "12",
-
-        explanation:
-            "Setiap 1 kotak berisi 3 bola. Jadi 4 kotak berisi 4 × 3 = 12 bola.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Cari faktor tetap antara jumlah kotak dan jumlah bola."
-    },
-
-
-    {
-        id: "RBR33",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Rasio awal = 3 : 5\n\nDiperbesar 2 kali.\n\nHasil = 6 : 5",
-
-        question:
-            "Apa kesalahannya?",
-
-        options: [
-            "3 tidak boleh dikali",
-            "hanya bagian pertama yang dikali",
-            "rasio harus dibalik",
-            "5 harus dikurangi 2"
-        ],
-
-        answer: "hanya bagian pertama yang dikali",
-
-        explanation:
-            "Jika rasio diperbesar 2 kali, kedua bagian harus dikalikan 2: 3 × 2 : 5 × 2 = 6 : 10.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Jika rasio diperbesar 2 kali, kedua bagian dikalikan 2: 3 × 2 : 5 × 2 = 6 : 10."
-    },
-
-
-    {
-        id: "RBR34",
-        mission: "RBR",
-        missionName: "Ratio Bridge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Andi menulis:\n\n4 : 7 = 8 : 14",
-
-        question:
-            "Apakah jawaban Andi benar?",
-
-        options: [
-            "Benar, karena keduanya dikali 2",
-            "Salah, karena hanya angka pertama yang berubah",
-            "Salah, karena 7 harus menjadi 9",
-            "Salah, karena rasio tidak boleh diperbesar"
-        ],
-
-        answer: "Benar, karena keduanya dikali 2",
-
-        explanation:
-            "Benar! Kedua bagian dikalikan dengan faktor yang sama, yaitu 2.",
-
-        errorCode: null,
-
-        feedback:
-            "Benar! Kedua bagian dikalikan dengan faktor yang sama, yaitu 2."
-    },
-
-
-    // ========================================================
-    // MISSION 4 — RATIO IN REAL LIFE
-    // ========================================================
-
-    {
-        id: "RRL35",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Untuk membuat 1 gelas jus diperlukan 2 buah jeruk dan 3 sendok air.",
-
-        question:
-            "Rasio jeruk terhadap sendok air adalah …",
-
-        options: [
-            "2 : 3",
-            "3 : 2",
-            "2 : 5",
-            "5 : 2"
-        ],
-
-        answer: "2 : 3",
-
-        explanation:
-            "Jeruk = 2 dan air = 3, sehingga rasio jeruk : air = 2 : 3.",
-
-        errorCode: "E2",
-
-        feedback:
-            "Perhatikan urutan yang diminta: jeruk terlebih dahulu, kemudian air."
-    },
-
-
-    {
-        id: "RRL36",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Satu resep membutuhkan 2 telur untuk 3 porsi kue.",
-
-        question:
-            "Berapa telur yang diperlukan untuk 9 porsi?",
-
-        options: [
-            "3",
-            "4",
-            "6",
-            "9"
-        ],
-
-        answer: "6",
-
-        explanation:
-            "3 porsi menjadi 9 porsi, berarti dikali 3. Telur juga dikali 3: 2 × 3 = 6.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Cari faktor perubahan porsi, kemudian gunakan faktor yang sama untuk jumlah telur."
-    },
-
-
-    {
-        id: "RRL37",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Kelas VI terdiri atas 15 siswa laki-laki dan 20 siswa perempuan.",
-
-        question:
-            "Rasio laki-laki terhadap perempuan dalam bentuk sederhana adalah …",
-
-        options: [
-            "3 : 4",
-            "4 : 3",
-            "15 : 35",
-            "5 : 4"
-        ],
-
-        answer: "3 : 4",
-
-        explanation:
-            "15 : 20 dibagi 5 menjadi 3 : 4.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Sederhanakan kedua bagian menggunakan faktor yang sama."
-    },
-
-
-    {
-        id: "RRL38",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Untuk membuat warna ungu, Rani mencampurkan 2 bagian merah dan 3 bagian biru.\n\nJika Rani menggunakan 6 bagian biru, berapa bagian merah yang diperlukan?",
-
-        question:
-            "Berapa bagian merah yang diperlukan?",
-
-        options: [
-            "2",
-            "3",
-            "4",
-            "6"
-        ],
-
-        answer: "4",
-
-        explanation:
-            "Biru dari 3 menjadi 6 berarti dikali 2. Merah juga dikali 2: 2 × 2 = 4.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Biru berubah dari 3 menjadi 6, berarti dikali 2. Merah juga harus dikali 2."
-    },
-
-
-    {
-        id: "RRL39",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Toko A menjual 2 pensil seharga Rp6.000.\n\nToko B menjual 3 pensil seharga Rp9.000.",
-
-        question:
-            "Apa yang dapat disimpulkan?",
-
-        options: [
-            "Harga per pensil di Toko A lebih murah",
-            "Harga per pensil di Toko B lebih murah",
-            "Harga per pensil kedua toko sama",
-            "Tidak dapat dibandingkan"
-        ],
-
-        answer: "Harga per pensil kedua toko sama",
-
-        explanation:
-            "Rp6.000 ÷ 2 = Rp3.000 dan Rp9.000 ÷ 3 = Rp3.000. Jadi harga per pensil sama.",
-
-        errorCode: "E5",
-
-        feedback:
-            "Jangan hanya membandingkan harga total. Bandingkan harga untuk jumlah barang yang sama."
-    },
-
-
-    {
-        id: "RRL40",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Sebuah kotak bekal berisi nasi, sayur, dan lauk dengan rasio 4 : 2 : 2.\n\nJika seluruh isi kotak terdiri atas 16 bagian, berapa bagian yang merupakan nasi?",
-
-        question:
-            "Berapa bagian yang merupakan nasi?",
-
-        options: [
-            "4",
-            "6",
-            "8",
-            "10"
-        ],
-
-        answer: "8",
-
-        explanation:
-            "Jumlah bagian rasio = 4 + 2 + 2 = 8. Jika seluruhnya 16 bagian, faktor pengalinya 16 ÷ 8 = 2. Nasi = 4 × 2 = 8 bagian.",
-
-        errorCode: "E5",
-
-        feedback:
-            "Jumlahkan seluruh bagian rasio terlebih dahulu, lalu tentukan nilai satu bagian."
-    },
-
-
-    {
-        id: "RRL41",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Dalam kegiatan olahraga, waktu berlari dan berjalan memiliki rasio 3 : 2.\n\nJika waktu berlari 30 menit, berapa menit waktu berjalan?",
-
-        question:
-            "Berapa menit waktu berjalan?",
-
-        options: [
-            "10",
-            "15",
-            "20",
-            "25"
-        ],
-
-        answer: "20",
-
-        explanation:
-            "3 bagian = 30 menit, sehingga 1 bagian = 10 menit. Berjalan = 2 bagian = 20 menit.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Tentukan nilai satu bagian terlebih dahulu."
-    },
-
-
-    {
-        id: "RRL42",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Di kebun terdapat tanaman cabai dan tomat dengan rasio 2 : 5.\n\nJika jumlah tanaman cabai 8, berapa jumlah tanaman tomat?",
-
-        question:
-            "Berapa jumlah tanaman tomat?",
-
-        options: [
-            "10",
-            "16",
-            "20",
-            "24"
-        ],
-
-        answer: "20",
-
-        explanation:
-            "2 bagian = 8, sehingga 1 bagian = 4. Tomat = 5 × 4 = 20.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Jika 2 bagian bernilai 8, tentukan dulu nilai 1 bagian."
-    },
-
-
-    {
-        id: "RRL43",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Sebuah kelas mengumpulkan botol plastik.\n\nSenin: 12 botol\nSelasa: 18 botol\nRabu: 24 botol",
-
-        question:
-            "Rasio botol Senin terhadap Rabu dalam bentuk sederhana adalah …",
-
-        options: [
-            "1 : 2",
-            "2 : 3",
-            "3 : 4",
-            "4 : 3"
-        ],
-
-        answer: "1 : 2",
-
-        explanation:
-            "12 : 24 dibagi 12 menjadi 1 : 2.",
-
-        errorCode: "E3",
-
-        feedback:
-            "Bandingkan data Senin dan Rabu saja, kemudian sederhanakan 12 : 24."
-    },
-
-
-    {
-        id: "RRL44",
-        mission: "RRL",
-        missionName: "Ratio in Real Life",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Perbandingan kelereng Andi dan Budi adalah 2 : 3.\nAndi memiliki 10 kelereng.\n\nRaka: Budi memiliki 15 kelereng.\n\nSinta: Budi memiliki 30 kelereng.",
-
-        question:
-            "Siapa yang benar?",
-
-        options: [
-            "Raka",
-            "Sinta",
-            "Keduanya",
-            "Tidak ada"
-        ],
-
-        answer: "Raka",
-
-        explanation:
-            "2 bagian = 10, sehingga 1 bagian = 5. Budi memiliki 3 bagian = 15.",
-
-        errorCode: "E4/E5",
-
-        feedback:
-            "2 bagian = 10, sehingga 1 bagian = 5. Budi memiliki 3 bagian = 15."
-    },
-
-
-    // ========================================================
-    // MISSION 5 — RATIO MASTER
-    // ========================================================
-
-    {
-        id: "RM45",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Sebuah kelas memiliki 24 siswa. Rasio laki-laki : perempuan = 1 : 2.",
-
-        question:
-            "Informasi apa yang perlu digunakan untuk menentukan jumlah siswa laki-laki?",
-
-        options: [
-            "24 dan 1 : 2",
-            "hanya 24",
-            "hanya angka 2",
-            "jumlah meja"
-        ],
-
-        answer: "24 dan 1 : 2",
-
-        explanation:
-            "Untuk menentukan jumlah siswa laki-laki, kita membutuhkan jumlah seluruh siswa dan rasio laki-laki : perempuan.",
-
-        errorCode: "E5",
-
-        feedback:
-            "Gunakan jumlah seluruh siswa dan rasio untuk menentukan nilai setiap bagian."
-    },
-
-
-    {
-        id: "RM46",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Tiga kelompok memiliki rasio:\n\nKelompok A = 2 : 3\nKelompok B = 4 : 6\nKelompok C = 6 : 8",
-
-        question:
-            "Kelompok mana yang memiliki rasio setara dengan A?",
-
-        options: [
-            "A saja",
-            "B saja",
-            "C saja",
-            "B dan C"
-        ],
-
-        answer: "B saja",
-
-        explanation:
-            "A = 2 : 3. B = 4 : 6 yang dapat disederhanakan menjadi 2 : 3. C = 6 : 8 menjadi 3 : 4.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Sederhanakan rasio setiap kelompok, lalu bandingkan bentuk sederhananya."
-    },
-
-
-    {
-        id: "RM47",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Rasio buku cerita : buku pengetahuan = 3 : 5.",
-
-        question:
-            "Manakah yang tidak mungkin menunjukkan jumlah buku dengan rasio tersebut?",
-
-        options: [
-            "6 : 10",
-            "9 : 15",
-            "12 : 20",
-            "15 : 20"
-        ],
-
-        answer: "15 : 20",
-
-        explanation:
-            "6 : 10, 9 : 15, dan 12 : 20 semuanya dapat disederhanakan menjadi 3 : 5. Sedangkan 15 : 20 menjadi 3 : 4.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Sederhanakan setiap pasangan untuk mengetahui mana yang memiliki rasio berbeda."
-    },
-
-
-    {
-        id: "RM48",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Banyak kotak : banyak pensil\n\n2 : 10\n4 : 20\n6 : ?",
-
-        question:
-            "Jika pola tetap, berapa pensil dalam 6 kotak?",
-
-        options: [
-            "25",
-            "30",
-            "35",
-            "40"
-        ],
-
-        answer: "30",
-
-        explanation:
-            "Setiap 1 kotak berisi 5 pensil. Jadi 6 × 5 = 30 pensil.",
-
-        errorCode: "E4",
-
-        feedback:
-            "Cari hubungan tetap antara jumlah kotak dan jumlah pensil."
-    },
-
-
-    {
-        id: "RM49",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Campuran A: 2 merah + 3 putih\n\nCampuran B: 4 merah + 5 putih",
-
-        question:
-            "Apakah kedua campuran memiliki rasio merah : putih yang sama?",
-
-        options: [
-            "Ya",
-            "Tidak",
-            "Hanya jika ditambah merah",
-            "Tidak dapat diketahui"
-        ],
-
-        answer: "Tidak",
-
-        explanation:
-            "Campuran A = 2 : 3. Campuran B = 4 : 5. Keduanya tidak dapat disederhanakan menjadi rasio yang sama.",
-
-        errorCode: "E4",
-
-        feedback:
-            "A = 2 : 3. B = 4 : 5. Keduanya tidak dapat disederhanakan menjadi rasio yang sama."
-    },
-
-
-    {
-        id: "RM50",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Rina mengatakan:\n\n'Rasio 5 : 8 lebih besar daripada 3 : 5 karena 5 lebih besar daripada 3.'",
-
-        question:
-            "Apakah alasan Rina sudah tepat?",
-
-        options: [
-            "Ya",
-            "Tidak, kedua rasio harus dibandingkan sebagai hubungan",
-            "Ya, karena bilangan pertama selalu menentukan",
-            "Tidak, karena rasio tidak dapat dibandingkan"
-        ],
-
-        answer: "Tidak, kedua rasio harus dibandingkan sebagai hubungan",
-
-        explanation:
-            "Untuk membandingkan rasio, tidak cukup melihat satu angka. Perhatikan hubungan kedua bagian.",
-
-        errorCode: "E5",
-
-        feedback:
-            "Untuk membandingkan rasio, tidak cukup melihat satu angka. Perhatikan hubungan kedua bagian."
-    },
-
-
-    {
-        id: "RM51",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "3 : 4 = 6 : 8\n6 : 8 = 9 : 12\n\nJadi 3 : 4 = 9 : 12.",
-
-        question:
-            "Kesimpulan tersebut …",
-
-        options: [
-            "benar",
-            "salah karena faktor pengalinya berbeda",
-            "salah karena rasio tidak boleh diperbesar",
-            "salah karena 9 harus menjadi 8"
-        ],
-
-        answer: "benar",
-
-        explanation:
-            "Benar. 3 : 4 dikali 3 menjadi 9 : 12.",
-
-        errorCode: null,
-
-        feedback:
-            "Benar. 3 : 4 dikali 3 menjadi 9 : 12."
-    },
-
-
-    {
-        id: "RM52",
-        mission: "RM",
-        missionName: "Ratio Master",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Perbandingan siswa laki-laki dan perempuan adalah 2 : 3. Jumlah seluruh siswa 25.",
-
-        question:
-            "Strategi yang paling tepat adalah …",
-
-        options: [
-            "25 ÷ 2",
-            "25 ÷ 3",
-            "25 ÷ (2 + 3), kemudian kalikan sesuai bagian",
-            "25 × 2 × 3"
-        ],
-
-        answer: "25 ÷ (2 + 3), kemudian kalikan sesuai bagian",
-
-        explanation:
-            "Jumlah seluruh bagian = 2 + 3 = 5. Cari nilai satu bagian terlebih dahulu.",
-
-        errorCode: "E5",
-
-        feedback:
-            "Jumlah seluruh bagian = 2 + 3 = 5. Cari nilai satu bagian terlebih dahulu."
-    },
-
-
-    // ========================================================
-    // BOSS CHALLENGE
-    // ========================================================
-
-    {
-        id: "BOSS53",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "7 bola merah dan 14 bola biru.",
-
-        question:
-            "Rasio merah : biru paling sederhana adalah …",
-
-        options: [
-            "1 : 2",
-            "2 : 1",
-            "7 : 14",
-            "14 : 7"
-        ],
-
-        answer: "1 : 2",
-
-        explanation:
-            "7 : 14 dibagi 7 menjadi 1 : 2.",
-
-        errorCode: null,
-
-        feedback:
-            "7 : 14 disederhanakan menjadi 1 : 2."
-    },
-
-
-    {
-        id: "BOSS54",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus:
-            "🍪 🍪 🍪 🍪\n\n🥛 🥛",
-
-        question:
-            "Rasio kue terhadap susu adalah …",
-
-        options: [
-            "1 : 2",
-            "2 : 1",
-            "4 : 2",
-            "2 : 4"
-        ],
-
-        answer: "4 : 2",
-
-        explanation:
-            "Ada 4 kue dan 2 susu. Karena yang dibandingkan kue terhadap susu, rasionya 4 : 2.",
-
-        errorCode: null,
-
-        feedback:
-            "Hitung jumlah kue dan susu, lalu ikuti urutan yang diminta."
-    },
-
-
-    {
-        id: "BOSS55",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Rasio 18 : 24 paling sederhana adalah …",
-
-        options: [
-            "2 : 3",
-            "3 : 4",
-            "4 : 3",
-            "6 : 8"
-        ],
-
-        answer: "3 : 4",
-
-        explanation:
-            "18 dan 24 sama-sama dibagi 6 sehingga menjadi 3 : 4.",
-
-        errorCode: null,
-
-        feedback:
-            "18 : 24 = 3 : 4."
-    },
-
-
-    {
-        id: "BOSS56",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "KU",
-        type: "multiple_choice",
-
-        stimulus: "",
-
-        question:
-            "Pasangan yang senilai dengan 5 : 7 adalah …",
-
-        options: [
-            "10 : 14",
-            "10 : 12",
-            "15 : 20",
-            "20 : 25"
-        ],
-
-        answer: "10 : 14",
-
-        explanation:
-            "5 : 7 dikalikan 2 menjadi 10 : 14.",
-
-        errorCode: null,
-
-        feedback:
-            "Kedua bagian dikalikan dengan faktor yang sama."
-    },
-
-
-    {
-        id: "BOSS57",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "A : B\n\n3 : 5\n6 : 10\n9 : ?",
-
-        question:
-            "Nilai yang tepat adalah …",
-
-        options: [
-            "12",
-            "15",
-            "18",
-            "20"
-        ],
-
-        answer: "15",
-
-        explanation:
-            "3 : 5 dikalikan 3 menjadi 9 : 15.",
-
-        errorCode: null,
-
-        feedback:
-            "Jika 3 menjadi 9, faktor pengalinya 3. Maka 5 × 3 = 15."
-    },
-
-
-    {
-        id: "BOSS58",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Untuk membuat 4 roti diperlukan 2 butir telur.",
-
-        question:
-            "Berapa telur untuk membuat 12 roti?",
-
-        options: [
-            "4",
-            "5",
-            "6",
-            "8"
-        ],
-
-        answer: "6",
-
-        explanation:
-            "4 roti menjadi 12 roti, berarti dikali 3. Telur juga dikali 3: 2 × 3 = 6.",
-
-        errorCode: null,
-
-        feedback:
-            "Cari faktor perubahan jumlah roti, kemudian gunakan faktor yang sama."
-    },
-
-
-    {
-        id: "BOSS59",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Sebuah kelas memiliki rasio laki-laki : perempuan = 3 : 4. Jumlah siswa laki-laki 15.",
-
-        question:
-            "Jumlah siswa perempuan adalah …",
-
-        options: [
-            "18",
-            "20",
-            "21",
-            "24"
-        ],
-
-        answer: "20",
-
-        explanation:
-            "3 bagian = 15, sehingga 1 bagian = 5. Perempuan = 4 × 5 = 20.",
-
-        errorCode: null,
-
-        feedback:
-            "3 bagian bernilai 15. Jadi 1 bagian = 5 dan 4 bagian = 20."
-    },
-
-
-    {
-        id: "BOSS60",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "A",
-        type: "multiple_choice",
-
-        stimulus:
-            "Campuran minuman menggunakan sirup : air = 1 : 4.\n\nJika digunakan 12 gelas air, berapa gelas sirup?",
-
-        question:
-            "Berapa gelas sirup?",
-
-        options: [
-            "2",
-            "3",
-            "4",
-            "6"
-        ],
-
-        answer: "3",
-
-        explanation:
-            "4 bagian air = 12 gelas, sehingga 1 bagian = 3 gelas. Sirup = 3 gelas.",
-
-        errorCode: null,
-
-        feedback:
-            "Jika 4 bagian air = 12 gelas, maka 1 bagian = 3 gelas."
-    },
-
-
-    {
-        id: "BOSS61",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Kelas A memiliki 12 siswa laki-laki dan 18 perempuan.\n\nKelas B memiliki 10 siswa laki-laki dan 15 perempuan.",
-
-        question:
-            "Kelas mana yang memiliki rasio laki-laki : perempuan yang sama?",
-
-        options: [
-            "Kelas A saja",
-            "Kelas B saja",
-            "Kelas A dan B",
-            "Tidak ada"
-        ],
-
-        answer: "Kelas A dan B",
-
-        explanation:
-            "Kelas A = 12 : 18 = 2 : 3. Kelas B = 10 : 15 = 2 : 3. Jadi keduanya memiliki rasio yang sama.",
-
-        errorCode: null,
-
-        feedback:
-            "Kedua kelas memiliki rasio sederhana 2 : 3."
-    },
-
-
-    {
-        id: "BOSS62",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Resep A: 3 tepung : 2 gula\n\nResep B: 6 tepung : 4 gula",
-
-        question:
-            "Pernyataan yang benar adalah …",
-
-        options: [
-            "hanya A yang memiliki rasio 3 : 2",
-            "hanya B yang memiliki rasio 3 : 2",
-            "keduanya memiliki rasio yang sama",
-            "keduanya berbeda"
-        ],
-
-        answer: "keduanya memiliki rasio yang sama",
-
-        explanation:
-            "6 : 4 dapat disederhanakan dengan membagi 2 menjadi 3 : 2.",
-
-        errorCode: null,
-
-        feedback:
-            "6 : 4 disederhanakan menjadi 3 : 2, sehingga kedua resep memiliki rasio yang sama."
-    },
-
-
-    {
-        id: "BOSS63",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Doni menyelesaikan:\n\n4 : 6 = 4 : 12",
-
-        question:
-            "Bagian mana yang salah?",
-
-        options: [
-            "angka 4 pertama",
-            "angka 6",
-            "angka 12",
-            "tidak ada kesalahan"
-        ],
-
-        answer: "angka 12",
-
-        explanation:
-            "Jika 6 dikali 2 menjadi 12, maka 4 juga harus dikali 2 menjadi 8. Jadi 4 : 6 = 8 : 12.",
-
-        errorCode: null,
-
-        feedback:
-            "Jika 6 dikali 2 menjadi 12, maka 4 juga harus dikali 2 menjadi 8."
-    },
-
-
-    {
-        id: "BOSS64",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Perbandingan jumlah buku Ani dan Beni adalah 3 : 5. Jumlah buku mereka 32.",
-
-        question:
-            "Berapa buku yang dimiliki Beni?",
-
-        options: [
-            "12",
-            "15",
-            "20",
-            "25"
-        ],
-
-        answer: "20",
-
-        explanation:
-            "3 + 5 = 8 bagian. 32 ÷ 8 = 4. Beni = 5 × 4 = 20.",
-
-        errorCode: null,
-
-        feedback:
-            "Jumlah bagian = 8. Nilai satu bagian = 32 ÷ 8 = 4. Beni memiliki 5 × 4 = 20 buku."
-    },
-
-
-    {
-        id: "BOSS65",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Sebuah kelas membuat paket makanan dengan rasio:\n\nnasi : lauk : sayur = 4 : 2 : 1\n\nJika dibuat 3 kali lipat dari jumlah awal, rasio menjadi …",
-
-        question:
-            "Rasio yang benar adalah …",
-
-        options: [
-            "12 : 6 : 3",
-            "4 : 6 : 3",
-            "12 : 2 : 1",
-            "7 : 3 : 1"
-        ],
-
-        answer: "12 : 6 : 3",
-
-        explanation:
-            "Semua bagian rasio dikalikan 3: 4 × 3 : 2 × 3 : 1 × 3 = 12 : 6 : 3.",
-
-        errorCode: null,
-
-        feedback:
-            "Ketiga bagian harus dikalikan dengan faktor yang sama, yaitu 3."
-    },
-
-
-    {
-        id: "BOSS66",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Rasio merah : biru = 2 : 5.\n\nJika merah = 8, maka biru = 20.\n\nRafi: 'Benar, karena 2 dikali 4 dan 5 juga dikali 4.'\n\nLala: 'Salah, karena 8 + 20 bukan 2 + 5.'",
-
-        question:
-            "Siapa yang memberikan alasan yang tepat?",
-
-        options: [
-            "Rafi",
-            "Lala",
-            "Keduanya",
-            "Tidak ada"
-        ],
-
-        answer: "Rafi",
-
-        explanation:
-            "Rafi menggunakan faktor yang sama. 2 × 4 = 8 dan 5 × 4 = 20.",
-
-        errorCode: "E4/E5",
-
-        feedback:
-            "Rafi menggunakan faktor yang sama. 2 × 4 = 8 dan 5 × 4 = 20."
-    },
-
-
-    {
-        id: "BOSS67",
-        mission: "BOSS",
-        missionName: "Boss Challenge",
-        level: "P",
-        type: "multiple_choice",
-
-        stimulus:
-            "Panitia kelas membuat minuman untuk kegiatan sekolah.\n\nPerbandingan sirup dan air adalah 2 : 5.\n\nPanitia memiliki 20 gelas air.\n\nSetelah minuman dibuat, ternyata 4 gelas minuman tumpah.",
-
-        question:
-            "Berapa gelas minuman yang masih tersedia?",
-
-        options: [
-            "24 gelas",
-            "26 gelas",
-            "28 gelas",
-            "30 gelas"
-        ],
-
-        answer: "24 gelas",
-
-        explanation:
-            "Rasio sirup : air = 2 : 5. Air 20 berarti dikali 4. Sirup = 2 × 4 = 8. Total awal = 20 + 8 = 28 gelas. Tumpah 4 gelas, sehingga tersisa 28 − 4 = 24 gelas.",
-
-        errorCode: "E4/E5",
-
-        feedback:
-            "Tentukan jumlah sirup terlebih dahulu. Setelah mendapatkan total minuman, kurangi 4 gelas yang tumpah."
-    }
+    stimulus:
+      "Untuk membuat sirup, perbandingan sirup dan air adalah 2 : 5. Jika digunakan 6 gelas sirup, berapa gelas air yang diperlukan?",
+
+    question:
+      "Air yang diperlukan adalah ...",
+
+    options: [
+      "A. 10 gelas",
+      "B. 12 gelas",
+      "C. 15 gelas",
+      "D. 18 gelas"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "2 bagian sirup = 6, berarti 1 bagian = 3. Air = 5 × 3 = 15 gelas.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Cari faktor pengali dari bagian pertama, lalu gunakan faktor yang sama pada bagian kedua."
+  },
+
+  {
+    id: "RB04",
+    mission: "RB",
+    missionName: "Ratio Builder",
+    level: "A",
+    type: "matching",
+
+    stimulus:
+      "Tentukan pasangan perbandingan yang senilai.",
+
+    question:
+      "Tuliskan perbandingan yang senilai.",
+
+    options: [
+      {
+        left: "1. 2 : 3 → dikali 6",
+        right: "12 : 18"
+      },
+      {
+        left: "2. 3 : 5 → dikali 2",
+        right: "6 : 10"
+      },
+      {
+        left: "3. 4 : 7 → dikali 2",
+        right: "8 : 14"
+      }
+    ],
+
+    answer: [
+      "12:18",
+      "6:10",
+      "8:14"
+    ],
+
+    explanation:
+      "Perbandingan senilai diperoleh dengan mengalikan kedua bagian menggunakan bilangan yang sama.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Jika satu bagian dikali suatu bilangan, bagian lainnya juga harus dikali bilangan yang sama."
+  },
+
+  {
+    id: "RB05",
+    mission: "RB",
+    missionName: "Ratio Builder",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan jumlah kelereng Rafi dan Bima adalah 12 : 18. Perbandingan tersebut setara dengan 8 : x.",
+
+    question:
+      "Nilai x adalah ...",
+
+    options: [
+      "A. 10",
+      "B. 12",
+      "C. 14",
+      "D. 16"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "12 : 18 disederhanakan menjadi 2 : 3. Jika 2 menjadi 8, dikali 4. Maka 3 juga dikali 4 sehingga x = 12.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Sederhanakan perbandingan terlebih dahulu atau cari faktor pengalinya."
+  },
+
+
+  /* =======================================================
+     RATIO IN REAL LIFE — 5 SOAL
+     ======================================================= */
+
+  {
+    id: "RL01",
+    mission: "RL",
+    missionName: "Ratio in Real Life",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Resep minuman membutuhkan 2 gelas sirup dan 5 gelas air. Ibu ingin membuat dua kali lipat resep tersebut.",
+
+    question:
+      "Jumlah sirup dan air yang diperlukan adalah ...",
+
+    options: [
+      "A. 4 gelas sirup dan 10 gelas air",
+      "B. 4 gelas sirup dan 7 gelas air",
+      "C. 2 gelas sirup dan 10 gelas air",
+      "D. 6 gelas sirup dan 10 gelas air"
+    ],
+
+    answer: "A",
+
+    explanation:
+      "Semua bagian dikalikan 2. Sirup 2 × 2 = 4 dan air 5 × 2 = 10.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Pada perbandingan senilai, kedua besaran harus berubah dengan faktor yang sama."
+  },
+
+  {
+    id: "RL02",
+    mission: "RL",
+    missionName: "Ratio in Real Life",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan siswa yang membawa bekal dan tidak membawa bekal adalah 3 : 1. Jumlah seluruh siswa 24 orang.",
+
+    question:
+      "Berapa siswa yang membawa bekal?",
+
+    options: [
+      "A. 6",
+      "B. 12",
+      "C. 18",
+      "D. 20"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "Jumlah bagian = 3 + 1 = 4. Satu bagian = 24 ÷ 4 = 6. Bekal = 3 × 6 = 18.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Jika diketahui jumlah keseluruhan, jumlahkan bagian perbandingan terlebih dahulu."
+  },
+
+  {
+    id: "RL03",
+    mission: "RL",
+    missionName: "Ratio in Real Life",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Untuk membuat adonan, perbandingan tepung dan gula adalah 4 : 1. Ibu menggunakan 400 gram tepung.",
+
+    question:
+      "Berapa gram gula yang diperlukan?",
+
+    options: [
+      "A. 50 gram",
+      "B. 80 gram",
+      "C. 100 gram",
+      "D. 160 gram"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "4 bagian tepung = 400 gram, sehingga 1 bagian = 100 gram. Gula = 1 bagian = 100 gram.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Gunakan informasi yang diketahui untuk menemukan nilai satu bagian."
+  },
+
+  {
+    id: "RL04",
+    mission: "RL",
+    missionName: "Ratio in Real Life",
+    level: "A",
+    type: "matching",
+
+    stimulus:
+      "Gunakan perbandingan untuk menentukan jumlah yang belum diketahui.",
+
+    question:
+      "Tuliskan jawaban yang tepat.",
+
+    options: [
+      {
+        left: "1. Rasio 2 : 3, bagian pertama = 8",
+        right: "12"
+      },
+      {
+        left: "2. Rasio 1 : 2, bagian pertama = 10",
+        right: "20"
+      },
+      {
+        left: "3. Tepung : gula = 3 : 1, tepung = 300 g",
+        right: "100 g"
+      }
+    ],
+
+    answer: [
+      "12",
+      "20",
+      "100"
+    ],
+
+    explanation:
+      "Gunakan faktor pengali yang sama untuk menentukan besaran kedua.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Temukan nilai satu bagian atau faktor pengali terlebih dahulu."
+  },
+
+  {
+    id: "RL05",
+    mission: "RL",
+    missionName: "Ratio in Real Life",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Dalam sebuah paket makanan, perbandingan nasi dan lauk adalah 12 : 8. Jika lauk ditambah menjadi 20 bagian dengan perbandingan tetap, berapa bagian nasi?",
+
+    question:
+      "Jumlah nasi adalah ...",
+
+    options: [
+      "A. 24",
+      "B. 30",
+      "C. 32",
+      "D. 36"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "12 : 8 disederhanakan menjadi 3 : 2. Jika 2 bagian = 20, maka 1 bagian = 10. Nasi = 3 × 10 = 30.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Sederhanakan rasio terlebih dahulu agar hubungan kedua besaran lebih mudah terlihat."
+  },
+
+
+  /* =======================================================
+     RATIO MASTER — 10 SOAL
+     ======================================================= */
+
+  {
+    id: "RM01",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Dalam kegiatan olahraga, perbandingan siswa yang memilih sepak bola dan bulu tangkis adalah 3 : 2. Jumlah seluruh siswa 25 orang.",
+
+    question:
+      "Berapa siswa yang memilih sepak bola?",
+
+    options: [
+      "A. 10",
+      "B. 12",
+      "C. 15",
+      "D. 18"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "Jumlah bagian = 3 + 2 = 5. Satu bagian = 25 ÷ 5 = 5. Sepak bola = 3 × 5 = 15.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Untuk mencari bagian dari keseluruhan, jumlahkan seluruh bagian rasio terlebih dahulu."
+  },
+
+  {
+    id: "RM02",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perhatikan dua perbandingan berikut: 4 : 6 dan 6 : 9.",
+
+    question:
+      "Pernyataan yang benar adalah ...",
+
+    options: [
+      "A. Kedua rasio tidak senilai",
+      "B. Hanya rasio pertama yang sederhana",
+      "C. Kedua rasio senilai",
+      "D. Rasio kedua lebih besar"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "4 : 6 = 2 : 3 dan 6 : 9 = 2 : 3. Jadi kedua perbandingan senilai.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Untuk membandingkan dua rasio, sederhanakan keduanya terlebih dahulu."
+  },
+
+  {
+    id: "RM03",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Rina berkata, '8 : 12 lebih besar daripada 2 : 3 karena 8 lebih besar daripada 2.'",
+
+    question:
+      "Bagaimana pendapatmu terhadap pernyataan Rina?",
+
+    options: [
+      "A. Benar, karena 8 > 2",
+      "B. Benar, karena 12 > 3",
+      "C. Salah, karena kedua rasio sebenarnya senilai",
+      "D. Salah, karena 8 : 12 tidak dapat disederhanakan"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "8 : 12 disederhanakan menjadi 2 : 3. Jadi ukuran bilangan tidak dapat langsung digunakan untuk menentukan rasio mana yang lebih besar.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Jangan membandingkan pembilang atau angka secara langsung. Bandingkan nilai perbandingannya."
+  },
+
+  {
+    id: "RM04",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "A",
+    type: "matching",
+
+    stimulus:
+      "Pasangkan strategi dengan situasi yang sesuai.",
+
+    question:
+      "Pilih strategi yang tepat.",
+
+    options: [
+      {
+        left: "1. Diketahui jumlah seluruh benda",
+        right: "Jumlahkan bagian rasio"
+      },
+      {
+        left: "2. Diketahui nilai satu bagian",
+        right: "Cari faktor pengali"
+      },
+      {
+        left: "3. Membandingkan dua rasio",
+        right: "Sederhanakan keduanya"
+      }
+    ],
+
+    answer: [
+      "Jumlahkan bagian rasio",
+      "Cari faktor pengali",
+      "Sederhanakan keduanya"
+    ],
+
+    explanation:
+      "Strategi penyelesaian harus disesuaikan dengan informasi yang diketahui.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Baca informasi yang tersedia sebelum memilih strategi."
+  },
+
+  {
+    id: "RM05",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan bola merah dan kuning yang benar adalah 2 : 3. Doni memiliki 6 bola merah dan 8 bola kuning.",
+
+    question:
+      "Apa yang dapat disimpulkan?",
+
+    options: [
+      "A. Bola Doni memiliki rasio yang sama",
+      "B. Bola Doni memiliki terlalu banyak bola kuning",
+      "C. Bola Doni memiliki terlalu banyak bola merah",
+      "D. Tidak dapat dibandingkan"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "Jika merah 6, maka dengan rasio 2 : 3 seharusnya kuning 9. Doni hanya memiliki 8 kuning, sehingga jumlah merah relatif terlalu banyak.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Gunakan rasio acuan untuk menentukan jumlah pasangan yang seharusnya."
+  },
+
+  {
+    id: "RM06",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "matching",
+
+    stimulus:
+      "Perhatikan arti dari beberapa perbandingan.",
+
+    question:
+      "Pasangkan rasio dengan maknanya.",
+
+    options: [
+      {
+        left: "1. 2 : 5",
+        right: "2 bagian pertama dibanding 5 bagian kedua"
+      },
+      {
+        left: "2. 3 : 4",
+        right: "3 bagian pertama dibanding 4 bagian kedua"
+      },
+      {
+        left: "3. 4 : 7",
+        right: "4 bagian pertama dibanding 7 bagian kedua"
+      }
+    ],
+
+    answer: [
+      "2 bagian pertama dibanding 5 bagian kedua",
+      "3 bagian pertama dibanding 4 bagian kedua",
+      "4 bagian pertama dibanding 7 bagian kedua"
+    ],
+
+    explanation:
+      "Angka pertama menunjukkan jumlah bagian pertama, sedangkan angka kedua menunjukkan jumlah bagian kedua.",
+
+    errorCode: "E2",
+
+    feedback:
+      "Perhatikan urutan angka dalam rasio."
+  },
+
+  {
+    id: "RM07",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan siswa laki-laki dan perempuan adalah 2 : 3. Budi berkata, 'Jika jumlah siswa laki-laki ditambah 4, perbandingannya tetap sama.'",
+
+    question:
+      "Apakah pernyataan Budi benar?",
+
+    options: [
+      "A. Benar, karena 4 dapat ditambahkan",
+      "B. Benar, karena rasio tidak berubah",
+      "C. Salah, karena kedua besaran harus berubah secara proporsional",
+      "D. Salah, karena siswa laki-laki tidak boleh bertambah"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "Agar rasio tetap 2 : 3, kedua jumlah harus berubah dengan faktor yang sama. Menambah 4 hanya pada salah satu bagian mengubah rasio.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Rasio senilai mempertahankan hubungan kedua besaran, bukan hanya salah satunya."
+  },
+
+  {
+    id: "RM08",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan acuan adalah 5 : 8.",
+
+    question:
+      "Manakah yang TIDAK senilai dengan 5 : 8?",
+
+    options: [
+      "A. 10 : 16",
+      "B. 15 : 24",
+      "C. 20 : 32",
+      "D. 25 : 36"
+    ],
+
+    answer: "D",
+
+    explanation:
+      "5 : 8 dikali 2 = 10 : 16, dikali 3 = 15 : 24, dan dikali 4 = 20 : 32. Sedangkan 25 : 36 tidak senilai.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Cek apakah kedua bilangan dapat diperoleh dengan faktor pengali yang sama."
+  },
+
+  {
+    id: "RM09",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "matching",
+
+    stimulus:
+      "Setiap kesalahan memiliki ciri tertentu.",
+
+    question:
+      "Pasangkan kode kesalahan dengan jenis kesalahannya.",
+
+    options: [
+      {
+        left: "1. E1",
+        right: "Salah menentukan besaran yang dibandingkan"
+      },
+      {
+        left: "2. E2",
+        right: "Salah urutan rasio"
+      },
+      {
+        left: "3. E3",
+        right: "Salah menyederhanakan rasio"
+      }
+    ],
+
+    answer: [
+      "Salah menentukan besaran yang dibandingkan",
+      "Salah urutan rasio",
+      "Salah menyederhanakan rasio"
+    ],
+
+    explanation:
+      "E1 berkaitan dengan besaran, E2 dengan urutan, dan E3 dengan proses penyederhanaan.",
+
+    errorCode: "E1",
+
+    feedback:
+      "Gunakan kode kesalahan untuk menemukan bagian mana dari prosesmu yang perlu diperbaiki."
+  },
+
+  {
+    id: "RM10",
+    mission: "RM",
+    missionName: "Ratio Master",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Citra membuat adonan dengan perbandingan tepung dan gula 5 : 2. Ia menggunakan 750 gram tepung.",
+
+    question:
+      "Berapa gram gula yang diperlukan agar perbandingan tetap sama?",
+
+    options: [
+      "A. 150 gram",
+      "B. 250 gram",
+      "C. 300 gram",
+      "D. 375 gram"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "5 bagian tepung = 750 gram. Satu bagian = 750 ÷ 5 = 150 gram. Gula = 2 × 150 = 300 gram.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Cari nilai satu bagian terlebih dahulu, kemudian kalikan dengan jumlah bagian gula."
+  },
+
+
+  /* =======================================================
+     BOSS CHALLENGE — 10 SOAL
+     ======================================================= */
+
+  {
+    id: "B01",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Sebuah kelas memiliki 18 buku cerita dan 24 buku pengetahuan.",
+
+    question:
+      "Perbandingan buku cerita terhadap buku pengetahuan dalam bentuk sederhana adalah ...",
+
+    options: [
+      "A. 2 : 3",
+      "B. 3 : 4",
+      "C. 4 : 3",
+      "D. 18 : 24"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "18 : 24 dibagi 6 = 3 : 4.",
+
+    errorCode: "E3",
+
+    feedback:
+      "Sederhanakan kedua bilangan dengan pembagi yang sama."
+  },
+
+  {
+    id: "B02",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan buku cerita dan buku pengetahuan adalah 3 : 5. Jika buku cerita berjumlah 24, berapa buku pengetahuan?",
+
+    question:
+      "Jumlah buku pengetahuan adalah ...",
+
+    options: [
+      "A. 30",
+      "B. 35",
+      "C. 40",
+      "D. 45"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "3 bagian = 24, maka 1 bagian = 8. Buku pengetahuan = 5 × 8 = 40.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Temukan nilai satu bagian sebelum mencari bagian yang lain."
+  },
+
+  {
+    id: "B03",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "A",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan jus dan susu dalam sebuah minuman adalah 4 : 3. Jika jus yang digunakan 28 gelas satuan, berapa susu yang diperlukan?",
+
+    question:
+      "Jumlah susu yang diperlukan adalah ...",
+
+    options: [
+      "A. 18",
+      "B. 20",
+      "C. 21",
+      "D. 24"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "4 bagian = 28, maka 1 bagian = 7. Susu = 3 × 7 = 21.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Bagilah jumlah yang diketahui dengan banyak bagian untuk mendapatkan nilai satu bagian."
+  },
+
+  {
+    id: "B04",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "A",
+    type: "matching",
+
+    stimulus:
+      "Tentukan nilai kedua berdasarkan perbandingan yang diberikan.",
+
+    question:
+      "Tuliskan nilai besaran kedua.",
+
+    options: [
+      {
+        left: "1. Rasio 2 : 3, bagian pertama = 10",
+        right: "15"
+      },
+      {
+        left: "2. Rasio 3 : 4, bagian pertama = 12",
+        right: "16"
+      },
+      {
+        left: "3. Rasio 4 : 5, bagian pertama = 20",
+        right: "25"
+      }
+    ],
+
+    answer: [
+      "15",
+      "16",
+      "25"
+    ],
+
+    explanation:
+      "Cari faktor pengali dari bagian pertama kemudian gunakan faktor yang sama pada bagian kedua.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Perbandingan senilai menggunakan faktor pengali yang sama."
+  },
+
+  {
+    id: "B05",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Perbandingan siswa yang memilih olahraga dan seni adalah 3 : 2. Jika 18 siswa memilih olahraga, berapa siswa yang memilih seni?",
+
+    question:
+      "Jumlah siswa yang memilih seni adalah ...",
+
+    options: [
+      "A. 8",
+      "B. 10",
+      "C. 12",
+      "D. 15"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "3 bagian = 18, sehingga 1 bagian = 6. Seni = 2 × 6 = 12.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Gunakan hubungan antarbagian dalam rasio, bukan hanya selisih kedua bilangan."
+  },
+
+  {
+    id: "B06",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Rasio acuan adalah 2 : 3.",
+
+    question:
+      "Manakah perbandingan yang tidak senilai dengan 2 : 3?",
+
+    options: [
+      "A. 4 : 6",
+      "B. 6 : 9",
+      "C. 8 : 12",
+      "D. 10 : 14"
+    ],
+
+    answer: "D",
+
+    explanation:
+      "4 : 6, 6 : 9, dan 8 : 12 semuanya dapat disederhanakan menjadi 2 : 3. Sedangkan 10 : 14 menjadi 5 : 7.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Sederhanakan setiap pilihan dan bandingkan dengan rasio acuan."
+  },
+
+  {
+    id: "B07",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "P",
+    type: "matching",
+
+    stimulus:
+      "Identifikasi jenis kesalahan dalam penyelesaian perbandingan.",
+
+    question:
+      "Pasangkan kode kesalahan dengan contohnya.",
+
+    options: [
+      {
+        left: "1. E1",
+        right: "Membandingkan jumlah benda yang salah"
+      },
+      {
+        left: "2. E2",
+        right: "Menulis perbandingan secara terbalik"
+      },
+      {
+        left: "3. E3",
+        right: "Membagi hanya salah satu bilangan"
+      }
+    ],
+
+    answer: [
+      "Membandingkan jumlah benda yang salah",
+      "Menulis perbandingan secara terbalik",
+      "Membagi hanya salah satu bilangan"
+    ],
+
+    explanation:
+      "Kesalahan perbandingan dapat dikenali dari langkah yang dilakukan siswa.",
+
+    errorCode: "E1",
+
+    feedback:
+      "Cek kembali: besaran, urutan, lalu cara menyederhanakan."
+  },
+
+  {
+    id: "B08",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Di kelas terdapat 10 siswa laki-laki dan 18 siswa perempuan. Guru ingin membuat perbandingan laki-laki : perempuan menjadi 2 : 3 dengan menambah siswa laki-laki.",
+
+    question:
+      "Berapa siswa laki-laki yang perlu ditambahkan agar perbandingan menjadi 2 : 3?",
+
+    options: [
+      "A. 1 siswa",
+      "B. 2 siswa",
+      "C. 3 siswa",
+      "D. 4 siswa"
+    ],
+
+    answer: "B",
+
+    explanation:
+      "Jika laki-laki menjadi 12 dan perempuan tetap 18, maka 12 : 18 = 2 : 3. Jadi perlu menambah 2 siswa laki-laki.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Cari nilai laki-laki yang membuat rasio 2 : 3 dengan jumlah perempuan tetap 18."
+  },
+
+  {
+    id: "B09",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "P",
+    type: "multiple_choice",
+
+    stimulus:
+      "Sebuah keranjang berisi 12 apel merah dan 20 apel hijau.",
+
+    question:
+      "Perbandingan apel merah terhadap apel hijau adalah ...",
+
+    options: [
+      "A. 2 : 5",
+      "B. 3 : 4",
+      "C. 3 : 5",
+      "D. 5 : 3"
+    ],
+
+    answer: "C",
+
+    explanation:
+      "12 : 20 dibagi 4 = 3 : 5.",
+
+    errorCode: "E4",
+
+    feedback:
+      "Cari faktor persekutuan yang dapat membagi kedua jumlah."
+  },
+
+  {
+    id: "B10",
+    mission: "BOSS",
+    missionName: "Boss Challenge",
+    level: "P",
+    type: "matching",
+
+    stimulus:
+      "Gunakan strategi perbandingan untuk menyelesaikan situasi berikut.",
+
+    question:
+      "Pasangkan situasi dengan strategi yang tepat.",
+
+    options: [
+      {
+        left: "1. Menentukan rasio apel : jeruk",
+        right: "Tentukan dua besaran dan urutannya"
+      },
+      {
+        left: "2. Total benda 30 dengan rasio 2 : 3",
+        right: "Jumlahkan bagian rasio lalu cari satu bagian"
+      },
+      {
+        left: "3. Bagian pertama 8 pada rasio 2 : 5",
+        right: "Cari faktor pengali"
+      }
+    ],
+
+    answer: [
+      "Tentukan dua besaran dan urutannya",
+      "Jumlahkan bagian rasio lalu cari satu bagian",
+      "Cari faktor pengali"
+    ],
+
+    explanation:
+      "Strategi yang tepat bergantung pada informasi yang diketahui dalam soal.",
+
+    errorCode: "E5",
+
+    feedback:
+      "Baca soal dengan teliti. Tentukan informasi yang diketahui dan apa yang harus dicari."
+  }
 
 ];
 
 
-// ============================================================
-// PEMBAGIAN BANK SOAL
-// ============================================================
+/* =========================================================
+   BANK SOAL PER MISI
+   ========================================================= */
 
-const questionBanks = {
+window.RATIO_QUESTION_BANKS = {
 
-    PRETEST: questions.filter(q => q.mission === "PRETEST"),
+  PRETEST: window.RATIO_QUESTIONS.filter(
+    q => q.mission === "PRETEST"
+  ),
 
-    RD: questions.filter(q => q.mission === "RD"),
+  RD: window.RATIO_QUESTIONS.filter(
+    q => q.mission === "RD"
+  ),
 
-    RB: questions.filter(q => q.mission === "RB"),
+  RB: window.RATIO_QUESTIONS.filter(
+    q => q.mission === "RB"
+  ),
 
-    RBR: questions.filter(q => q.mission === "RBR"),
+  RL: window.RATIO_QUESTIONS.filter(
+    q => q.mission === "RL"
+  ),
 
-    RRL: questions.filter(q => q.mission === "RRL"),
+  RM: window.RATIO_QUESTIONS.filter(
+    q => q.mission === "RM"
+  ),
 
-    RM: questions.filter(q => q.mission === "RM"),
-
-    BOSS: questions.filter(q => q.mission === "BOSS")
-
-};
-
-
-// ============================================================
-// INFORMASI MISI
-// ============================================================
-
-const missionInfo = {
-
-    PRETEST: {
-        title: "Pretest",
-        subtitle: "Starting Point",
-        icon: "🔎",
-        description: "Lihat kemampuan awalmu tentang perbandingan."
-    },
-
-    RD: {
-        title: "Ratio Detective",
-        subtitle: "Mission 01",
-        icon: "🕵️",
-        description: "Temukan dan baca perbandingan dengan tepat."
-    },
-
-    RB: {
-        title: "Ratio Builder",
-        subtitle: "Mission 02",
-        icon: "🧱",
-        description: "Bangun perbandingan dalam bentuk sederhana."
-    },
-
-    RBR: {
-        title: "Ratio Bridge",
-        subtitle: "Mission 03",
-        icon: "🌉",
-        description: "Temukan dan gunakan rasio yang ekuivalen."
-    },
-
-    RRL: {
-        title: "Ratio in Real Life",
-        subtitle: "Mission 04",
-        icon: "🥗",
-        description: "Gunakan perbandingan dalam kehidupan sehari-hari."
-    },
-
-    RM: {
-        title: "Ratio Master",
-        subtitle: "Mission 05",
-        icon: "🧠",
-        description: "Gunakan penalaran untuk memecahkan masalah."
-    },
-
-    BOSS: {
-        title: "Boss Challenge",
-        subtitle: "Final Assessment",
-        icon: "👑",
-        description: "Buktikan penguasaanmu tanpa bantuan."
-    }
+  BOSS: window.RATIO_QUESTIONS.filter(
+    q => q.mission === "BOSS"
+  )
 
 };
 
 
-// ============================================================
-// FUNGSI HELPER
-// ============================================================
+/* =========================================================
+   VALIDASI BANK SOAL
+   ========================================================= */
 
-function getQuestionsByMission(mission) {
+console.log(
+  "📚 Total soal Ratio Quest:",
+  window.RATIO_QUESTIONS.length
+);
 
-    return questionBanks[mission] || [];
+console.log(
+  "📊 Bank soal:",
+  {
+    PRETEST: window.RATIO_QUESTION_BANKS.PRETEST.length,
+    RD: window.RATIO_QUESTION_BANKS.RD.length,
+    RB: window.RATIO_QUESTION_BANKS.RB.length,
+    RL: window.RATIO_QUESTION_BANKS.RL.length,
+    RM: window.RATIO_QUESTION_BANKS.RM.length,
+    BOSS: window.RATIO_QUESTION_BANKS.BOSS.length
+  }
+);
 
+
+/* =========================================================
+   CEK DUPLIKAT ID
+   ========================================================= */
+
+const ratioIds = window.RATIO_QUESTIONS.map(q => q.id);
+
+const duplicateIds = ratioIds.filter(
+  (id, index) => ratioIds.indexOf(id) !== index
+);
+
+if (duplicateIds.length > 0) {
+  console.error(
+    "❌ ID soal duplikat:",
+    duplicateIds
+  );
+} else {
+  console.log(
+    "✅ Semua ID soal unik."
+  );
 }
 
 
-function getQuestionById(id) {
+/* =========================================================
+   CEK JUMLAH SOAL
+   ========================================================= */
 
-    return questions.find(q => q.id === id);
-
+if (window.RATIO_QUESTIONS.length === 40) {
+  console.log(
+    "✅ BANK SOAL BERHASIL: 40 soal."
+  );
+} else {
+  console.error(
+    "❌ Jumlah soal tidak sesuai. Ditemukan:",
+    window.RATIO_QUESTIONS.length
+  );
 }
-
-
-function getMissionInfo(mission) {
-
-    return missionInfo[mission] || null;
-
-}
-
-
-// ============================================================
-// EKSPOR KE WINDOW
-// Digunakan oleh script.js
-// ============================================================
-
-window.RATIO_QUESTIONS = questions;
-
-window.RATIO_QUESTION_BANKS = questionBanks;
-
-window.RATIO_MISSION_INFO = missionInfo;
-
-window.getQuestionsByMission = getQuestionsByMission;
-
-window.getQuestionById = getQuestionById;
-
-window.getMissionInfo = getMissionInfo;
-
-
-// ============================================================
-// INFORMASI BANK
-// ============================================================
-
-console.log(
-    "MATH MISSION — RATIO QUEST"
-);
-
-console.log(
-    "Total soal:",
-    questions.length
-);
-
-console.log(
-    "Pretest:",
-    questionBanks.PRETEST.length
-);
-
-console.log(
-    "Ratio Detective:",
-    questionBanks.RD.length
-);
-
-console.log(
-    "Ratio Builder:",
-    questionBanks.RB.length
-);
-
-console.log(
-    "Ratio Bridge:",
-    questionBanks.RBR.length
-);
-
-console.log(
-    "Ratio in Real Life:",
-    questionBanks.RRL.length
-);
-
-console.log(
-    "Ratio Master:",
-    questionBanks.RM.length
-);
-
-console.log(
-    "Boss Challenge:",
-    questionBanks.BOSS.length
-);
-console.log(
-    "Boss Challenge:",
-    questionBanks.BOSS.length
-);
-
-console.log("✅ QUESTIONS.JS BERHASIL DIMUAT");
-console.log("Jumlah bank soal =", window.RATIO_QUESTIONS.length);
