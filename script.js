@@ -388,6 +388,7 @@
       ".rq-screen"
     ).forEach((el) => {
       el.style.display = "none";
+      el.classList.remove("active", "active-screen", "show");
     });
   }
 
@@ -441,6 +442,9 @@
     }
 
     if (target) {
+      // .rq-screen memang display:none secara default.
+      // Aktifkan screen dengan class agar CSS menampilkannya.
+      target.classList.add("active");
       target.style.display = "";
     }
 
